@@ -15,6 +15,9 @@ if (count GRLIB_warehouse == 0) then {
 if (isNil "GRLIB_WHS_Group") then {
 	GRLIB_WHS_Group = createGroup [GRLIB_side_civilian, true];
 };
+if (isNull GRLIB_WHS_Group) then {
+	GRLIB_WHS_Group = createGroup [GRLIB_side_civilian, true];
+};
 
 private _warehouse_offset = [
 	// row 1 (Water)

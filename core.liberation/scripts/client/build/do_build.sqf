@@ -201,8 +201,9 @@ while { true } do {
 				_truedir = 90 - (getdir player);
 				_truepos = [((getpos player) select 0) + (_dist * (cos _truedir)), ((getpos player) select 1) + (_dist * (sin _truedir)), build_altitude];
 				_actualdir = ((getdir player) + build_rotation);
-				if ( _classname == "Land_Cargo_Patrol_V1_F" ) then { _actualdir = _actualdir + 180 };
-				if ( _classname == FOB_typename ) then { _actualdir = _actualdir + 270 };
+				if (_classname == "Land_Cargo_Patrol_V1_F") then { _actualdir = _actualdir + 180 };
+				if (_classname == FOB_typename) then { _actualdir = _actualdir + 270 };
+				if (_classname == Warehouse_typename) then { build_mode = 1 };
 
 				while { _actualdir > 360 } do { _actualdir = _actualdir - 360 };
 				while { _actualdir < 0 } do { _actualdir = _actualdir + 360 };
