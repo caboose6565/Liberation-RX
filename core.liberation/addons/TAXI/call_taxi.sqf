@@ -35,7 +35,6 @@ if (_nb_unit > 8) then {_taxi_type = selectRandom taxi_type_14};
 hintSilent format [localize "STR_TAXI_CALLED", getText(configFile >> "cfgVehicles" >> _taxi_type >> "DisplayName")];
 
 // Create Taxi
-private _air_grp = createGroup [GRLIB_side_civilian, true];
 private _air_spawnpos = [] call F_getNearestFob;
 if (isNil "GRLIB_all_fobs" || count GRLIB_all_fobs == 0) then {
 	_air_spawnpos = getPos lhd;
@@ -43,6 +42,7 @@ if (isNil "GRLIB_all_fobs" || count GRLIB_all_fobs == 0) then {
 
 private _air_spawnpos = [(((_air_spawnpos select 0) + 125) - floor(random 250)),(((_air_spawnpos select 1) + 125) - floor(random 250)), 120];
 private _vehicle = createVehicle [_taxi_type, _air_spawnpos, [], 0, "FLY"];
+if (isNil "_vehicle") exitWith { diag_log format ["--- LRX Error: Taxi %1 create failed!", _taxi_type]};
 if (_taxi_type isKindOf "Heli_Light_01_civil_base_F") then {
 	[_vehicle, false, ["AddDoors",1,"AddBackseats",1,"AddTread",1,"AddTread_Short",0]] call BIS_fnc_initVehicle;
 };
@@ -59,19 +59,22 @@ _vehicle lockTurret [[0], true];
 _vehicle lockTurret [[0,0], true];
 
 GRLIB_taxi_cooldown = 0;
-private _idact_dest = _vehicle addAction [format ["<t color='#8000FF'>%1</t>", localize "STR_TAXI_ACTION1"], "addons\TAXI\taxi_pickdest.sqf","",999,true,true,"","vehicle _this == _target && (getPosATL _target) distance2D GRLIB_taxi_helipad > 300"];
-private _idact_cancel = _vehicle addAction [format ["<t color='#FF0080'>%1</t>", localize "STR_TAXI_ACTION2"], {player setVariable ["GRLIB_taxi_called", nil, true]},"",998,true,true,"","vehicle _this == _target"];
+private _idact_dest = _vehicle addAction [format ["<t color='#8000FF'>%1</t>", localize "STR_TAXI_ACTION1"], "addons\TAXI\taxi_pickdest.sqf","",999,false,true,"","vehicle _this == _target && (getPosATL _target) distance2D GRLIB_taxi_helipad > 300"];
+private _idact_cancel = _vehicle addAction [format ["<t color='#FF0080'>%1</t>", localize "STR_TAXI_ACTION2"], {player setVariable ["GRLIB_taxi_called", nil, true]},"",998,false,true,"","vehicle _this == _target"];
+private _idact_eject = _vehicle addAction [format ["<t color='#FF0080'>%1</t>", localize "STR_TAXI_ACTION3"], "addons\TAXI\taxi_eject.sqf","",997,false,true,"","vehicle _this == _target && (getPos _target select 2) > 50 && (getPosATL _target) distance2D GRLIB_taxi_helipad > 300"];
 player setVariable ["GRLIB_taxi_called", _vehicle, true];
 
+private _air_grp = createGroup [GRLIB_side_civilian, true];
 createVehicleCrew _vehicle;
-sleep 1;
-private _pilots = crew _vehicle;
+sleep 0.5;
+if (count (crew _vehicle) == 0) exitWith { diag_log format ["--- LRX Error: Taxi %1 create crew failed!", _taxi_type]};
 {
+	[_x] joinSilent _air_grp;	
     [_x] orderGetIn true;
 	_x allowDamage false;
 	_x allowFleeing 0;
- } foreach _pilots;
-_pilots joinSilent _air_grp;
+ } foreach (crew _vehicle);
+_vehicle setVariable ["GRLIB_vehicle_group", _air_grp];
 
 _air_grp setBehaviour "CARELESS";
 _air_grp setCombatMode "GREEN";
@@ -86,6 +89,7 @@ _marker setMarkerTextlocal "Taxi PickUp";
 // Goto Pickup Point
 [_vehicle, _air_grp, _dest, "STR_TAXI_MOVE"] call taxi_dest;
 [_vehicle] call taxi_land;
+deleteVehicle GRLIB_taxi_helipad;
 _vehicle setVehicleLock "UNLOCKED";
 _vehicle lockCargo false;
 
@@ -112,13 +116,13 @@ if (time < _stop) then {
 		hintSilent "Ok, let's go...";
 		_vehicle setVehicleLock "LOCKED";
 		_vehicle lockCargo true;
-		_cargo = [_vehicle, _pilots] call taxi_cargo;
-		{ _x allowDamage false } forEach (_cargo);
+		_cargo = [_vehicle] call taxi_cargo;
+		{ _x allowDamage false } forEach _cargo;
 
 		_dest = markerPos "taxi_dz";
 		[_vehicle, _air_grp, _dest, "STR_TAXI_PROGRESS"] call taxi_dest;
 		_vehicle removeAction _idact_dest;
-		[_vehicle] call taxi_land;
+		_vehicle removeAction _idact_eject;
 	};
 } else {
 	_vehicle setVehicleLock "LOCKED";
@@ -126,18 +130,27 @@ if (time < _stop) then {
 };
 
 // Board Out
-_cargo = [_vehicle, _pilots] call taxi_cargo;
-[_vehicle, _cargo] call taxi_outboard;
-{ _x allowDamage true } forEach (_cargo);
-sleep 5;
+if (isNil "GRLIB_taxi_eject") then {
+	_cargo = [_vehicle] call taxi_cargo;
+	if (count _cargo > 0) then {
+		[_vehicle] call taxi_land;
+		[_vehicle, _cargo] call taxi_outboard;
+		sleep 3;
+		{ _x allowDamage true } forEach _cargo;
+	};
+};
 
 // Go back
 deleteMarkerLocal "taxi_lz";
 deleteMarkerLocal "taxi_dz";
+if (GRLIB_taxi_helipad_created) then { deleteVehicle GRLIB_taxi_helipad };
+GRLIB_taxi_eject = nil;
+GRLIB_taxi_helipad = nil;
 [_vehicle, _air_grp, zeropos, "STR_TAXI_RETURN"] call taxi_dest;
 
 // Cleanup
 hintSilent "";
-{deletevehicle _x} forEach _pilots;
+{deletevehicle _x} forEach (crew _vehicle);
 deleteVehicle _vehicle;
+deleteGroup _air_grp;
 player setVariable ["GRLIB_taxi_called", nil, true];

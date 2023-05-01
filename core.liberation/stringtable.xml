@@ -7783,6 +7783,10 @@
 			<Portuguese>-- TÁXI Cancelar</Portuguese>
 			<Czech>-- TAXI Zrušit</Czech>
 		</Key>
+		<Key ID="STR_TAXI_ACTION3">
+			<Original>-- TAXI Ejection</Original>
+			<French>-- TAXI Éjection</French>
+		</Key>		
 		<Key ID="STR_TAXI_ONLY_ONE">
 			<Original>Sorry, only one Taxi at time.</Original>
 			<Russian>Извините, только один вертолет за раз.</Russian>

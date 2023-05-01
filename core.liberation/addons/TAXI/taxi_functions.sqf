@@ -23,8 +23,7 @@ taxi_land = {
 	};
 	hintSilent localize "STR_TAXI_LANDED";
 	doStop (driver _vehicle);
-	deleteMarkerLocal "taxi_dz";
-	if (GRLIB_taxi_helipad_created) then { deleteVehicle GRLIB_taxi_helipad };
+	sleep 5;
 };
 
 taxi_dest = {
@@ -67,13 +66,14 @@ taxi_dest = {
 			_vehicle setPos (getPosATL _vehicle vectorAdd [0, 0, 3]);
 			sleep 1;
 		};
-		((_vehicle distance2D _dest < _landing_range || time > _stop) && unitReady (driver _vehicle))
+		(((_vehicle distance2D _dest < _landing_range || time > _stop) && unitReady (driver _vehicle)) || !(isNil "GRLIB_taxi_eject"))
 	};
 };
 
 taxi_cargo = {
-	params ["_vehicle", "_pilots"];
-	(crew _vehicle - _pilots);
+	params ["_vehicle"];
+	private _grp = _vehicle getVariable ["GRLIB_vehicle_group", grpNull];
+	(crew _vehicle - (units _grp));
 };
 
 taxi_outboard = {
