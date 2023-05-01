@@ -16,6 +16,7 @@ GRLIB_blacklisted_from_arsenal append [
 	"ACE_Vector",
 	"ACE_Yardage450",
 	"ace_gunbag",
+	"ACE_launch_NLAW_ready_F",
 	"ACE_launch_NLAW_used_F",
 	"ace_csw",
 	"ace_compat",
