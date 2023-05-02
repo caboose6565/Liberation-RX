@@ -17,7 +17,7 @@ _setupVars =
 
 _setupObjects =
 {
-	_missionPos = markerPos _missionLocation;
+	_missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
 	_vehiclePos = _missionPos findEmptyPosition [1, 60, "B_Heli_Transport_03_unarmed_F"];
 	_vehicle = [_vehiclePos, selectRandom opfor_vehicles, true, false, true] call F_libSpawnVehicle;
 	_vehicle setVariable ["R3F_LOG_disabled", true, true];

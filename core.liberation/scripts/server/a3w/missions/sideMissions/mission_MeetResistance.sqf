@@ -33,7 +33,7 @@ _setupVars =
 
 _setupObjects =
 {
-	_missionPos = (markerPos _missionLocation vectorAdd [([[-50,0,50], 20] call F_getRND), ([[-50,0,50], 20] call F_getRND), 0]);
+	_missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
 
 	// spawn some crates in the middle of town (Town marker position)
 	_box1 = [basic_weapon_typename, _missionPos, true] call boxSetup;

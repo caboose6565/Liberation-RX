@@ -22,7 +22,7 @@ _setupVars =
 
 _setupObjects =
 {
-	_missionPos = (markerPos _missionLocation vectorAdd [([[-50,0,50], 20] call F_getRND), ([[-50,0,50], 20] call F_getRND), 0]);
+	_missionPos = ([markerPos _missionLocation, 50, random 360] call BIS_fnc_relPos);
 
 	// get Houses nearbby
 	_allbuildings = [ nearestObjects [_missionPos, ["House"], 100 ], { alive _x } ] call BIS_fnc_conditionalSelect;

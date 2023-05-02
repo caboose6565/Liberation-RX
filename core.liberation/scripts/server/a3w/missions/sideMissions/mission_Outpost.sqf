@@ -15,7 +15,7 @@ _setupVars = {
 };
 
 _setupObjects = {
-	_missionPos = markerPos _missionLocation;
+	_missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
 	private _base_output = [_missionPos, false, true] call createOutpost;
 	_vehicles = _base_output select 0;
 	//_objectives = _base_output select 1;

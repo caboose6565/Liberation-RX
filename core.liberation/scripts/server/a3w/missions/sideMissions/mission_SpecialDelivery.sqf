@@ -25,16 +25,13 @@ _setupObjects =
 			_m1 = selectRandom _missionLocationList;
 			_missionPicture = getText (configFile >> "CfgVehicles" >> "C_Hatchback_01_F" >> "picture");
 			_missionHintText = format [localize "STR_SPECIALDELI_MESSAGE1", sideMissionColor, markerText _m1];
-			_missionPos = (markerPos _m1 vectorAdd [([[-100,0,100], 20] call F_getRND), ([[-100,0,100], 20] call F_getRND), 0]);
+			_missionPos = ([markerPos _m1, 100, random 360] call BIS_fnc_relPos);
 			_missionLocationList = _missionLocationList - [ _m1 ];
-
 			_m1 = selectRandom _missionLocationList;
-			_missionPos2 = (markerPos _m1 vectorAdd [([[-100,0,100], 20] call F_getRND), ([[-100,0,100], 20] call F_getRND), 0]);
+			_missionPos2 = ([markerPos _m1, 100, random 360] call BIS_fnc_relPos);
 			_missionLocationList = _missionLocationList - [ _m1 ];
-
 			_m1 = selectRandom _missionLocationList;
-			_missionPos3 = (markerPos _m1 vectorAdd [([[-100,0,100], 20] call F_getRND), ([[-100,0,100], 20] call F_getRND), 0]);
-
+			_missionPos3 = ([markerPos _m1, 100, random 360] call BIS_fnc_relPos);
 			_missionPosEnd = (markerpos _missionEnd);
 		};
 	};

@@ -17,7 +17,7 @@ _setupVars =
 
 _setupObjects =
 {
-	_missionPos = markerPos _missionLocation;
+	_missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
 
 	//_missionHintText = format ["An armed <t color='%1'>outpost</t> containing weapon crates has been spotted near the marker, go capture it!", sideMissionColor]
 };

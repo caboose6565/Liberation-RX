@@ -22,7 +22,7 @@ _setupVars =
 
 _setupObjects =
 {
-	_missionPos = (markerPos _missionLocation vectorAdd [([[-50,0,50], 20] call F_getRND), ([[-50,0,50], 20] call F_getRND), 0]);
+	_missionPos = ([markerPos _missionLocation, 50, random 360] call BIS_fnc_relPos);
 
 	// create some atmosphere around the crates 8)
 	_tent1 = createVehicle ["Land_cargo_addon02_V2_F", _missionPos, [], 3, "None"];
