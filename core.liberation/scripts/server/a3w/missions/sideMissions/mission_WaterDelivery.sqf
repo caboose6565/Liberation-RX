@@ -20,7 +20,7 @@ _setupVars =
 
 _setupObjects =
 {
-	__missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
+	_missionPos = ([markerPos _missionLocation, 100, random 360] call BIS_fnc_relPos);
 	_mission_grp = createGroup [GRLIB_side_civilian, true];
 	_man1 = _mission_grp createUnit ["C_Marshal_F", _missionPos, [], 0, "NONE"];
 	_man1 setVariable ['GRLIB_can_speak', true, true];
