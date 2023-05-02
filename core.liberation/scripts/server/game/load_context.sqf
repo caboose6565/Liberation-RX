@@ -12,7 +12,9 @@ if (count _context == 0) then {
 if (count _context >= 1) then {
     // Player loadout
     _player setUnitLoadout (_context select 1);
+    [player, ["GREUH_stuff_price", ([player] call F_loadoutPrice)]] remoteExec ["setVariable", owner _player];
     diag_log format ["--- LRX player %1 loadout Loaded.", name _player];
+    sleep 1;
 
     // AIs loadout
     if (count (_context select 2) >= 1 ) then {
