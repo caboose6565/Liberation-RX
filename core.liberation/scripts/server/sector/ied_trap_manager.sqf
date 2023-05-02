@@ -32,7 +32,7 @@ if ( count _ide_pos > 0 ) then {
 
 	if ((random 100) <= 50) then { _false_trap = true };
 
-	private _timeout = time + (30 * 60);
+	private _timeout = time + (60 * 60);
 	while {alive _ied_obj && time < _timeout && !_goes_boom } do {
 		sleep 1;
 		if (!_false_trap) then {
