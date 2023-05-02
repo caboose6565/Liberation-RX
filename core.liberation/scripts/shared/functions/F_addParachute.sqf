@@ -16,7 +16,6 @@ _parachute = createVehicle ["B_Parachute_02_F", _pos, [], 0, "CAN_COLLIDE"];
 _parachute disableCollisionWith _objet;
 _parachute disableCollisionWith _heli;
 _objet attachTo [_parachute,[0,0,0.6]];
-_objet setMass 5000;
 
 _timeout = time + 150;
 waitUntil {sleep 0.2;((getPosATL _objet select 2) < _start_smoke || !(alive _objet) || time > _timeout)};
