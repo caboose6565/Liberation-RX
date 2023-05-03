@@ -123,14 +123,14 @@ blufor_air = [
 ];
 
 static_vehicles = [
-	["B_HMG_01_F",0,10,0,GRLIB_perm_log],
-	["B_HMG_01_high_F",0,10,0,GRLIB_perm_tank],
-	["B_GMG_01_F",0,20,0,GRLIB_perm_log],
-	["B_GMG_01_high_F",0,20,0,GRLIB_perm_tank],
-	["B_static_AA_F",0,50,0,GRLIB_perm_air],
-	["B_static_AT_F",0,50,0,GRLIB_perm_air],
-	["B_Mortar_01_F",0,500,0,GRLIB_perm_max],
-	["B_SAM_System_01_F",10,1500,0,GRLIB_perm_tank],
+	["B_HMG_01_F",0,10,0,GRLIB_perm_inf],
+	["B_HMG_01_high_F",0,10,0,GRLIB_perm_log],
+	["B_GMG_01_F",0,20,0,GRLIB_perm_inf],
+	["B_GMG_01_high_F",0,20,0,GRLIB_perm_log],
+	["B_static_AA_F",0,50,0,GRLIB_perm_tank],
+	["B_static_AT_F",0,50,0,GRLIB_perm_tank],
+	["B_Mortar_01_F",0,500,0,GRLIB_perm_tank],
+	["B_SAM_System_01_F",10,1500,0,GRLIB_perm_air],
 	["B_SAM_System_02_F",10,1500,0,GRLIB_perm_air],
 	["B_AAA_System_01_F",10,1500,0,GRLIB_perm_max]
 ];
