@@ -12,8 +12,7 @@ if (count _context == 0) then {
 if (count _context >= 1) then {
     // Player loadout
     _player setUnitLoadout (_context select 1);
-    [player, ["GREUH_stuff_price", ([player] call F_loadoutPrice)]] remoteExec ["setVariable", owner _player];
-    diag_log format ["--- LRX player %1 loadout Loaded.", name _player];
+    [_player, ["GREUH_stuff_price", ([_player] call F_loadoutPrice)]] remoteExec ["setVariable", owner _player];
     sleep 1;
 
     // AIs loadout
@@ -49,7 +48,7 @@ if (count _context >= 1) then {
                     } foreach (_context select 2);
 
                     _wait = false;
-                    diag_log format ["--- LRX Loading %1 unit(s) for %2 Squad.", count (_context select 2), name _player];
+                    //diag_log format ["--- LRX Loading %1 unit(s) for %2 Squad.", count (_context select 2), name _player];
                 } else {
                     if ((getPosATL _player) distance2D (markerPos "respawn_west") > 100) then {
                         [localize "$STR_SQUAD_WAIT"] remoteExec ["hintSilent", owner _player];
