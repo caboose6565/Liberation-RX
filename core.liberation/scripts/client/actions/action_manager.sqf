@@ -41,6 +41,7 @@ while { true } do {
 		_near_fuel = [player, "FUEL", _distvehclose, false] call F_check_near;
 		_near_repair = [player, "REPAIR", _distvehclose, false] call F_check_near;
 		_near_atm = [player, "ATM", _distvehclose, true] call F_check_near;
+		//_near_medic = [player, "MEDIC", _distvehclose, true] call F_check_near;
 		_near_lhd = (player distance2D lhd < GRLIB_fob_range);
 		_my_dog = player getVariable ["my_dog", nil];
 		_my_squad = player getVariable ["my_squad", nil];
@@ -168,9 +169,9 @@ while { true } do {
 		// Heal Self
 		_idact_id = _idact_id + 1;
 		_idact_num = _id_actions select _idact_id;
-		if ((_fobdistance < _distarsenal || _near_lhd) && (damage player) >= 0.023) then {
+		if ((_fobdistance < _distarsenal || _near_lhd) && damage player >= 0.02) then {
 			if ( _idact_num == -1 ) then {
-				_idact = player addAction ["<img size='1' image='\a3\ui_f\data\IGUI\Cfg\Actions\heal_ca'/>", { (_this select 1) playMove "AinvPknlMstpSlayWnonDnon_medic"; (_this select 1) setDamage 0;},"",999,true,true,"", ""];
+				_idact = player addAction ["<img size='1' image='\a3\ui_f\data\IGUI\Cfg\Actions\heal_ca'/> Heal self", { (_this select 1) playMove "AinvPknlMstpSlayWnonDnon_medic"; (_this select 1) setDamage 0;},"",999,true,true,"", ""];
 				_id_actions set [_idact_id, _idact];
 			};
 		} else {
