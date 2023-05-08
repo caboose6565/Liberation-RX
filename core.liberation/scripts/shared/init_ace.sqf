@@ -47,13 +47,18 @@ GRLIB_movableObjects = [] + boats_names + R3F_LOG_CFG_can_be_moved_by_player;
 
 //Set the cargo space of vehicles.
 {
-     [_x, "init", { [(_this select 0), ([(_this select 0), GRLIB_cargoSpace] call ACE_getSize)] call ace_cargo_fnc_setSpace }, true, [], true] call CBA_fnc_addClassEventHandler;
+    [_x, "init", { [(_this select 0), ([(_this select 0), GRLIB_cargoSpace] call ACE_getSize)] call ace_cargo_fnc_setSpace }, true, [], true] call CBA_fnc_addClassEventHandler;
 } forEach (GRLIB_cargoSpace select 0);
 
 //Set the cargo size of objects.
 {
-     [_x, "init", { [(_this select 0), ([(_this select 0), GRLIB_cargoSize] call ACE_getSize)] call ace_cargo_fnc_setSize }, true, [], true] call CBA_fnc_addClassEventHandler;
+    [_x, "init", { [(_this select 0), ([(_this select 0), GRLIB_cargoSize] call ACE_getSize)] call ace_cargo_fnc_setSize }, true, [], true] call CBA_fnc_addClassEventHandler;
 } forEach (GRLIB_cargoSize select 0);
+
+// Set ACE Medical Facility
+{ 
+    [_x, "init", { (_this select 0) setVariable ["ace_medical_isMedicalFacility",true, true] }, true, [], true] call CBA_fnc_addClassEventHandler;
+} forEach ai_healing_sources;
 
 // R3F functions
 call compile preprocessFile "R3F_LOG\fonctions_generales\lib_geometrie_3D.sqf";
