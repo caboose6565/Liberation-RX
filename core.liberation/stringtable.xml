@@ -2901,6 +2901,10 @@
 			<Portuguese>Salto HALO</Portuguese>
 			<Czech>HALO jump</Czech>
 		</Key>
+		<Key ID="STR_HALO_PARAM_VEH">
+			<Original>HALO Vehicle</Original>
+			<French>Vehicule HALO</French>
+		</Key>		
 		<Key ID="STR_HALO_PARAM1">
 			<Original>Enabled - No cooldown</Original>
 			<French>Activé - Pas d'attente</French>

@@ -32,8 +32,13 @@ waitUntil { dialog };
 dojump = 0;
 halo_position = getPosATL _unit;
 
-[ "halo_map_event", "onMapSingleClick", { halo_position = _pos } ] call BIS_fnc_addStackedEventHandler;
 "spawn_marker" setMarkerTextLocal (localize "STR_HALO_PARAM");
+if (_unit isKindOf "LandVehicle") then {
+	"spawn_marker" setMarkerTextLocal (localize "STR_HALO_PARAM_VEH");
+	ctrlSetText [202, (localize "STR_HALO_PARAM_VEH")];
+};
+
+[ "halo_map_event", "onMapSingleClick", { halo_position = _pos } ] call BIS_fnc_addStackedEventHandler;
 
 while { dialog && alive _unit && dojump == 0 } do {
 	"spawn_marker" setMarkerPosLocal halo_position;
