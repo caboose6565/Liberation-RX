@@ -88,7 +88,8 @@ heavy_vehicles = [
 	["B_MBT_01_TUSK_F",15,1500,35,GRLIB_perm_air],
 	["B_AFV_Wheeled_01_cannon_F",15,3000,35,GRLIB_perm_max],
 	["B_AFV_Wheeled_01_up_cannon_F",15,3500,35,GRLIB_perm_max],
-	["B_MBT_01_arty_F",15,3500,30,GRLIB_perm_max]
+	["B_MBT_01_arty_F",15,3500,30,GRLIB_perm_max],
+	["B_MBT_01_mlrs_F",20,5000,30,GRLIB_perm_max]
 ];
 
 air_vehicles = [
