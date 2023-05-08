@@ -193,6 +193,15 @@ if (isServer && hasInterface) then {
 		[] call save_game_mp;
 	 }];
 };
+onPlayerDisconnected {
+	diag_log [_id, _uid, _name];
+	// Remove Marker
+	deletemarker format ["PAR_marker_%1", _name];
+
+	// Remove AI
+	private _bros = allUnits select {(_x getVariable ["PAR_Grp_ID","0"]) == format["Bros_%1", _uid]};
+	{ deleteVehicle _x } forEach _bros;
+};
 
 initAmbientLife;
 enableEnvironment [true, true];
