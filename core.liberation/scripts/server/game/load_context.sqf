@@ -11,8 +11,14 @@ if (count _context == 0) then {
 };
 if (count _context >= 1) then {
     // Player loadout
-    _player setUnitLoadout (_context select 1);
-    [_player, ["GREUH_stuff_price", ([_player] call F_loadoutPrice)]] remoteExec ["setVariable", owner _player];
+    [
+        [_context select 1],
+        {
+            params ["_loadout"];
+            player setUnitLoadout _loadout;
+            player setVariable ["GREUH_stuff_price", ([player] call F_loadoutPrice)];
+        }
+    ] remoteExec ["bis_fnc_call", owner _player];
     sleep 1;
 
     // AIs loadout
