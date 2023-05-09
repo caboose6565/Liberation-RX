@@ -75,7 +75,6 @@ _successExec = {
 	_successHintMessage = format [localize "STR_INSURGENCY_MESSAGE2", sideMissionColor, _townName];
 	[_missionPos] call showlandmines;
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
-	A3W_delivery_failed = 0;
 };
 
 _this call sideMissionProcessor;

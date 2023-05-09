@@ -25,8 +25,13 @@ while {true} do {
 		// _availableMissions = MISSION_CTRL_PVAR_LIST; // If you want to allow multiple missions of the same type running along, uncomment this line and comment the one above
 
 		if (count _availableMissions > 0 && diag_fps > 35.0) then {
-			_missionsList = [_availableMissions] call generateMissionWeights;
-			_nextMission = _missionsList call fn_selectRandomWeighted;
+			if (A3W_delivery_failed > 3) then {
+				_nextMission = "mission_TownInsurgency";
+				A3W_delivery_failed = 0;
+			} else {
+				_missionsList = [_availableMissions] call generateMissionWeights;
+				_nextMission = _missionsList call fn_selectRandomWeighted;
+			};
 			if (!isNil "GRLIB_A3W_debug") then {
 				diag_log "DBG: A3W missions:";
 				{ diag_log format ["    %1", _x] } foreach MISSION_CTRL_PVAR_LIST;

@@ -28,7 +28,6 @@ if (_arrayCount > count _weights) exitWith {
 
 if (_weightsTotal > 0) then {
 	private ["_random", "_index"];
-
 	_random = floor(random _weightsTotal);
 	_weightsTotal = 0;
 
@@ -40,11 +39,7 @@ if (_weightsTotal > 0) then {
 		};
 	} forEach _weights;
 
-	if (!isNil "_index") then {
-		_array select _index
-	} else {
-		["Your computer is broken."] call BIS_fnc_error;
-	};
+	_array select _index;
 } else {
 	["The sum of weights must be larger than 0"] call BIS_fnc_error;
 };
