@@ -418,7 +418,7 @@ opfor_squad_low_intensity = [
 	opfor_medic,
 	opfor_rpg,
 	opfor_marksman,
-	opfor_rifleman,	
+	opfor_rifleman,
 	opfor_sentry,
 	opfor_sentry,
 	opfor_sentry
@@ -503,7 +503,7 @@ GRLIB_ide_traps = [
 	"Land_Sacks_heap_F",
 	"Land_CanisterFuel_White_F",
 	"Land_CanisterFuel_Blue_F",
-	"Land_CanisterFuel_Red_F",	
+	"Land_CanisterFuel_Red_F",
 	"Land_GasTank_01_khaki_F",
 	"Land_FirstAidKit_01_closed_F",
 	"Box_C_UAV_06_Swifd_F",
@@ -546,8 +546,8 @@ GRLIB_ignore_colisions = [
 // Ammobox you want keep contents
 GRLIB_Ammobox_keep = [
 	playerbox_typename,
-	basic_weapon_typename,
 	medicalbox_typename,
+	Box_Weapon_typename,
 	Box_Ammo_typename,
 	Box_Support_typename,
 	Box_Launcher_typename,
