@@ -22,10 +22,7 @@ private _getPrice = {
 // Init BUY list
 private _buy_list_static = [
 	[Arsenal_typename, 0, 67],
-	[medicalbox_typename, 0, 60],
-	[waterbarrel_typename, 0, 70],
-	[foodbarrel_typename, 0, 72],
-	[fuelbarrel_typename, 0, 74]
+	[medicalbox_typename, 0, 60]
 ];
 private _buy_blacklist = [];
 private _buy_list = [opfor_recyclable, {

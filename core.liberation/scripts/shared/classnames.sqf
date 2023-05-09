@@ -548,7 +548,6 @@ GRLIB_Ammobox_keep = [
 	playerbox_typename,
 	basic_weapon_typename,
 	medicalbox_typename,
-	Box_Weapon_typename,
 	Box_Ammo_typename,
 	Box_Support_typename,
 	Box_Launcher_typename,
