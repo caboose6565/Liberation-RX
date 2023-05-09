@@ -4,6 +4,7 @@
 GRLIB_mod_list_west = [
     "A3_BLU",
     "A3_OPF",
+    "A3_BLU_PAC",
     "A3_OPF_PAC",
     "A3_IND",
     "CP_BAF_DES",
@@ -19,7 +20,7 @@ GRLIB_mod_list_west = [
     "GM_WEST",
     "GM_WEST_WINT",
     "GM_EAST",
-    "GM_EAST_WINT",   
+    "GM_EAST_WINT",
     "OPTRE",
     "WS_UNA",
     "SOG_USA",
@@ -40,9 +41,10 @@ GRLIB_mod_list_east = [
     "A3_IND",
     "A3_OPF_PAC",
     "A3_OPF_UB",
+    "A3_BLU_PAC",
     "CP_TA",
     "CP_USMC_W",    // C0br4
-    "CP_USMC_D",    // C0br4 
+    "CP_USMC_D",    // C0br4
     "CP_AFRF",		// Z@warrior CUP AFRF
     "CP_SAHRA_D",	// Z@Warrior CUP Sahrani Desert
     "EJW_TA",
@@ -52,7 +54,7 @@ GRLIB_mod_list_east = [
     "RHS_AFRF",
     "FFAA_SPAIN_W",  // C0br4
     "GM_WEST",
-    "GM_WEST_WINT",    
+    "GM_WEST_WINT",
     "GM_EAST",
     "GM_EAST_WINT",
     "OPTRE",

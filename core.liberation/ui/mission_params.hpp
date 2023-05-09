@@ -74,10 +74,11 @@ class Params
 	};
 	class ModPresetWest {
 		title = "MOD Preset - Friendly";
-		values[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29 };
+		values[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30 };
 		texts[] = {
 					"ArmA3 NATO",
 					"ArmA3 CSAT",
+					"ArmA3 NATO Pacific",
 					"ArmA3 CSAT Pacific",
 					"ArmA3 AAF",
 					"CUP BAF Desert",
@@ -111,13 +112,14 @@ class Params
 	};
 	class ModPresetEast {
 		title = "MOD Preset - Enemy";
-		values[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32 };
+		values[] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33 };
 		texts[] = {
 					"ArmA3 CSAT",
 					"ArmA3 NATO",
 					"ArmA3 AAF",
 					"ArmA3 CSAT Pacific",
 					"ArmA3 CSAT Urban",
+					"ArmA3 NATO Pacific",
 					"CUP Takistan",
 					"CUP USMC Woodland",
 					"CUP USMC Desert",
@@ -145,7 +147,7 @@ class Params
 					"3CB Chernarussian Red Star",
 					"CWR Cold War Rearmed III - SOVIET",
 					"Unsung USA",
-					"Unsung NVA"					
+					"Unsung NVA"
 				};
 		default = 0;
 	};
@@ -292,7 +294,7 @@ class Params
 		values[] = {1,2,3,4,5,6};
 		texts[] = {1,2,3,4,5,6};
 		default = 3;
-	};	
+	};
 	class Permissions{
 		title = $STR_PERMISSIONS_PARAM;
 		values[] = {1,0};
