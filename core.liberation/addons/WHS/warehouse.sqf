@@ -90,6 +90,7 @@ while { dialog && alive player } do {
             // load
             if (load_box == 1) then {
                 ctrlEnable [120, false];
+                lbSetCurSel [110, -1];
                 _box = _mybox select (lbCurSel 110);
                 _box_name = [typeOf _box] call F_getLRXName;
                 _price = support_vehicles select {(_x select 0) == (typeOf _box)} select 0 select 2;
@@ -106,6 +107,7 @@ while { dialog && alive player } do {
             // unload
             if (load_box == 2) then {
                 ctrlEnable [121, false];
+                lbSetCurSel [111, -1];
                 _box = GRLIB_warehouse select (lbCurSel 111) select 0;
                 _box_name = [_box] call F_getLRXName;
                 _price = support_vehicles select {(_x select 0) == (_box)} select 0 select 2;
