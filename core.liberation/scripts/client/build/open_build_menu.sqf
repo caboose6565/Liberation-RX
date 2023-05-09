@@ -54,7 +54,7 @@ while { dialog && alive player && (dobuild == 0 || buildtype == 1)} do {
 		if (buildtype == 8 ) then {
 			_build_list pushback _x;
 		} else {
-			if ( _score >= (_x select 4) ) then {_build_list pushback _x};
+			if ( _score >= (_x select 4) && (_x select 4) < GRLIB_perm_hidden) then { _build_list pushback _x };
 		};
 	} forEach (build_lists select buildtype);
 

@@ -1,5 +1,6 @@
 // *** GLOBAL DEFINITIOON ***
 
+GRLIB_perm_hidden = 99999;
 markers_reset = [99999,99999,0];
 zeropos = [0,0,0];
 
@@ -151,17 +152,17 @@ support_vehicles = support_vehicles + [
 	[FOB_box_outpost,5,500,20,GRLIB_perm_log],
 	[FOB_box_typename,5,1500,80,GRLIB_perm_max],
 	[FOB_truck_typename,5,1500,150,GRLIB_perm_max],
-	[ammobox_b_typename,0,round(300 / GRLIB_recycling_percentage),0,99999],
-	[ammobox_o_typename,0,round(300 / GRLIB_recycling_percentage),0,99999],
-	[ammobox_i_typename,0,round(300 / GRLIB_recycling_percentage),0,99999],
-	[basic_weapon_typename,0,round(150 / GRLIB_recycling_percentage),0,99999],
-	[waterbarrel_typename,0,110,0,99999],
-	[fuelbarrel_typename,0,120,0,99999],
-	[foodbarrel_typename,0,130,0,99999]
+	[ammobox_b_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
+	[ammobox_o_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
+	[ammobox_i_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
+	[basic_weapon_typename,0,round(150 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
+	[waterbarrel_typename,0,110,0,GRLIB_perm_hidden],
+	[fuelbarrel_typename,0,120,0,GRLIB_perm_hidden],
+	[foodbarrel_typename,0,130,0,GRLIB_perm_hidden]
 ] + support_vehicles_west;
 
 // *** BUILDINGS ***
-buildings = [[FOB_sign,0,0,0,99999]];
+buildings = [[FOB_sign,0,0,0,GRLIB_perm_hidden]];
 if (isNil "buildings_west_overide") then {
 	buildings append buildings_default + buildings_west;
 } else {
