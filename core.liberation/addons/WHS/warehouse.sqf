@@ -25,6 +25,7 @@ while { dialog && alive player } do {
         // Box outside
         _control = _display displayCtrl (110);
         lbClear 110;
+        lbSetCurSel [110, -1];
         _mybox = getPosATL player nearEntities [[waterbarrel_typename,fuelbarrel_typename,foodbarrel_typename,basic_weapon_typename], 20];
         {
             _entrytext = [typeOf _x] call F_getLRXName;
@@ -39,6 +40,7 @@ while { dialog && alive player } do {
         // Box inside
         _control = _display displayCtrl (111);
         lbClear 111;
+        lbSetCurSel [111, -1];
         {
             _entrytext = [(_x select 0)] call F_getLRXName;
             _control lnbAddRow [_entrytext, str (_x select 1)];
@@ -90,7 +92,6 @@ while { dialog && alive player } do {
             // load
             if (load_box == 1) then {
                 ctrlEnable [120, false];
-                lbSetCurSel [110, -1];
                 _box = _mybox select (lbCurSel 110);
                 _box_name = [typeOf _box] call F_getLRXName;
                 _price = support_vehicles select {(_x select 0) == (typeOf _box)} select 0 select 2;
@@ -107,7 +108,6 @@ while { dialog && alive player } do {
             // unload
             if (load_box == 2) then {
                 ctrlEnable [121, false];
-                lbSetCurSel [111, -1];
                 _box = GRLIB_warehouse select (lbCurSel 111) select 0;
                 _box_name = [_box] call F_getLRXName;
                 _price = support_vehicles select {(_x select 0) == (_box)} select 0 select 2;
@@ -129,7 +129,7 @@ while { dialog && alive player } do {
                             [_box, load_box, player] remoteExec ["warehouse_remote_call", 2];
                             hintSilent format ["%1 Taken from Warehouse,\n for %2 AMMO.", _box_name, _price];
                             playSound "taskSucceeded";
-                        };                        
+                        };
                     };
                     sleep 1;
                 };
@@ -138,7 +138,6 @@ while { dialog && alive player } do {
             _refresh = true;
             load_box = 0;
         };
-
     };
     sleep 0.3;
 };
