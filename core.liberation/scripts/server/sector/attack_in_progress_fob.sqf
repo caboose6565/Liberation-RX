@@ -65,7 +65,7 @@ if ( _ownership == GRLIB_side_enemy ) then {
 			} foreach _enemy_left;
 
 			private _rwd_xp = round (15 + random 10);
-			private _text = format ["Glory to the Defendes! +%1 XP", _rwd_xp];
+			private _text = format ["Glory to the Defenders! +%1 XP", _rwd_xp];
 			{
 				if (_x distance2D _fobpos < GRLIB_sector_size ) then {
 					[_x, _rwd_xp] call F_addScore;
