@@ -2,9 +2,7 @@ class liberation_params {
 	idd = 5119;
 	movingEnable = false;
 	controlsBackground[] = {};
-
 	controls[] = { "OuterBG1", "OuterBG_F1", "InnerBG1", "InnerBG_F1", "Header", "ButtonClose", "ButtonSave", "ButtonCancel", "MissionsControlGroup" };
-
 	objects[] = {};
 
 	class OuterBG1 : StdBG{
@@ -47,7 +45,6 @@ class liberation_params {
 	};
 
 	class MissionsControlGroup  {
-
 	 	type = 15;
 	 	idc = 9969;
 	 	style = 0;
@@ -57,31 +54,31 @@ class liberation_params {
 		h = 0.55 * safezoneH ;
 		colorScrollbar[] = COLOR_WHITE;
 
-	 	// class VScrollbar
-	 	// {
-	 	// 	color[] = COLOR_WHITE;
-	 	// 	width = 0.01 * safezoneW;
-		// 	autoScrollSpeed = 5;
-		// 	autoScrollDelay = 25;
-		// 	autoScrollRewind = 0;
-	 	// };
+	 	class VScrollbar
+	 	{
+	 		color[] = COLOR_WHITE;
+	 		width = 0.01 * safezoneW;
+			autoScrollSpeed = 5;
+			autoScrollDelay = 25;
+			autoScrollRewind = 0;
+	 	};
 
-	 	// class HScrollbar
-	 	// {
-	 	// 	color[] = COLOR_WHITE;
-	 	// 	height = 0.012 * safezoneH;
-	 	// };
+	 	class HScrollbar
+	 	{
+	 		color[] = COLOR_WHITE;
+	 		height = 0.012 * safezoneH;
+	 	};
 
-	 	// class ScrollBar
-	 	// {
-		// 	color[] = COLOR_WHITE;
-		// 	colorActive[] = COLOR_WHITE;
-		// 	colorDisabled[] = COLOR_WHITE;
-		// 	thumb = "\A3\ui_f\data\gui\cfg\scrollbar\thumb_ca.paa";
-		// 	arrowEmpty = "\A3\ui_f\data\gui\cfg\scrollbar\arrowEmpty_ca.paa";
-		// 	arrowFull = "\A3\ui_f\data\gui\cfg\scrollbar\arrowFull_ca.paa";
-		// 	border = "\A3\ui_f\data\gui\cfg\scrollbar\border_ca.paa";
-	 	// };
+	 	class ScrollBar
+	 	{
+			color[] = COLOR_WHITE;
+			colorActive[] = COLOR_WHITE;
+			colorDisabled[] = COLOR_WHITE;
+			thumb = "\A3\ui_f\data\gui\cfg\scrollbar\thumb_ca.paa";
+			arrowEmpty = "\A3\ui_f\data\gui\cfg\scrollbar\arrowEmpty_ca.paa";
+			arrowFull = "\A3\ui_f\data\gui\cfg\scrollbar\arrowFull_ca.paa";
+			border = "\A3\ui_f\data\gui\cfg\scrollbar\border_ca.paa";
+	 	};
 
 	 	class Controls {};
 	 };
