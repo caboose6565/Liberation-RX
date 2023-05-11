@@ -11,7 +11,6 @@ private _offset = 0;
 } foreach box_transport_config;
 
 _truck_to_unload allowDamage false;
-_truck_to_unload enableSimulationGlobal false;
 private _all_objects = _truck_to_unload getVariable ["GRLIB_ammo_truck_load", []];
 { 
 	_x enableSimulationGlobal false;
@@ -43,7 +42,9 @@ sleep 1;
 	_x enableCollisionWith _truck_to_unload;
 	_x allowDamage true;
 	_x setVariable ["R3F_LOG_disabled", false, true];
-} foreach _all_objects + [_truck_to_unload];
+} foreach _all_objects;
+
+_truck_to_unload allowDamage true;
 _truck_to_unload setVariable ["GRLIB_ammo_truck_load", [], true];
 
 sleep 1;
