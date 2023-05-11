@@ -23,13 +23,12 @@ diag_log "-----------------------------------------------------";
 if (_save == 1) then {
   diag_log "--- LRX Savegame ------------------------------------";
   diag_log format ["Save key: %1", GRLIB_save_key];
-  _greuh_liberation_savegame = profileNamespace getVariable GRLIB_save_key;
   {
     private _var = _x;
     if (typeName _var == "ARRAY") then {
       { diag_log format ["   %1", _x] } foreach _var;
     } else { diag_log _x };
-  } foreach _greuh_liberation_savegame;
+  } foreach (profileNamespace getVariable GRLIB_save_key);
   diag_log "-----------------------------------------------------";
   diag_log "Player Context";
   {

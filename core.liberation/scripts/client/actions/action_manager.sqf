@@ -9,6 +9,7 @@ private _id_actions = [
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,	
 	-1, -1
 ];
 
@@ -61,8 +62,28 @@ while { true } do {
 			};
 		};
 
-		// Dog - Actions
+		// Admin Menu
 		_idact_id = _idact_id + 1;
+		_idact_num = _id_actions select _idact_id;
+		if (([] call is_admin || getPlayerUID player in GRLIB_whitelisted_moderators) && GRLIB_admin_menu ) then {
+			if ( _idact_num == -1 ) then {
+				_idact = player addAction ["<t color='#0000F8'>" + localize "STR_ADMIN_MENU" + "</t>","scripts\client\commander\admin_menu.sqf","",999,false,true,"",""];
+				_id_actions set [_idact_id, _idact];
+				_idact = player addAction ["<t color='#008080'>-- CONFIGURE MISSION</t>","scripts\client\commander\open_params.sqf","",998,false,true,"",""];
+				_id_actions set [_idact_id+1, _idact];
+			};
+		} else {
+			if ( _idact_num != -1 ) then {
+				player removeAction _idact_num;
+				_id_actions set [_idact_id, -1];
+				_idact_num = _id_actions select _idact_id+1;
+				player removeAction _idact_num;
+				_id_actions set [_idact_id, -1];
+			};
+		};
+
+		// Dog - Actions
+		_idact_id = _idact_id + 2;
 		_idact_num = _id_actions select _idact_id;
 		if (!isNil "_my_dog") then {
 			if ( _idact_num == -1 ) then {
@@ -393,21 +414,6 @@ while { true } do {
 		// 		_id_actions set [26, -1];
 		// 	};
 		// };
-
-		// Admin Menu
-		_idact_id = _idact_id + 1;
-		_idact_num = _id_actions select _idact_id;
-		if (([] call is_admin || getPlayerUID player in GRLIB_whitelisted_moderators) && GRLIB_admin_menu ) then {
-			if ( _idact_num == -1 ) then {
-				_idact = player addAction ["<t color='#0000F8'>" + localize "STR_ADMIN_MENU" + "</t>","scripts\client\commander\admin_menu.sqf","",999,false,true,"",""];
-				_id_actions set [_idact_id, _idact];
-			};
-		} else {
-			if ( _idact_num != -1 ) then {
-				player removeAction _idact_num;
-				_id_actions set [_idact_id, -1];
-			};
-		};
 
 		// Destroy Outpost
 		_idact_id = _idact_id + 1;

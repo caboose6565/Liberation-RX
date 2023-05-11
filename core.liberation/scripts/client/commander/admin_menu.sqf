@@ -208,7 +208,7 @@ while { alive player && dialog } do {
 			output_save = [];
 			[player, {
 				[] call save_game_mp;
-				[missionNamespace, ["output_save", greuh_liberation_savegame]] remoteExec ["setVariable", owner _this];
+				[missionNamespace, ["output_save", (profileNamespace getVariable GRLIB_save_key)]] remoteExec ["setVariable", owner _this];
 				["Copy the Savegame from Text Field."] remoteExec ["hint", owner _this];
 			}] remoteExec ["bis_fnc_call", 2];
 			waitUntil {uiSleep 0.3; ((count output_save > 0) || !(dialog) || !(alive player))};

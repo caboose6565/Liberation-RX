@@ -77,24 +77,24 @@ if ( GRLIB_param_wipe_savegame_1 == 1 && GRLIB_param_wipe_savegame_2 == 1 ) then
 };
 
 // Load Savegame
-greuh_liberation_savegame = profileNamespace getVariable GRLIB_save_key;
+private _lrx_liberation_savegame = profileNamespace getVariable GRLIB_save_key;
 private _side_west = "";
 private _side_east = "";
 private _buildings_created = [];
 
-if ( !isNil "greuh_liberation_savegame" ) then {
+if ( !isNil "_lrx_liberation_savegame" ) then {
 	diag_log format [ "--- LRX Load Game start at %1", time ];
 
-	blufor_sectors = greuh_liberation_savegame select 0;
-	GRLIB_all_fobs = greuh_liberation_savegame select 1;
-	buildings_to_load = greuh_liberation_savegame select 2;
-	time_of_day = greuh_liberation_savegame select 3;
-	combat_readiness = greuh_liberation_savegame select 4;
-	GRLIB_garage = greuh_liberation_savegame select 5;
-	_side_west = greuh_liberation_savegame select 6;
-	_side_east = greuh_liberation_savegame select 7;
-	GRLIB_warehouse = greuh_liberation_savegame select 8;
-	_stats = greuh_liberation_savegame select 9;
+	blufor_sectors = _lrx_liberation_savegame select 0;
+	GRLIB_all_fobs = _lrx_liberation_savegame select 1;
+	buildings_to_load = _lrx_liberation_savegame select 2;
+	time_of_day = _lrx_liberation_savegame select 3;
+	combat_readiness = _lrx_liberation_savegame select 4;
+	GRLIB_garage = _lrx_liberation_savegame select 5;
+	_side_west = _lrx_liberation_savegame select 6;
+	_side_east = _lrx_liberation_savegame select 7;
+	GRLIB_warehouse = _lrx_liberation_savegame select 8;
+	_stats = _lrx_liberation_savegame select 9;
 	stats_opfor_soldiers_killed = _stats select 0;
 	stats_opfor_killed_by_players = _stats select 1;
 	stats_blufor_soldiers_killed = _stats select 2;
@@ -124,16 +124,16 @@ if ( !isNil "greuh_liberation_savegame" ) then {
 	stats_fobs_lost = _stats select 26;
 	stats_readiness_earned = _stats select 27;
 
-	_weights = greuh_liberation_savegame select 10;
+	_weights = _lrx_liberation_savegame select 10;
 	infantry_weight = _weights select 0;
 	armor_weight = _weights select 1;
 	air_weight = _weights select 2;
 
-	GRLIB_vehicle_to_military_base_links = greuh_liberation_savegame select 11;
-	GRLIB_permissions = greuh_liberation_savegame select 12;
-	GRLIB_player_context = greuh_liberation_savegame select 13;
-	resources_intel = greuh_liberation_savegame select 14;
-	GRLIB_player_scores = greuh_liberation_savegame select 15;
+	GRLIB_vehicle_to_military_base_links = _lrx_liberation_savegame select 11;
+	GRLIB_permissions = _lrx_liberation_savegame select 12;
+	GRLIB_player_context = _lrx_liberation_savegame select 13;
+	resources_intel = _lrx_liberation_savegame select 14;
+	GRLIB_player_scores = _lrx_liberation_savegame select 15;
 
 	if ( GRLIB_force_load == 0 && typeName _side_west == "STRING" && typeName _side_east == "STRING" ) then {
 		if ( _side_west != GRLIB_mod_west || _side_east != GRLIB_mod_east ) exitWith {
@@ -341,7 +341,7 @@ if ( !isNil "greuh_liberation_savegame" ) then {
 
 	diag_log format [ "--- LRX Load Game finish at %1", time ];
 } else {
-	greuh_liberation_savegame = [];
+	_lrx_liberation_savegame = [];
 };
 
 if ( count GRLIB_vehicle_to_military_base_links == 0 ) then {

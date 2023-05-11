@@ -195,7 +195,7 @@ if ( GRLIB_endgame == 1 ) then {
     _stats pushback stats_readiness_earned;
 
     // Save Blob
-    greuh_liberation_savegame = [
+    private _lrx_liberation_savegame = [
         blufor_sectors,
         GRLIB_all_fobs,
         buildings_to_save,
@@ -214,7 +214,7 @@ if ( GRLIB_endgame == 1 ) then {
         _player_scores
     ];
 
-    profileNamespace setVariable [ GRLIB_save_key, greuh_liberation_savegame ];
+    profileNamespace setVariable [ GRLIB_save_key, _lrx_liberation_savegame ];
     saveProfileNamespace;
     diag_log format [ "--- LRX Save %1 in Profile at %2", GRLIB_save_key, time ];
 };
