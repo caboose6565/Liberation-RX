@@ -11,10 +11,10 @@
 // - FilterArsenal = 1    Soft Mode: The Arsenal only show your side gears.
 //                        but the player can use other objects,
 //                        from enemy equipment or anything else. (from saved loadout).
-//                        
+//
 // - FilterArsenal = 2    Strict Mode: The player can ONLY use items present in the Arsenal.
 //                        he will not be able to use enemy weapons or anything else. (from saved loadout).
-//                        
+//
 // - FilterArsenal = 3    Strict Mode + MOD: The player can ONLY use items present in the Arsenal.
 //                        plus items from the current MOD.
 //
@@ -32,12 +32,12 @@
 if (isDedicated) exitWith {};
 
 // Init flag
-LRX_arsenal_init_done = false; 
+LRX_arsenal_init_done = false;
 
-// Filters disabled 
+// Filters disabled
 waitUntil { sleep 1; !isNil "GRLIB_filter_arsenal" };
 if (GRLIB_filter_arsenal == 0) exitWith {
-    LRX_arsenal_init_done = true; 
+    LRX_arsenal_init_done = true;
 	//Enable ACE Arsenal for no filter cases
 	if (GRLIB_ACE_enabled) then { [myLARsBox, true, false] call ace_arsenal_fnc_initBox };
     diag_log "--- LRX Arsenal filters disabled.";
@@ -93,4 +93,4 @@ if (GRLIB_ACE_enabled) then {
 diag_log format ["--- LRX Arsenal initialized. blacklist: %1 - whitelist: %2", count GRLIB_blacklisted_from_arsenal, count GRLIB_whitelisted_from_arsenal];
 diag_log format ["--- LRX MOD %1 use: %2 signatures", GRLIB_mod_west, count GRLIB_MOD_signature];
 
-LRX_arsenal_init_done = true; 
+LRX_arsenal_init_done = true;
