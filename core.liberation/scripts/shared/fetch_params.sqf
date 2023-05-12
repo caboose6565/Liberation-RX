@@ -12,9 +12,9 @@
 //--- Parameters from Lobby ----------------------------------------------
 GRLIB_use_whitelist = ["Whitelist",1] call bis_fnc_getParamValue;
 GRLIB_use_exclusive = ["Exclusive",0] call bis_fnc_getParamValue;
-GRLIB_param_open_params = ["OpenParams",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_savegame_1 = ["WipeSave1",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_savegame_2 = ["WipeSave2",0] call bis_fnc_getParamValue;
+GRLIB_param_open_params = ["OpenParams",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_params = ["WipeSave3",0] call bis_fnc_getParamValue;
 GRLIB_force_load = ["ForceLoading",0] call bis_fnc_getParamValue;
 //------------------------------------------------------------------------
@@ -27,19 +27,18 @@ private _lrx_getParamValue = {
 	_def;
 };
 
+private _params_name = format ["%1-config", GRLIB_save_key];
+if (GRLIB_param_wipe_params == 1) then { profileNamespace setVariable [_params_name, LRX_Mission_Params]; };
+
 // Open Mission Parameters
 if (GRLIB_param_open_params == 1) then {
 	if (!isDedicated && hasInterface) then {
-		titleText ["Wait for Mission configuration...", "BLACK FADED", 100];
 		[] execVM "scripts\client\commander\open_params.sqf";
 	};
 	waitUntil { sleep 1; GRLIB_param_open_params == 0 };
 };
 
 // Load Mission Parameters
-private _params_name = format ["%1-config", GRLIB_save_key];
-if (GRLIB_param_wipe_params == 1) then { profileNamespace setVariable [_params_name, nil] };
-
 private _lrx_liberation_params = profileNamespace getVariable _params_name;
 if ( isNil "_lrx_liberation_params" ) then {
 	_lrx_liberation_params = LRX_Mission_Params;

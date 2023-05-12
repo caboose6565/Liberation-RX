@@ -1,18 +1,24 @@
 private ["_nextparam", "_idx", "_control", "_selection", "_value", "_value_raw", "_save_data"];
-if !([] call is_admin) exitWith {};
+
 waitUntil {!(isNull (findDisplay 46))};
-
-createDialog "liberation_params";
-
-param_id = -1;
-param_value = -1;
-save_changes = 0;
-
 disableUserInput false;
 disableUserInput true;
 disableUserInput false;
-disableSerialization;
 
+if ( !([] call is_admin) && GRLIB_param_open_params == 1) then {
+	waitUntil {
+		titleText ["... Waiting for LRX Configuration ...", "BLACK FADED", 100];
+		uIsleep 2;
+		titleText ["... Please Wait ...", "BLACK FADED", 100];
+		uIsleep 2;
+		GRLIB_param_open_params == 0;
+	};
+	titleText ["", "BLACK FADED", 100];
+};
+if !([] call is_admin) exitWith {};
+
+createDialog "liberation_params";
+disableSerialization;
 waitUntil { dialog };
 
 private _display = findDisplay 5119;
@@ -29,6 +35,10 @@ private _lrx_getParamData = {
 
 private _params_save = profileNamespace getVariable format ["%1-config", GRLIB_save_key];
 private _params_array = [];
+param_id = -1;
+param_value = -1;
+save_changes = 0;
+
 {
 	_data = [_x select 0] call _lrx_getParamData;
 	_name = _data select 0;
@@ -94,6 +104,7 @@ while { dialog && alive player } do {
 				params ["_params"];
 				profileNamespace setVariable [format ["%1-config", GRLIB_save_key], _params];
 				GRLIB_param_open_params = 0;
+				publicVariable "GRLIB_param_open_params";
 			}
 		] remoteExec ["bis_fnc_call", 2];
 

@@ -11,13 +11,19 @@ class Params
 		values[] = { "" };
 		texts[] = { "" };
 		default = "";
-	};	
+	};
 	class OpenParams {
 		title = "Open Mission Parameters";
 		values[] = { 1, 0 };
 		texts[] = { $STR_PARAMS_ENABLED, $STR_PARAMS_DISABLED };
 		default = 0;
-	};	
+	};
+	class WipeSave3 {
+		title = $STR_WIPE_TITLE_3;
+		values[] = {1, 0};
+		texts[] = { $STR_PARAMS_ENABLED, $STR_PARAMS_DISABLED };
+		default = 0;
+	};
 	class Space1 {
 		title = "";
 		values[] = { "" };
@@ -35,13 +41,13 @@ class Params
 		values[] = { 1, 0 };
 		texts[] = { $STR_PARAMS_ENABLED, $STR_PARAMS_DISABLED };
 		default = 0;
-	};	
+	};
 	class Space2 {
 		title = "";
 		values[] = { "" };
 		texts[] = { "" };
 		default = "";
-	};	
+	};
 	class WipeSave1 {
 		title = $STR_WIPE_TITLE;
 		values[] = {0,1};
@@ -54,18 +60,12 @@ class Params
 		texts[] = { $STR_WIPE_NO, $STR_WIPE_YES };
 		default = 0;
 	};
-	class WipeSave3 {
-		title = $STR_WIPE_TITLE_3;
-		values[] = {0,1};
-		texts[] = { $STR_WIPE_NO, $STR_WIPE_YES };
-		default = 0;
-	};	
 	class Space3 {
 		title = "";
 		values[] = { "" };
 		texts[] = { "" };
 		default = "";
-	};	
+	};
 	class ForceLoading {
 		title = "Force save game loading.";
 		values[] = {0,1};
