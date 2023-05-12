@@ -3,16 +3,20 @@
 // Map constant
 [] call compileFinal preprocessFileLineNUmbers "gameplay_constants.sqf";
 
+// Classename MOD source
+[] call compileFinal preprocessFileLineNUmbers "mod_template\mod_init.sqf";
+
 // Mission Parameter constant
 [] call compileFinal preprocessFileLineNUmbers "mission_params.sqf";
 
-//--- Parameters from Lobby  ---------------------------------------------
+//--- Parameters from Lobby ----------------------------------------------
 GRLIB_use_whitelist = ["Whitelist",1] call bis_fnc_getParamValue;
 GRLIB_use_exclusive = ["Exclusive",0] call bis_fnc_getParamValue;
 GRLIB_param_open_params = ["OpenParams",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_savegame_1 = ["WipeSave1",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_savegame_2 = ["WipeSave2",0] call bis_fnc_getParamValue;
-GRLIB_force_load = ["ForceLoading", 0] call bis_fnc_getParamValue;
+GRLIB_param_wipe_params = ["WipeSave3",0] call bis_fnc_getParamValue;
+GRLIB_force_load = ["ForceLoading",0] call bis_fnc_getParamValue;
 //------------------------------------------------------------------------
 
 private _lrx_getParamValue = {
@@ -31,6 +35,8 @@ if (GRLIB_param_open_params == 1) then {
 
 // Load Mission Parameters
 private _params_name = format ["%1-config", GRLIB_save_key];
+if (GRLIB_param_wipe_params == 1) then { profileNamespace setVariable [_params_name, nil] };
+
 private _lrx_liberation_params = profileNamespace getVariable _params_name;
 if ( isNil "_lrx_liberation_params" ) then {
 	_lrx_liberation_params = LRX_Mission_Params;
@@ -97,9 +103,6 @@ GRLIB_civilians_amount = GRLIB_civilians_amount * GRLIB_civilian_activity;
 // User Defined Parameters
 //[] call compileFinal preprocessFileLineNUmbers "mission_param.sqf";
 
-
-// Classename MOD source
-[] call compileFinal preprocessFileLineNUmbers "mod_template\mod_init.sqf";
 if (isNil "GRLIB_mod_west") then { GRLIB_mod_west = GRLIB_mod_list_west select GRLIB_mod_preset_west };
 if (isNil "GRLIB_mod_east") then { GRLIB_mod_east = GRLIB_mod_list_east select GRLIB_mod_preset_east };
 GRLIB_r1 = "&#108;&#105;&#98;&#101;&#114;&#97;&#116;&#105;&#111;&#110;";
@@ -173,8 +176,8 @@ if ( GRLIB_mod_west in ["A3_BLU", "A3_IND"]) then {
 };
 
 // ACE
-if ( GRLIB_ACE_enabled ) then { GRLIB_fancy_info = 0 };  // Disable Fancy if ACE present
-if ( GRLIB_ACE_medical_enabled ) then { GRLIB_revive = 0; GRLIB_fatigue = 1  };  // Disable PAR/Fatigue if ACE Medical is present
+if ( GRLIB_ACE_enabled ) then { GRLIB_fancy_info = 0 };		// Disable Fancy if ACE present
+if ( GRLIB_ACE_medical_enabled ) then { GRLIB_revive = 0; GRLIB_fatigue = 1 };		// Disable PAR/Fatigue if ACE Medical is present
 if ( GRLIB_fatigue == 1 ) then { GRLIB_fatigue = true } else { GRLIB_fatigue = false };
 if ( GRLIB_introduction == 1 ) then { GRLIB_introduction = true } else { GRLIB_introduction = false };
 if ( GRLIB_deployment_cinematic == 1 ) then { GRLIB_deployment_cinematic = true } else { GRLIB_deployment_cinematic = false };

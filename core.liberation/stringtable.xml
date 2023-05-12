@@ -657,12 +657,8 @@
 			<Czech>Potvrdit: vymazat uloženou hru</Czech>
 		</Key>
 		<Key ID="STR_WIPE_TITLE_3">
-			<Original>Keep Players datas</Original>
-			<French>Garder les infos des Joueurs</French>
-			<Chinesesimp>保存玩家数据</Chinesesimp>
-			<Chinese>保存玩家数据</Chinese>
-			<Portuguese>Manter os dados dos jogadores</Portuguese>
-			<Czech>Udržujte data hráčů</Czech>
+			<Original>Wipe Mission Parameters</Original>
+			<French>Effacer les Parametres de la Mission</French>
 		</Key>
 		<Key ID="STR_WIPE_NO">
 			<Original>No</Original>
@@ -2005,18 +2001,6 @@
 			<Czech>Povolit civil</Czech>
 		</Key>
 		<Key ID="STR_PARAMS_CIVILIANS1">
-			<Original>None</Original>
-			<French>Aucune</French>
-			<German>Keine</German>
-			<Spanish>Ninguna</Spanish>
-			<Russian>Нету</Russian>
-			<Chinesesimp>无</Chinesesimp>
-			<Chinese>無</Chinese>
-			<Japanese>なし</Japanese>
-			<Portuguese>Nenhum</Portuguese>
-			<Czech>Žádný</Czech>
-		</Key>
-		<Key ID="STR_PARAMS_CIVILIANS2">
 			<Original>Reduced</Original>
 			<French>Réduite</French>
 			<German>Reduziert</German>
@@ -2028,7 +2012,7 @@
 			<Portuguese>Reduzido</Portuguese>
 			<Czech>Snížená</Czech>
 		</Key>
-		<Key ID="STR_PARAMS_CIVILIANS3">
+		<Key ID="STR_PARAMS_CIVILIANS2">
 			<Original>Normal</Original>
 			<French>Normale</French>
 			<German>Normal</German>
@@ -2040,7 +2024,7 @@
 			<Portuguese>Normal</Portuguese>
 			<Czech>Normální</Czech>
 		</Key>
-		<Key ID="STR_PARAMS_CIVILIANS4">
+		<Key ID="STR_PARAMS_CIVILIANS3">
 			<Original>Increased</Original>
 			<French>Augmentée</French>
 			<German>Erhöht</German>
@@ -3065,6 +3049,9 @@
 			<Portuguese>Limpeza de veículos abandonados fora dos FOBs</Portuguese>
 			<Czech>Čištění opuštěných vozidel mimo FOB</Czech>
 		</Key>
+		<Key ID="STR_AUTO_SAVE">
+			<Original>AutoSave Timer</Original>
+		</Key>
 		<Key ID="STR_CLEANUP_PARAM1">
 			<Original>15 minutes delay</Original>
 			<French> 15 minutes de délai</French>
@@ -3094,16 +3081,8 @@
 			<French>2 heures de délai</French>
 			<Chinesesimp>2小时间隔</Chinesesimp>
 			<Chinese>2小时间隔</Chinese>
-			<Portuguese>1 horas de atraso</Portuguese>
+			<Portuguese>2 horas de atraso</Portuguese>
 			<Czech>za 2 hodiny vymazat</Czech>
-		</Key>
-		<Key ID="STR_CLEANUP_PARAM5">
-			<Original>4 hours delay</Original>
-			<French>4 heures de délai</French>
-			<Chinesesimp>4小时间隔</Chinesesimp>
-			<Chinese>4小时间隔</Chinese>
-			<Portuguese>4 horas de atraso</Portuguese>
-			<Czech>za 4 hodiny vymazat</Czech>
 		</Key>
 		<Key ID="STR_SORRY">
 			<Original>Sorry!</Original>
@@ -5509,6 +5488,10 @@
 			<Japanese>分かりやすい情報</Japanese>
 			<Portuguese>Informações extravagantes</Portuguese>
 			<Czech>Zajímavé informace</Czech>
+		</Key>
+		<Key ID="STR_KEEP_SCORE">
+			<Original>Keep Players score on map restart</Original>
+			<French>Garder le score du joueurs au redemarage de la Map</French>
 		</Key>
 		<Key ID="STR_OPFORMARK">
 			<Original>Dynamic Opfor sector markers</Original>
