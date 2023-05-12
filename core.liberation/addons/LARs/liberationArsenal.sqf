@@ -91,6 +91,6 @@ if (GRLIB_ACE_enabled) then {
 };
 
 diag_log format ["--- LRX Arsenal initialized. blacklist: %1 - whitelist: %2", count GRLIB_blacklisted_from_arsenal, count GRLIB_whitelisted_from_arsenal];
-diag_log format ["--- LRX Arsenal MOD signature in use: %1", GRLIB_MOD_signature];
+diag_log format ["--- LRX MOD %1 use: %2 signatures", GRLIB_mod_west, count GRLIB_MOD_signature];
 
 LRX_arsenal_init_done = true; 
