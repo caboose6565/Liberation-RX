@@ -29,8 +29,11 @@ private _lrx_getParamValue = {
 
 // Open Mission Parameters
 if (GRLIB_param_open_params == 1) then {
-	// wait until mission is configured
-
+	if (!isDedicated && hasInterface) then {
+		titleText ["Wait for Mission configuration...", "BLACK FADED", 100];
+		[] execVM "scripts\client\commander\open_params.sqf";
+	};
+	waitUntil { sleep 1; GRLIB_param_open_params == 0 };
 };
 
 // Load Mission Parameters
@@ -43,7 +46,7 @@ if ( isNil "_lrx_liberation_params" ) then {
 	profileNamespace setVariable [_params_name, _lrx_liberation_params];
 };
 
-//{ diag_log _x } foreach _lrx_liberation_params;
+// Selectable
 GRLIB_introduction = ["Introduction",1] call _lrx_getParamValue;
 GRLIB_deployment_cinematic = ["DeploymentCinematic",1] call _lrx_getParamValue;
 GRLIB_unitcap = ["Unitcap",1] call _lrx_getParamValue;
@@ -67,14 +70,14 @@ GRLIB_adaptive_opfor = ["AdaptToPlayercount",1] call _lrx_getParamValue;
 GRLIB_sector_radius = ["SectorRadius",0] call _lrx_getParamValue;
 GRLIB_day_factor = ["DayDuration",1] call _lrx_getParamValue;
 GRLIB_night_factor = ["NightDuration",1] call _lrx_getParamValue;
-GRLIB_weather_param = ["Weather",4] call _lrx_getParamValue;
+GRLIB_weather_param = ["Weather",1] call _lrx_getParamValue;
 GRLIB_resources_multiplier = ["ResourcesMultiplier",1] call _lrx_getParamValue;
 GRLIB_fatigue = ["Fatigue",0] call _lrx_getParamValue;
 GRLIB_revive = ["Revive",3] call _lrx_getParamValue;
 GRLIB_tk_mode = ["TK_mode",1] call _lrx_getParamValue;
 GRLIB_tk_count = ["TK_count",4] call _lrx_getParamValue;
 GRLIB_squad_size = ["SquadSize",2] call _lrx_getParamValue;
-GRLIB_max_squad_size = ["MaxSquadSize",6] call _lrx_getParamValue;
+GRLIB_max_squad_size = ["MaxSquadSize",7] call _lrx_getParamValue;
 GRLIB_max_spawn_point = ["MaxSpawnPoint",3] call _lrx_getParamValue;
 GRLIB_permissions_param = ["Permissions",1] call _lrx_getParamValue;
 GRLIB_permission_vehicles = ["EnableLock",1] call _lrx_getParamValue;
@@ -89,8 +92,7 @@ GRLIB_cleanup_vehicles = ["CleanupVehicles",1800] call _lrx_getParamValue;
 GRLIB_autosave_timer = ["AutoSave",3600] call _lrx_getParamValue;
 GRLIB_param_wipe_keepscore = ["KeepScore",0] call _lrx_getParamValue;
 
-// Define constant
-[] call compileFinal preprocessFileLineNUmbers "gameplay_constants.sqf";
+// Hardcoded
 GRLIB_endgame = 0;
 GRLIB_min_score_player = 20;	// Minimal player score to be saved
 GRLIB_blufor_cap = GRLIB_blufor_cap * GRLIB_unitcap;
@@ -100,9 +102,7 @@ GRLIB_patrol_cap = GRLIB_patrol_cap * GRLIB_unitcap;
 GRLIB_battlegroup_size = GRLIB_battlegroup_size * GRLIB_unitcap;
 GRLIB_civilians_amount = GRLIB_civilians_amount * GRLIB_civilian_activity;
 
-// User Defined Parameters
-//[] call compileFinal preprocessFileLineNUmbers "mission_param.sqf";
-
+// Select MOD name
 if (isNil "GRLIB_mod_west") then { GRLIB_mod_west = GRLIB_mod_list_west select GRLIB_mod_preset_west };
 if (isNil "GRLIB_mod_east") then { GRLIB_mod_east = GRLIB_mod_list_east select GRLIB_mod_preset_east };
 GRLIB_r1 = "&#108;&#105;&#98;&#101;&#114;&#97;&#116;&#105;&#111;&#110;";

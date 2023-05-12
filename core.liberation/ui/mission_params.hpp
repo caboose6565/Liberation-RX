@@ -6,6 +6,12 @@ class Params
 		texts[] = { "" };
 		default = "";
 	};
+	class Space0 {
+		title = "";
+		values[] = { "" };
+		texts[] = { "" };
+		default = "";
+	};	
 	class OpenParams {
 		title = "Open Mission Parameters";
 		values[] = { 1, 0 };

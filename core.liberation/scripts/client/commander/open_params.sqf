@@ -1,12 +1,22 @@
 private ["_nextparam", "_idx", "_control", "_selection", "_value", "_value_raw", "_save_data"];
+if !([] call is_admin) exitWith {};
+waitUntil {!(isNull (findDisplay 46))};
+
 createDialog "liberation_params";
 
 param_id = -1;
 param_value = -1;
 save_changes = 0;
 
+disableUserInput false;
+disableUserInput true;
+disableUserInput false;
 disableSerialization;
+
 waitUntil { dialog };
+
+private _display = findDisplay 5119;
+private _noesckey = _display displayAddEventHandler ["KeyDown", "if ((_this select 1) == 1) then { true }"];
 
 private _lrx_getParamData = {
 	params ["_param"];
@@ -28,7 +38,6 @@ private _params_array = [];
 	_params_array pushback [ _x select 0, _x select 1, _forEachIndex + 1, _name, _values, _values_raw ];
 } foreach _params_save;
 
-private _display = findDisplay 5119;
 {
 	_nextparam = _x;
 	_idx = _nextparam select 2;
@@ -75,14 +84,25 @@ while { dialog && alive player } do {
 		_save_data set [1, _value];
 		_params_save set [param_id, _save_data];
 		param_id = -1;
-		diag_log [_value, _value_raw, _save_data];
 	};
 
 	if ( save_changes == 1 ) then {
 		save_changes = 0;
-		diag_log _params_save;
-		//profileNamespace setVariable [format ["%1-config", GRLIB_save_key], _params_save];
+		[
+			[_params_save],
+			{
+				params ["_params"];
+				profileNamespace setVariable [format ["%1-config", GRLIB_save_key], _params];
+				GRLIB_param_open_params = 0;
+			}
+		] remoteExec ["bis_fnc_call", 2];
+
+		waitUntil { sleep 1; GRLIB_param_open_params == 0 };
+		closeDialog 0;
 	};
 
 	sleep 0.5;
 };
+
+disableUserInput true;
+_display displayRemoveEventHandler ["KeyDown", _noesckey];

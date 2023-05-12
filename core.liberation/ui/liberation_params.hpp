@@ -100,6 +100,6 @@ class liberation_params {
 		w = 0.09 * safezoneW;
 		h = 0.035 * safezoneH;
 		text = $STR_RECYCLING_CANCEL;
-		action = "closeDialog 0";
+		action = "if (GRLIB_param_open_params == 1) then { endMission 'LOSER' }; closeDialog 0";
 	};
 };

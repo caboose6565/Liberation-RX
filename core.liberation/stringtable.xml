@@ -657,8 +657,8 @@
 			<Czech>Potvrdit: vymazat uloženou hru</Czech>
 		</Key>
 		<Key ID="STR_WIPE_TITLE_3">
-			<Original>Wipe Mission Parameters</Original>
-			<French>Effacer les Parametres de la Mission</French>
+			<Original>Reset Mission Parameters</Original>
+			<French>RAZ Parametres de la Mission</French>
 		</Key>
 		<Key ID="STR_WIPE_NO">
 			<Original>No</Original>
