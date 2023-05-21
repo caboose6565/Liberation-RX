@@ -32,7 +32,8 @@ GRLIB_mod_list_west = [
 	"BW_MOD",		// Z@Warrior Bundenswehr Tropentarn
 	"CWR3_USA",		// Z@Warrior Cold War Rearmed III - US
 	"UNS_US",		// Z@Warrior Unsung
-	"UNS_NVA"		// Z@Warrior Unsung
+	"UNS_NVA",		// Z@Warrior Unsung
+	"FPARMA_BLU"
 ];
 
 GRLIB_mod_list_east = [
@@ -69,7 +70,8 @@ GRLIB_mod_list_east = [
 	"3CB_ChDKZ",	// Z@Warrior Chernarussian Movement of the Red Star
 	"CWR3_SOV",		// Z@Warrior Cold War Rearmed III - SOVIET
 	"UNS_US",		// Z@Warrior Unsung
-	"UNS_NVA"		// Z@Warrior Unsung
+	"UNS_NVA",		// Z@Warrior Unsung
+	"FPARMA_OP"
 ];
 
 GRLIB_mod_list_name = [
@@ -111,5 +113,7 @@ GRLIB_mod_list_name = [
 	["CWR3_USA", "Cold War Rearmed USA"],
 	["CWR3_SOV", "Cold War Rearmed SOVIET"],
 	["UNS_US", "Unsung USA"],
-	["UNS_NVA", "Unsung NVA"]
+	["UNS_NVA", "Unsung NVA"],
+	["FPARMA_OP", "FPARMA OPFOR CUSTOM"],
+	["FPARMA_BLU", "FPARMA BLUFOR CUSTOM"]
 ];

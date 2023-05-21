@@ -2,10 +2,10 @@
 <Project name="Liberation">
 	<Package name="Liberation">
 		<Key ID="STR_MISSION_TITLE">
-			<Original>-= Liberation RX =-</Original>
+			<Original>Liberation RX: FPARMA Edition</Original>
 		</Key>
 		<Key ID="STR_MISSION_AUTHOR">
-			<Original>[AKH] pSiKO</Original>
+			<Original>pSiKO / caboose</Original>
 		</Key>
 		<Key ID="STR_MISSION_VERSION">
 			<Original>v0.927</Original>

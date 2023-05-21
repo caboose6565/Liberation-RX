@@ -258,7 +258,8 @@ ai_resupply_sources = [
 	Arsenal_typename,
 	ammo_truck_typename,
 	ammo_sling_typename,
-	Box_Ammo_typename
+	Box_Ammo_typename,
+	"Land_Ammobox_rounds_F"
 ] + ai_resupply_sources_west;
 
 // Everything the AI troups should be able to healing from
@@ -275,7 +276,8 @@ vehicle_rearm_sources = [
 	ammo_sling_typename,
 	ammobox_b_typename,
 	ammobox_o_typename,
-	ammobox_i_typename
+	ammobox_i_typename,
+	"Land_Ammobox_rounds_F"
 ] + vehicle_rearm_sources_west;
 
 // Everything the AI vehicle should be able to repair from
@@ -285,7 +287,8 @@ vehicle_repair_sources = [
 	"B_APC_Tracked_01_CRV_F",
 	"C_Offroad_01_repair_F",
 	"B_G_Offroad_01_repair_F",
-	"Land_RepairDepot_01_civ_F"
+	"Land_RepairDepot_01_civ_F",
+	"Land_RepairDepot_01_green_F"
 ];
 
 // *** TRANSPORT CONFIG ***

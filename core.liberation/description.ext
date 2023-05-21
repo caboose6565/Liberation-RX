@@ -25,6 +25,16 @@ cba_settings_hasSettingsFile = 1;
 
 class CfgFunctions {
 	#include "addons\SDB_DALE\CfgFunctions.hpp"
+
+	    class gor
+    	{
+        tag="gor";
+        class functions
+        {
+            file = "functions";
+			class applyCustomVic {};
+        };
+    	};
 };
 
 class cfgSounds {
@@ -66,3 +76,27 @@ class CfgDebriefing {
 #include "addons\VAM\defines.hpp"
 #include "addons\VAM\VAM_GUI_controls.hpp"
 #include "addons\VAM\VAM_GUI_classes.hpp"
+
+class Extended_InitPost_EventHandlers 
+{
+	class Land_Wrench_F
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+	class Land_Ammobox_rounds_F
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+	class Land_CanisterFuel_F
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+	class B_T_Truck_01_mover_F
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+		class Land_Axe_F
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+};

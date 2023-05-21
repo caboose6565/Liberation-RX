@@ -34,7 +34,7 @@ class Params
 		title = $STR_WHITELIST_PARAM;
 		values[] = { 1, 0 };
 		texts[] = { $STR_PARAMS_ENABLED, $STR_PARAMS_DISABLED };
-		default = 1;
+		default = 0;
 	};
 	class Exclusive {
 		title = $STR_EXCLUSIVE_PARAM;
