@@ -1,6 +1,7 @@
-PAR_AI_bros = [];
+// PAR Manage AI
+
 while {true} do {
-    PAR_AI_bros = (units player) select {!isplayer _x && (_x getVariable ["PAR_Grp_ID","0"]) == format["Bros_%1",PAR_Grp_ID]};
+    PAR_AI_bros = ((units player) + (units GRLIB_side_civilian)) select {!isplayer _x && alive _x && (_x getVariable ["PAR_Grp_ID","0"]) == format["Bros_%1", PAR_Grp_ID]};
     if (count PAR_AI_bros > 0 ) then {
         {
             // Set EH
@@ -57,10 +58,8 @@ while {true} do {
                     _x setVariable ["PAR_AI_score", ((GRLIB_rank_level find (rank _x)) + 1) * 5, true];
                 };
             };
-
             sleep 0.3;
         } forEach PAR_AI_bros;
     };
-    player setVariable ["PAR_AI_bros", PAR_AI_bros, true];
     sleep 5;
 };
