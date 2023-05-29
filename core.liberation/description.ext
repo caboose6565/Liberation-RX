@@ -95,7 +95,15 @@ class Extended_InitPost_EventHandlers
 		{
         init = "_this call gor_fnc_applyCustomVic";
     };
-		class Land_Axe_F
+	class UK3CB_C_Ikarus
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+	class UK3CB_C_MMT
+		{
+        init = "_this call gor_fnc_applyCustomVic";
+    };
+	class Land_Axe_F
 		{
         init = "_this call gor_fnc_applyCustomVic";
     };
