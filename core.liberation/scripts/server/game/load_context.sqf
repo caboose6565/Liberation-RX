@@ -29,24 +29,27 @@ if (count _context >= 1) then {
             if (isNull _player) then {
                 _wait = false
             } else {
-                if ([_player, "FOB", GRLIB_fob_range] call F_check_near && isTouchingGround (vehicle _player)) then {
+                if ([_player, "FOB", GRLIB_fob_range] call F_check_near && isTouchingGround vehicle _player) then {
                     {
                         [
                             [_x select 0, _x select 1, _x select 2],
                             {
                                 params ["_class", "_rank", "_loadout"];
-                                private _unit = (group player) createUnit [_class, (getPosATL player), [], 10, "NONE"];
+                                if (count units player > (GRLIB_squad_size + GRLIB_squad_size_bonus)) exitWith {};
+                                private _pos = getPosATL player;
+                                if (surfaceIsWater _pos) then { _pos = getPosASL player };
+                                private _unit = (group player) createUnit [_class, _pos, [], 10, "NONE"];
                                 [_unit] joinSilent (group player);
                                 _unit setVariable ["PAR_Grp_ID", format["Bros_%1", (getPlayerUID player)], true];
-                                [_unit] call PAR_fn_AI_Damage_EH;
                                 _unit setUnitLoadout _loadout;
                                 _unit setUnitRank _rank;
                                 _unit setSkill (0.6 + (GRLIB_rank_level find _rank) * 0.05);
                                 _unit enableIRLasers true;
                                 _unit enableGunLights "Auto";
-                                _unit setpos (getpos _unit);
+                                //_unit setpos (getpos _unit);
                                 _unit switchMove "AmovPercMwlkSrasWrflDf";
 				                _unit playMoveNow "AmovPercMwlkSrasWrflDf";
+                                [_unit] spawn PAR_fn_AI_Damage_EH;
                                 gamelogic globalChat format ["Adds %1 (%2) to your squad.", name _unit, rank _unit];
                             }
                         ] remoteExec ["bis_fnc_call", owner _player];
@@ -56,7 +59,7 @@ if (count _context >= 1) then {
                     _wait = false;
                     //diag_log format ["--- LRX Loading %1 unit(s) for %2 Squad.", count (_context select 2), name _player];
                 } else {
-                    if ((getPosATL _player) distance2D (markerPos "respawn_west") > 100) then {
+                    if (_player distance2D (markerPos "respawn_west") > 100) then {
                         [localize "$STR_SQUAD_WAIT"] remoteExec ["hintSilent", owner _player];
                     };
                 };

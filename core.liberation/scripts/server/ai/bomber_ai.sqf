@@ -1,6 +1,6 @@
 params ["_unit", ["_side", west]];
 
-if (typeof _unit == pilot_classname) exitWith {};
+if (isNull _unit) exitWith {};
 if (_unit getVariable ["GRLIB_mission_AI", false]) exitWith {};
 if (_unit getVariable ["GRLIB_is_prisonner", false]) exitWith {};
 
@@ -54,16 +54,12 @@ while {alive _unit} do {
 			_expl3 setVectorDirAndUp [[0.5, -0.5, 0], [0.5, 0.5, 0]];
 
 			sleep 2.5;
-			{
-				if ((_x distance2D _unit) <= 200) then {
-					[[getMissionPath "res\shout.ogg", _unit, false, getPosASL _unit, 5, 1, 250]] remoteExec ["playSound3D", owner _x];
-				};
-			} forEach (AllPlayers - (entities "HeadlessClient_F"));
-
+			playSound3D [getMissionPath "res\shout.ogg", _unit, false, getPosASL _unit, 5, 1, 500];
 			sleep 0.5;
-			{ deleteVehicle _x } forEach [_expl1,_expl2,_expl3];
 			if (alive _unit) then {
-				"Rocket_04_HE_F" createVehicle (getPosATL _unit);
+				{ _x setDamage 1 } forEach [_expl1,_expl2,_expl3];
+				"R_PG32V_F" createVehicle (getPosATL _unit);
+				{ deleteVehicle _x } forEach [_expl1,_expl2,_expl3];
 				deleteVehicle _unit;
 			};
 		};

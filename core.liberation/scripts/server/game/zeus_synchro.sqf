@@ -1,15 +1,12 @@
 waitUntil { !isNil "huron_typename" };
 
-_vehicleClassnames = [huron_typename];
-
-
-{
-	_vehicleClassnames = _vehicleClassnames + [_x select 0];
-} foreach (light_vehicles + heavy_vehicles + air_vehicles + static_vehicles + support_vehicles) ;
+private _vehicleClassnames = [huron_typename] + all_friendly_classnames;
+private _zeusunits = [];
+private _units_to_remove = [];
 
 while { true } do {
 
-	waitUntil { sleep 0.3; count allCurators > 0 };
+	waitUntil { sleep 1; count allCurators > 0 };
 
 	_zeusunits = [];
 	{
@@ -45,7 +42,6 @@ while { true } do {
 		_zgm  setCuratorCoef ["synchronize", 0];
 		_zgm  setCuratorCoef ["delete", 0];
 		_zgm  setCuratorCoef ["destroy", 0];
-
 	} foreach allCurators;
 
 	sleep 10;

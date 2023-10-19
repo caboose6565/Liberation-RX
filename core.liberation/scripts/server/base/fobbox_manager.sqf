@@ -8,6 +8,10 @@ if ( GRLIB_fob_type == 1 ) then {
 	_fob_type = FOB_truck_typename;
 };
 
+if ( GRLIB_fob_type == 2 ) then {
+	_fob_type = FOB_boat_typename;
+};
+
 while { true } do {
 
 	_foblist = [entities _fob_type, {[_x] call is_public}] call BIS_fnc_conditionalSelect;
@@ -35,5 +39,5 @@ while { true } do {
 		sleep 30;
 		deleteVehicle _fobbox;
 	};
-	sleep 10;
+	sleep 18;
 };

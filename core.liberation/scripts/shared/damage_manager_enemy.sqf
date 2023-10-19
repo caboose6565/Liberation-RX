@@ -1,6 +1,8 @@
 params ["_unit", "_selection", "_amountOfDamage", "_killer", "_projectile", "_hitPartIndex", "_instigator"];
 
-if (isNull _unit) exitWith {0};
+if (isNull _unit) exitWith {};
+if (!alive _unit) exitWith {};
+
 if (!isNull _instigator) then {
 	if (isNull (getAssignedCuratorLogic _instigator)) then {
 	   	_killer = _instigator;
@@ -11,11 +13,15 @@ if (!isNull _instigator) then {
 	};
 };
 
-private _ret = _amountOfDamage;
-if (isPlayer _killer && _unit != _killer) then {
-	private _veh_unit = vehicle _unit;
-	private _veh_killer = vehicle _killer;
+if (isPlayer _killer) then {
+	_unit setVariable ["GRLIB_last_killer", _killer, true];
+};
 
+private _ret = _amountOfDamage;
+private _veh_unit = vehicle _unit;
+private _veh_killer = vehicle _killer;
+
+if (isPlayer _killer && _unit != _killer) then {
 	// OpFor in vehicle
 	if (_veh_unit != _unit && _veh_killer == _killer && round (_killer distance2D _unit) <= 2) then {
 		if ( _unit getVariable ["GRLIB_isProtected", 0] < time ) then {
@@ -28,6 +34,12 @@ if (isPlayer _killer && _unit != _killer) then {
 		};
 		_ret = 0;
 	};
+};
+
+private _evac_in_progress = (_veh_unit getVariable ["GRLIB_vehicle_evac", false]);
+if (_veh_unit isKindOf "AllVehicles" && damage _veh_unit >= 0.80 && !_evac_in_progress) then {
+	_veh_unit setVariable ["GRLIB_vehicle_evac", true];
+	{ [_x, false] spawn F_ejectUnit } forEach (crew _veh_unit);	
 };
 
 _ret;

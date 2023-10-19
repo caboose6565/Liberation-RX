@@ -1,6 +1,8 @@
 // LRX Virtual Garage
 // by pSiKO
 
+if ( !isNil "GRLIB_garage_in_use" ) exitWith { hintSilent "Garage is busy !!\nPlease wait..." };
+
 private _cfg = configFile >> "cfgVehicles";
 private _myveh = [];
 private _myveh_info = [];
@@ -17,8 +19,6 @@ createDialog "VIRT_vehicle_garage";
 waitUntil { dialog };
 
 private _display = findDisplay 2301;
-ctrlEnable [ 120, false ];
-ctrlEnable [ 121, false ];
 
 while { dialog && alive player } do {
 	if ( _refresh ) then {
@@ -28,6 +28,7 @@ while { dialog && alive player } do {
 			alive _x && (count (crew _x) == 0 || typeOf _x in uavs) &&
 			(_x distance2D lhd > GRLIB_fob_range) &&
 			_x getVariable ["GRLIB_vehicle_owner", ""] == _guid &&
+			(isNull (_x getVariable ["R3F_LOG_est_transporte_par", objNull])) &&
 			!(typeOf _x in _recycleable_blacklist)
 		}] call BIS_fnc_conditionalSelect;
 
@@ -37,7 +38,7 @@ while { dialog && alive player } do {
 
 		_i = 0;
 		{
-			if (_guid == _x select 3) then {
+			if (_guid == _x select 1) then {
 				_myveh pushBack [(_x select 0), 1, _i];
 				_myveh_info pushBack _x;
 				_i = _i + 1;
@@ -73,10 +74,11 @@ while { dialog && alive player } do {
 		ctrlEnable [ 120, false ];
 		ctrlEnable [ 121, false ];
 		_refresh = true;
-		sleep 1;
-	} else {
+		sleep 3;
 		hintSilent "";
-
+	} else {
+		ctrlEnable [ 120, false ];
+		ctrlEnable [ 121, false ];		
 		if (count(_myveh) > 0) then {
 			// Enable Button
 			private _selected_item = lbCurSel 110;
@@ -99,16 +101,18 @@ while { dialog && alive player } do {
 					private _timer = _vehicle getVariable ["GREUH_rearm_timer", 0];
 					private _msg = format [ "%1\nRearming Cooldown (%2 sec)\nPlease Wait...", _vehicle_name, round (_timer - time) ];
 
-					if (count ([_myveh_info, {(_guid == _x select 3)}] call BIS_fnc_conditionalSelect) >= _max_vehicle) exitWith { hintSilent (format [localize "STR_FULL_GARAGE", _max_vehicle]); sleep 2 };
+					if (count ([_myveh_info, {(_guid == _x select 1)}] call BIS_fnc_conditionalSelect) >= _max_vehicle) exitWith { hintSilent (format [localize "STR_FULL_GARAGE", _max_vehicle]); sleep 2 };
 					if (damage _vehicle != 0) exitWith { hintSilent "Damaged Vehicles cannot be Parked !"; sleep 2 };
-					if (count (_vehicle getVariable ["GRLIB_ammo_truck_load", []]) > 0) exitWith { hintSilent localize "STR_CANT_PARK"; sleep 2 };
+					//if (count (_vehicle getVariable ["GRLIB_ammo_truck_load", []]) > 0) exitWith { hintSilent localize "STR_CANT_PARK"; sleep 2 };
 					if (count (crew _vehicle) > 0 && !(typeOf _vehicle in uavs)) exitWith { hintSilent localize "STR_CANT_PARKUAV"; sleep 2 };
 					if (_timer >= time) exitWith { hintSilent _msg; sleep 2 };
 
 					private _result = [localize "STR_ONLY_WEAPONS",localize "STR_WARNING", true, true] call BIS_fnc_guiMessage;
 					if (_result) then {
 						ctrlEnable [ 120, false ];
+						(_display displayCtrl (110)) lnbDeleteRow _selected_item;
 						[_vehicle, load_veh, _guid] remoteExec ["vehicle_garage_remote_call", 2];
+						sleep 2;
 						hintSilent (format [localize "STR_LOADED", _vehicle_name]);
 					};
 				};
@@ -121,13 +125,15 @@ while { dialog && alive player } do {
 
 					_veh_info = _myveh_info select _vehicle;
 					_veh_class = _veh_info select 0;
-					_color = _veh_info select 1;
-					_ammo = _veh_info select 2;
-					_lst_a3 = _veh_info select 4;
-					_lst_r3f = _veh_info select 5;
-					_compo = _veh_info select 6;
+					_owner = _veh_info select 1;
+					_color = _veh_info select 2;
+					_ammo = _veh_info select 3;
+					_compo = _veh_info select 4;					
+					_lst_a3 = _veh_info select 5;
+					_lst_r3f = _veh_info select 6;
+					_lst_grl = _veh_info select 7;
 					buildtype = 10;
-					build_unit = [_veh_class,_color,_ammo,_lst_a3,_lst_r3f,_compo];
+					build_unit = [_veh_class,_color,_ammo,_compo,_lst_a3,_lst_r3f,_lst_grl];
 					dobuild = 1;
 
 					waitUntil {sleep 0.5; dobuild == 0};
@@ -136,7 +142,6 @@ while { dialog && alive player } do {
 						hintSilent (format ["Vehicle %1\nUnloaded from Garage.", [_veh_class] call F_getLRXName]);
 					};
 				};
-				sleep 2;
 				_refresh = true;
 				load_veh = 0;
 			};

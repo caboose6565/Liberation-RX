@@ -24,6 +24,8 @@ class liberation_airdrop {
     "LabelAir",
     "ButtonBoat",
     "LabelBoat",
+    "ButtonArty",
+    "LabelArty",
 	  "CancelButton"
 	};
 	objects[] = {};
@@ -60,21 +62,22 @@ class liberation_airdrop {
     size = "(((((safezoneW / safezoneH) min 1) / 1) / 30) * 1)";
     shadow = 2;
   };
+  //-------------------------------------------------------------------------------------
   class ButtonTaxi: StdButton
   {
     idc = 1607;
-    action = "air_type=8;do_action=1";
+    action = "air_type=10;do_action=1";
     text = $STR_AIRDROP_TAXI;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.2186 * safezoneH + safezoneY;
+    y = 0.1986 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
   class LabelTaxi: GREUH_RscStructuredText
   {
-    idc = 1628;
+    idc = 1630;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.2176 * safezoneH + safezoneY;
+    y = 0.1976 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -84,15 +87,15 @@ class liberation_airdrop {
     action = "air_type=1;do_action=1";
     text = $STR_AIRDROP_LIGHT;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.2786 * safezoneH + safezoneY;
+    y = 0.2486 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
   class LabelLight: GREUH_RscStructuredText
   {
-    idc = 1621;    
+    idc = 1621;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.2776 * safezoneH + safezoneY;
+    y = 0.2476 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -102,7 +105,7 @@ class liberation_airdrop {
     action = "air_type=2;do_action=1";
     text = $STR_AIRDROP_LIGHTPLUS;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.3386 * safezoneH + safezoneY;
+    y = 0.2986 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -110,7 +113,7 @@ class liberation_airdrop {
   {
     idc = 1622;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.3376 * safezoneH + safezoneY;
+    y = 0.2976 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -120,7 +123,7 @@ class liberation_airdrop {
     action = "air_type=3;do_action=1";
     text = $STR_AIRDROP_ARMORED;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.3986 * safezoneH + safezoneY;
+    y = 0.3486 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -128,7 +131,7 @@ class liberation_airdrop {
   {
     idc = 1623;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.3976 * safezoneH + safezoneY;
+    y = 0.3476 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -138,7 +141,7 @@ class liberation_airdrop {
     action = "air_type=4;do_action=1";
     text = $STR_AIRDROP_TRUCK;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.4586 * safezoneH + safezoneY;
+    y = 0.3986 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -146,7 +149,7 @@ class liberation_airdrop {
   {
     idc = 1624;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.4576 * safezoneH + safezoneY;
+    y = 0.3976 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -156,7 +159,7 @@ class liberation_airdrop {
     action = "air_type=5;do_action=1";
     text = $STR_AIRDROP_APC;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.5186 * safezoneH + safezoneY;
+    y = 0.4486 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -164,7 +167,7 @@ class liberation_airdrop {
   {
     idc = 1625;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.5176 * safezoneH + safezoneY;
+    y = 0.4476 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -174,7 +177,7 @@ class liberation_airdrop {
     action = "air_type=6;do_action=1";
     text = $STR_AIRDROP_BOAT;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.5786 * safezoneH + safezoneY;
+    y = 0.4986 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -182,7 +185,7 @@ class liberation_airdrop {
   {
     idc = 1626;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.5776 * safezoneH + safezoneY;
+    y = 0.4976 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
@@ -192,7 +195,7 @@ class liberation_airdrop {
     action = "air_type=7;do_action=1";
     text = $STR_AIRDROP_AIRSUPREMACY;
     x = 0.206094 * safezoneW + safezoneX;
-    y = 0.6386 * safezoneH + safezoneY;
+    y = 0.5486 * safezoneH + safezoneY;
     w = 0.061875 * safezoneW;
     h = 0.033 * safezoneH;
   };
@@ -200,10 +203,29 @@ class liberation_airdrop {
   {
     idc = 1627;
     x = 0.283437 * safezoneW + safezoneX;
-    y = 0.6376 * safezoneH + safezoneY;
+    y = 0.5476 * safezoneH + safezoneY;
     w = 0.149531 * safezoneW;
     h = 0.044 * safezoneH;
   };
+  class ButtonArty: StdButton
+  {
+    idc = 1608;
+    action = "air_type=8;do_action=1";
+    text = $STR_AIRDROP_ARTY;
+    x = 0.206094 * safezoneW + safezoneX;
+    y = 0.5986 * safezoneH + safezoneY;
+    w = 0.061875 * safezoneW;
+    h = 0.033 * safezoneH;
+  };
+  class LabelArty: GREUH_RscStructuredText
+  {
+    idc = 1628;
+    x = 0.283437 * safezoneW + safezoneX;
+    y = 0.5976 * safezoneH + safezoneY;
+    w = 0.149531 * safezoneW;
+    h = 0.044 * safezoneH;
+  };
+  //-------------------------------------------------------------------------------------
   class OuterBG1: StdBG
   {
     colorBackground[] = COLOR_BROWN;

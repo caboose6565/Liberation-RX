@@ -51,7 +51,7 @@ units_loadout_overide = [
 
 light_vehicles = [
 	["O_Quadbike_01_F",1,5,1,0],
-	["O_Boat_Transport_01_F",1,25,1,GRLIB_perm_inf],
+	["O_Boat_Transport_01_F",1,25,1,0],
 	["C_Boat_Transport_02_F",2,25,2,GRLIB_perm_log],
 	["O_Boat_Armed_01_hmg_F",5,30,5,GRLIB_perm_log],
 	["O_SDV_01_F",5,30,5,GRLIB_perm_log],
@@ -80,11 +80,12 @@ heavy_vehicles = [
 	["O_APC_Tracked_02_cannon_F",10,800,10,GRLIB_perm_log],
 	["O_APC_Tracked_02_AA_F",10,1500,10,GRLIB_perm_tank],
 	["O_MBT_02_cannon_F",15,1500,15,GRLIB_perm_tank],
+	["O_MBT_02_railgun_F",15,1800,15,GRLIB_perm_air],
 	["O_MBT_04_cannon_F",15,2500,15,GRLIB_perm_air],
 	["O_MBT_04_command_F",15,2500,15,GRLIB_perm_air],
-	["I_MBT_03_cannon_F",15,4500,15,GRLIB_perm_max],
-	["O_MBT_02_arty_F",15,3500,15,GRLIB_perm_max],
-	["I_E_Truck_02_MRL_F",15,3500,15,GRLIB_perm_max]
+	["I_MBT_03_cannon_F",15,3500,15,GRLIB_perm_max],
+	["O_MBT_02_arty_F",15,4000,15,GRLIB_perm_max],
+	["I_E_Truck_02_MRL_F",15,4500,15,GRLIB_perm_max]
 ];
 
 air_vehicles = [
@@ -146,6 +147,12 @@ buildings_west = [
 	["Land_Cargo_House_V3_F",0,0,0,GRLIB_perm_inf],
 	["Land_Cargo_Patrol_V3_F",0,0,0,GRLIB_perm_log],
 	["Flag_CSAT_F",0,0,0,0]
+];
+
+// Boats
+boats_west = [
+	"O_Boat_Transport_01_F",
+	"O_Boat_Armed_01_minigun_F"
 ];
 
 blufor_squad_inf_light = [

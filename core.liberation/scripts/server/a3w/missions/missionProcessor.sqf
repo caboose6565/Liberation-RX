@@ -9,18 +9,24 @@ if (!isServer) exitwith {};
 
 #define MISSION_TIMER_EXTENSION (20*60)
 
-private ["_controllerSuffix", "_missionTimeout", "_availableLocations", "_missionLocation", "_leader", "_marker", "_failed", "_complete", "_startTime", "_oldAiCount", "_leaderTemp", "_newAiCount", "_adjustTime", "_lastPos", "_floorHeight"];
+private [
+	"_controllerSuffix", "_missionTimeout", "_availableLocations", "_missionLocation", "_leader", 
+	"_marker", "_marker_zone", "_time_left",
+	"_failed", "_complete", "_startTime", "_oldAiCount", "_leaderTemp", 
+	"_newAiCount", "_adjustTime", "_lastPos", "_floorHeight"
+];
 
 // Variables that can be defined in the mission script :
-private ["_missionType", "_locationsArray", "_aiGroup", "_vehicle", "_vehicles", "_missionPos", "_missionPicture", "_missionHintText", "_successHintMessage", "_failedHintMessage"];
+private [
+	"_missionType", "_locationsArray", "_aiGroup", "_vehicle", "_vehicles",
+	"_missionPos", "_precise_marker", "_missionPicture", "_missionHintText",
+	"_successHintMessage", "_failedHintMessage"
+];
 
 _controllerSuffix = param [0, "", [""]];
 _aiGroup = grpNull;
-
+_precise_marker = true;
 if (!isNil "_setupVars") then { call _setupVars };
-
-["lib_secondary_a3w_mission", [_missionType]] remoteExec ["bis_fnc_shownotification", 0];
-diag_log format ["A3W Side Mission% started: %2", _controllerSuffix, _missionType];
 
 _missionTimeout = A3W_Mission_timeout;
 
@@ -38,12 +44,16 @@ if (!isNil "_locationsArray") then {
 _continue_mission = true;
 if (!isNil "_setupObjects") then { _continue_mission = call _setupObjects };
 if (!_continue_mission) exitWith {
-	diag_log format ["--- LRX Error: A3W Side Mission%1 failed to setup: %2", _controllerSuffix, _missionType];
+	diag_log format ["--- LRX Error: A3W Side Mission%1 failed to setup: %2", _controllerSuffix, localize _missionType];
 };
+publicVariable "A3W_sectors_in_use";
+
+["lib_secondary_a3w_mission", [localize _missionType]] remoteExec ["bis_fnc_shownotification", 0];
+diag_log format ["A3W Side Mission% started: %2", _controllerSuffix, localize _missionType];
 
 sleep 5;
 _leader = leader _aiGroup;
-_marker = [_missionType, _missionPos] call createMissionMarker;
+([localize _missionType, _missionPos, _precise_marker] call createMissionMarker) params ["_marker", "_marker_zone"];
 _aiGroup setVariable ["A3W_missionMarkerName", _marker, true];
 
 if (isNil "_missionPicture") then { _missionPicture = "" };
@@ -54,13 +64,13 @@ if (isNil "_missionPicture") then { _missionPicture = "" };
 	_missionPicture,
 	_missionHintText,
 	sideMissionColor
-] call missionHint;
+] remoteExec ["remote_call_showinfo", 0];
 
-diag_log format ["A3W Side Mission%1 waiting to be finished: %2", _controllerSuffix, _missionType];
+diag_log format ["A3W Side Mission%1 waiting to be finished: %2", _controllerSuffix, localize _missionType];
 
 _failed = false;
 _complete = false;
-_startTime = diag_tickTime;
+_startTime = time;
 _oldAiCount = 0;
 
 if (isNil "_ignoreAiDeaths") then { _ignoreAiDeaths = false };
@@ -85,7 +95,7 @@ waitUntil {
 	if (_newAiCount < _oldAiCount) then {
 		// some units were killed, mission expiry will be reset to 20 mins if it's currently lower than that
 		_adjustTime = if (_missionTimeout < MISSION_TIMER_EXTENSION) then { MISSION_TIMER_EXTENSION - _missionTimeout } else { 0 };
-		_startTime = _startTime max (diag_tickTime - ((MISSION_TIMER_EXTENSION - _adjustTime) max 0));
+		_startTime = _startTime max (time - ((MISSION_TIMER_EXTENSION - _adjustTime) max 0));
 	};
 
 	_oldAiCount = _newAiCount;
@@ -93,9 +103,14 @@ waitUntil {
 	if (!isNull _leaderTemp) then { _leader = _leaderTemp }; // Update current leader
 	if (!isNil "_waitUntilMarkerPos") then { _marker setMarkerPos (call _waitUntilMarkerPos) };
 	if (!isNil "_waitUntilExec") then { call _waitUntilExec };
-	_marker setMarkerText format ["%1 - %2 min left", _missionType, round ((_missionTimeout - (diag_tickTime - _startTime)) /60)];
+	_time_left = round ((_missionTimeout - (time - _startTime)) /60);
+	if (_time_left > 0) then {
+		_marker setMarkerText format ["%1 - %2 min left", localize _missionType, _time_left];
+	} else {
+		_marker setMarkerText format ["%1 - time over ", localize _missionType];
+	};
 
-	_expired = (diag_tickTime - _startTime >= _missionTimeout && ([_missionPos, GRLIB_sector_size, GRLIB_side_friendly] call F_getUnitsCount) == 0);
+	_expired = (time - _startTime >= _missionTimeout && ([_missionPos, GRLIB_sector_size, GRLIB_side_friendly] call F_getUnitsCount) == 0);
 	_failed = ((!isNil "_waitUntilCondition" && {call _waitUntilCondition}) || _expired);
 
 	if (!isNil "_waitUntilSuccessCondition" && {call _waitUntilSuccessCondition}) then {
@@ -103,19 +118,18 @@ waitUntil {
 		_complete = true;
 	};
 
-	(GRLIB_endgame == 1 || _failed || _complete || (!_ignoreAiDeaths && {alive _x} count units _aiGroup == 0))
+	(GRLIB_endgame == 1 || GRLIB_global_stop == 1 || _failed || _complete || (!_ignoreAiDeaths && {alive _x} count units _aiGroup == 0))
 };
+
+if (GRLIB_endgame == 1 || GRLIB_global_stop == 1) then { _failed = true };
 
 if (_failed) then {
 	// Mission failed
 
-	{ moveOut _x; deleteVehicle _x } forEach units _aiGroup;
-
+	{ deleteVehicle _x } forEach units _aiGroup;
 	if (!isNil "_failedExec") then { call _failedExec };
-
-	if (!isNil "_vehicle") then	{ [_vehicle, 5, true] spawn cleanMissionVehicles };
-
-	if (!isNil "_vehicles") then { [_vehicles, 5, true] spawn cleanMissionVehicles };
+	if (!isNil "_vehicle") then	{ [_vehicle] spawn cleanMissionVehicles };
+	if (!isNil "_vehicles") then { [_vehicles] spawn cleanMissionVehicles };
 
 	[
 		"Objective Failed",
@@ -123,10 +137,10 @@ if (_failed) then {
 		_missionPicture,
 		if (!isNil "_failedHintMessage") then { _failedHintMessage } else { "Better luck next time!" },
 		failMissionColor
-	] call missionHint;
+	] remoteExec ["remote_call_showinfo", 0];
 
-	["lib_secondary_a3w_mission_fail", [_missionType]] remoteExec ["bis_fnc_shownotification", 0];
-	diag_log format ["A3W Side Mission%1 failed: %2", _controllerSuffix, _missionType];
+	["lib_secondary_a3w_mission_fail", [localize _missionType]] remoteExec ["bis_fnc_shownotification", 0];
+	diag_log format ["A3W Side Mission%1 failed: %2", _controllerSuffix, localize _missionType];
 	A3W_mission_failed = A3W_mission_failed + 1;
 } else {
 	// Mission completed
@@ -143,12 +157,12 @@ if (_failed) then {
 
 	if (!isNil "_vehicle") then {
 		_vehicle setVariable ["R3F_LOG_disabled", false, true];
-		[_vehicle, 600] spawn cleanMissionVehicles;
+		[_vehicle, 300] spawn cleanMissionVehicles;
 	};
 
 	if (!isNil "_vehicles") then {
 		{ _x setVariable ["R3F_LOG_disabled", false, true] } forEach _vehicles;
-		[_vehicles, 600] spawn cleanMissionVehicles;
+		[_vehicles, 300] spawn cleanMissionVehicles;
 	};
 
 	[
@@ -157,16 +171,19 @@ if (_failed) then {
 		_missionPicture,
 		_successHintMessage,
 		successMissionColor
-	] call missionHint;
+	] remoteExec ["remote_call_showinfo", 0];
 
-	["lib_secondary_a3w_mission_success", [_missionType]] remoteExec ["bis_fnc_shownotification", 0];
-	diag_log format ["A3W Mission%1 complete: %2", _controllerSuffix, _missionType];
+	["lib_secondary_a3w_mission_success", [localize _missionType]] remoteExec ["bis_fnc_shownotification", 0];
+	diag_log format ["A3W Mission%1 complete: %2", _controllerSuffix, localize _missionType];
 	A3W_mission_success = A3W_mission_success + 1;
 };
 
+publicVariable "A3W_sectors_in_use";
 deleteGroup _aiGroup;
 deleteMarker _marker;
-
+deleteMarker _marker_zone;
 if (!isNil "_locationsArray") then {
 	[_locationsArray, _missionLocation, false] call setLocationState;
 };
+
+sleep 20;

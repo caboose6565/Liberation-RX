@@ -10,7 +10,7 @@ private [ "_citylist", "_leader", "_numWaypoints", "_box1", "_box2"];
 
 _setupVars =
 {
-	_missionType = localize "STR_HOSSTILE_HELI";
+	_missionType = "STR_HOSTILE_HELI";
 	_citylist = [] call cityList;
 	_locationsArray = nil; // locations are generated on the fly from towns
 };
@@ -34,6 +34,7 @@ _setupObjects =
 	_aiGroup selectLeader _leader;
 
 	// behaviour on waypoints
+	[_aiGroup] call F_deleteWaypoints;
 	{
 		_waypoint = _aiGroup addWaypoint [markerPos (_x select 0), 0];
 		_waypoint setWaypointType "MOVE";
@@ -47,7 +48,7 @@ _setupObjects =
 	_missionPos = getPosATL leader _aiGroup;
 	_missionPicture = getText (configFile >> "CfgVehicles" >> (_vehicleClass param [0,""]) >> "picture");
 	_vehicleName = getText (configFile >> "CfgVehicles" >> (_vehicleClass param [0,""]) >> "displayName");
-	_missionHintText = format [localize "STR_HOSSTILE_HELI_MESSAGE1", _vehicleName, sideMissionColor];
+	_missionHintText = ["STR_HOSTILE_HELI_MESSAGE1", _vehicleName, sideMissionColor];
 	_numWaypoints = count waypoints _aiGroup;
 	true;
 };
@@ -68,7 +69,7 @@ _successExec =
 	{
 		_veh = _this;
 		//Delete pilots
-		{ deleteVehicle _x } forEach crew _veh;
+		{ deleteVehicle _x } forEach (crew _veh);
 		waitUntil
 		{
 			sleep 0.1;
@@ -81,7 +82,7 @@ _successExec =
 		_box2 = [ammobox_o_typename, _wreckPos, false] call boxSetup;
 	};
 
-	_successHintMessage = localize "STR_HOSSTILE_HELI_MESSAGE2";
+	_successHintMessage = "STR_HOSTILE_HELI_MESSAGE2";
 };
 
 _this call sideMissionProcessor;

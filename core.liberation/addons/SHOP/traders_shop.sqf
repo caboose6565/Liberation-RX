@@ -33,7 +33,7 @@ private _buy_list = [opfor_recyclable, {
 private _rank = player getVariable ["GRLIB_Rank", "Private"];
 private _buy_list_dlg = [];
 {
-	private _price = round ((_x select 2) * (1 + _ratio));
+	private _price = round (([_x select 0] call _getPrice) * (1 + _ratio));
 	if (_rank == "Super Colonel") then { _price = round (_price / 2)};
 	_buy_list_dlg pushBack [_x select 0, _price];
 } forEach _buy_list_static + _buy_list;
@@ -136,7 +136,7 @@ while { dialog && alive player } do {
 			if (_result) then {
 				private _veh_class = _buy_list_dlg select _selected_item select 0;
 				buildtype = 9;
-				build_unit = [_veh_class,[],1,[],[],[]];
+				build_unit = [_veh_class,[],1,[],[],[],[]];
 				dobuild = 1;
 				closeDialog 0;
 				waitUntil { sleep 0.5; dobuild == 0};

@@ -1,34 +1,34 @@
 waitUntil {sleep 1; GRLIB_player_spawned};
 
-private ["_new_manpower_used", "_unit"];
+private ["_manpower_used", "_player_vehicles", "_player_respawn", "_unit"];
+private _uid = getPlayerUID player;
+private _search_list = [] + light_vehicles + heavy_vehicles + air_vehicles + static_vehicles + support_vehicles + opfor_recyclable + ind_recyclable;
+
+private _get_mp = {
+	params ["_vehicle"];
+	private _ret = 0;
+	private _veh_class = typeOf _vehicle;
+	{
+		if ((_x select 0) == _veh_class) exitWith { _ret = (_x select 1) };
+	} forEach _search_list;
+	_ret;
+};
 
 while { true } do {
+		_new_manpower_used = count ((units player) select { !(isPlayer _x) && alive _x });
 
-		_new_manpower_used = 0;
-		{
-			if ( !(isPlayer _x) && alive _x && !(_x getVariable ["GRLIB_is_prisonner", false]) ) then {
-				_unit = _x;
-				{
-					if ( ( _x select 0 ) == typeof _unit ) then { _new_manpower_used = _new_manpower_used + (_x select 1) };
-				} foreach infantry_units;				
-			};
-		} foreach (units group player);
+		_player_respawn = ([_uid] call F_getMobileRespawnsPlayer) select 0;
+		_player_vehicles = (vehicles - _player_respawn) select {
+			(alive _x) &&
+			(_x getVariable ["GRLIB_vehicle_owner", ""] == _uid) &&
+			!(_x getVariable ['R3F_LOG_disabled', false]) &&
+			isNull (_x getVariable ["R3F_LOG_est_transporte_par", objNull])
+		};
 
 		{
-			if ( (alive _x) &&
-				 (_x getVariable ["GRLIB_vehicle_owner", ""] == getPlayerUID player) &&
-				 !(_x getVariable ['R3F_LOG_disabled', false]) &&
-				 isNull (_x getVariable ["R3F_LOG_est_transporte_par", objNull])
-				) then {
-		  		_unit = _x;
-				{
-					if ( (_x select 0) == typeof _unit ) then {
-						_new_manpower_used = _new_manpower_used + (_x select 1);
-					};
-				} foreach ( light_vehicles + heavy_vehicles + air_vehicles + static_vehicles + support_vehicles + opfor_recyclable );
-			};
-		} foreach vehicles + GRLIB_mobile_respawn;
+			_new_manpower_used = _new_manpower_used + ([_x] call _get_mp);
+		} foreach (_player_vehicles + _player_respawn);
 
 		resources_infantry = _new_manpower_used;
-	sleep 2;
+	sleep 3;
 };

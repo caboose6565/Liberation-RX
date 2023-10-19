@@ -1,6 +1,8 @@
 params ["_unit", "_selection", "_amountOfDamage", "_killer", "_projectile", "_hitPartIndex", "_instigator"];
 
-if (isNull _unit) exitWith {0};
+if (isNull _unit) exitWith {};
+if (!alive _unit) exitWith {};
+
 if (!isNull _instigator) then {
 	if (isNull (getAssignedCuratorLogic _instigator)) then {
 	   	_killer = _instigator;
@@ -13,9 +15,6 @@ if (!isNull _instigator) then {
 
 private _ret = _amountOfDamage;
 if (!isNull _killer && _unit != _killer) then {
-	private _veh_unit = vehicle _unit;
-	private _veh_killer = vehicle _killer;
-
 	// Static AI
 	if ( typeOf _unit in static_vehicles_AI ) then {
 		if ( _unit getVariable ["GRLIB_isProtected", 0] < time ) then {

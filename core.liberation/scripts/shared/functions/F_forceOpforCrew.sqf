@@ -1,17 +1,17 @@
-params [ "_veh"];
+params [ "_vehicle" ];
 
-createVehicleCrew _veh;
-sleep 0.1;
-
+private _grp = GRLIB_side_enemy createVehicleCrew _vehicle;
+sleep 0.2;
+(crew _vehicle) joinSilent _grp;
 {
+	_x addEventHandler ["HandleDamage", { _this call damage_manager_enemy }];
 	_x addMPEventHandler ["MPKilled", { _this spawn kill_manager }];
- 	_x addEventHandler ["HandleDamage", { _this call damage_manager_enemy }];
 	_x setSkill 0.65;
 	_x allowFleeing 0;
-} foreach (crew _veh);
+} foreach (units _grp);
 
-_grp = createGroup [GRLIB_side_enemy, true];
-(crew _veh) joinSilent _grp;
+_vehicle allowCrewInImmobile [true, false];
+_vehicle setUnloadInCombat [true, false];
 
-_grp setCombatMode "GREEN";
-_grp setBehaviour "SAFE";
+_grp setCombatMode "WHITE";
+_grp setBehaviour "AWARE";

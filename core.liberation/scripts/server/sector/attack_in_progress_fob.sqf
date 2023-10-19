@@ -1,4 +1,5 @@
 params [ "_fobpos" ];
+
 sleep 30;
 private _ownership = [ _fobpos ] call F_sectorOwnership;
 if ( _ownership != GRLIB_side_enemy ) exitWith {};
@@ -17,8 +18,7 @@ if ( GRLIB_blufor_defenders ) then {
 		_x allowFleeing 0;
 		_x addEventHandler ["HandleDamage", { _this call damage_manager_friendly }];
 	} foreach (units _grp);
-	_grp setCombatMode "GREEN";
-	_grp setBehaviour "COMBAT";
+	_grp setCombatBehaviour "COMBAT";
 	[_grp, _fobpos] spawn add_defense_waypoints;
 
 	private _defenders_timer = round (time + 120);
@@ -34,6 +34,16 @@ if ( _ownership == GRLIB_side_enemy ) then {
 	private _activeplayers = 0;
 
 	[_fobpos, 1, _sector_timer] remoteExec ["remote_call_fob", 0];
+
+	[_fobpos] spawn {
+		params ["_pos"];
+		private _sound = "A3\Sounds_F\sfx\alarm_blufor.wss";
+		while { ([_pos] call F_sectorOwnership) == GRLIB_side_enemy } do {
+			playSound3D [_sound, _pos, false, ATLToASL _pos, 5, 1, 1000];
+			sleep (60 + (floor(random 4) * 45));
+		};
+	};
+
 	sleep 10;
 	_sector_timer = round (time + _sector_timer);
 

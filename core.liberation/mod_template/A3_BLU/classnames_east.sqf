@@ -22,7 +22,6 @@ opfor_sniper = "B_sniper_F";
 opfor_spotter = "B_spotter_F";
 opfor_engineer = "B_engineer_F";
 opfor_paratrooper = "B_soldier_PG_F";
-opfor_mrap = "B_MRAP_02_F";
 opfor_mrap_hmg = "B_MRAP_01_hmg_F";
 opfor_mrap_gmg = "B_MRAP_01_gmg_F";
 opfor_transport_helo = "B_Heli_Transport_03_F";
@@ -165,6 +164,8 @@ opfor_air = [
 opfor_statics = [
 	"B_HMG_01_high_F",
 	"B_GMG_01_high_F",
+	"B_HMG_01_high_F",
+	"B_GMG_01_high_F",	
 	"B_static_AA_F",
 	"B_static_AT_F",
 	"B_Mortar_01_F"

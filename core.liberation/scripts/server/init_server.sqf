@@ -1,5 +1,31 @@
 diag_log "--- Server Init start ---";
 
+// EventHandler
+addMissionEventHandler ['HandleDisconnect', {
+	params ["_unit", "_id", "_uid", "_name"];
+	[_unit, _uid, true] call save_context;
+	[_unit, _uid] call cleanup_player;
+	if (count (AllPlayers - (entities "HeadlessClient_F")) == 0) then {
+		[] call save_game_mp;
+		diag_log "--- LRX Mission End!";
+		if (!GRLIB_server_persistent) then {
+			endMission "END";
+			forceEnd;
+		};
+	};
+	false;
+}];
+
+// AI Skill
+// skillMin, skillAimMin, skillMax, skillAimMax
+[
+ true,
+ [
+  [GRLIB_side_friendly, 0.52, 0.36, 0.81, 0.64 ],
+  [GRLIB_side_enemy,    0.52, 0.36, 0.81, 0.64 ]
+ ]
+] call BIS_fnc_EXP_camp_dynamicAISkill;
+
 // Init owner on map vehicles
 {
 	if (_x isKindOf "AllVehicles") then {
@@ -11,7 +37,7 @@ diag_log "--- Server Init start ---";
 	};
 } foreach vehicles;
 
-// Init owner on user placed objects 
+// Init owner on user placed objects
 {
 	if (getObjectType _x >= 8 && !(_x iskindof "Man")) then {
 		if (isNil {_x getVariable "GRLIB_vehicle_owner"} ) then {
@@ -36,8 +62,10 @@ troup_transport = compileFinal preprocessFileLineNumbers "scripts\server\ai\trou
 // Battlegroup
 spawn_air = compileFinal preprocessFileLineNumbers "scripts\server\battlegroup\spawn_air.sqf";
 spawn_battlegroup = compileFinal preprocessFileLineNumbers "scripts\server\battlegroup\spawn_battlegroup.sqf";
+spawn_battlegroup_direct = compileFinal preprocessFileLineNumbers "scripts\server\battlegroup\spawn_battlegroup_direct.sqf";
 
 // Game
+[] call compileFinal preprocessFileLineNumbers "scripts\server\game\save_game_mp_init.sqf";
 load_game_mp = compileFinal preprocessFileLineNumbers "scripts\server\game\load_game_mp.sqf";
 save_game_mp  = compileFinal preprocessFileLineNumbers "scripts\server\game\save_game_mp.sqf";
 load_context = compileFinal preprocessFileLineNumbers "scripts\server\game\load_context.sqf";
@@ -46,7 +74,10 @@ check_victory_conditions = compileFinal preprocessFileLineNumbers "scripts\serve
 attach_object_direct = compileFinal preprocessFileLineNumbers "scripts\server\game\attach_object_direct.sqf";
 load_object_direct = compileFinal preprocessFileLineNumbers "scripts\server\game\load_object_direct.sqf";
 get_rank = compileFinal preprocessFileLineNumbers "scripts\server\game\get_rank.sqf";
-launch_firework = compileFinal preprocessFileLineNumbers "scripts\server\game\launch_firework.sqf";
+
+// Bases
+fob_init = compileFinal preprocessFileLineNumbers "scripts\server\base\fob_init.sqf";
+fob_init_officer = compileFinal preprocessFileLineNumbers "scripts\server\base\fob_init_officer.sqf";
 
 // Patrol
 reinforcements_manager = compileFinal preprocessFileLineNumbers "scripts\server\patrols\reinforcements_manager.sqf";
@@ -56,6 +87,7 @@ send_paratroopers = compileFinal preprocessFileLineNumbers "scripts\server\patro
 fob_hunting = compileFinal preprocessFileLineNumbers "scripts\server\secondary\fob_hunting.sqf";
 convoy_hijack = compileFinal preprocessFileLineNumbers "scripts\server\secondary\convoy_hijack.sqf";
 search_and_rescue = compileFinal preprocessFileLineNumbers "scripts\server\secondary\search_and_rescue.sqf";
+final_situaton = compileFinal preprocessFileLineNumbers "scripts\server\secondary\final_situaton.sqf";
 
 // Sector
 attack_in_progress_fob = compileFinal preprocessFileLineNumbers "scripts\server\sector\attack_in_progress_fob.sqf";
@@ -101,9 +133,9 @@ if (abort_loading) exitWith {
 [] execVM "scripts\server\battlegroup\counter_battlegroup.sqf";
 [] execVM "scripts\server\battlegroup\random_battlegroups.sqf";
 [] execVM "scripts\server\battlegroup\readiness_increase.sqf";
-[] execVM "scripts\server\resources\unit_cap.sqf";
 [] execVM "scripts\server\resources\manage_resources.sqf";
 [] execVM "scripts\server\patrols\civilian_patrols.sqf";
+[] execVM "scripts\server\patrols\enemy_patrols.sqf";
 [] execVM "scripts\server\sector\manage_sectors.sqf";
 [] execVM "scripts\server\sector\lose_sectors.sqf";
 [] execVM "scripts\server\game\manage_score.sqf";
@@ -114,16 +146,15 @@ if (abort_loading) exitWith {
 [] execVM "scripts\server\secondary\autostart.sqf";
 [] execVM "scripts\server\game\synchronise_vars.sqf";
 [] execVM "scripts\server\game\zeus_synchro.sqf";
-[] execVM "scripts\server\game\playtime.sqf";
 [] execVM "scripts\server\game\clean.sqf";
 [] execVM "scripts\server\game\periodic_save.sqf";
 [] execVM "scripts\server\a3w\init_missions.sqf";
 [] execVM "scripts\server\ar\fn_advancedRappellingInit.sqf";
+[] execVM "scripts\server\offloading\show_fps.sqf";
 
 // Offloading
 [] execVM "scripts\server\offloading\offload_calculation.sqf";
 [] execVM "scripts\server\offloading\offload_manager.sqf";
-[] execVM "scripts\server\offloading\show_fps.sqf";
 
 global_locked_group = [];
 publicVariable "global_locked_group";
@@ -139,27 +170,6 @@ if (GRLIB_side_enemy == INDEPENDENT) then {
 	resistance setFriend [GRLIB_side_enemy, 0];
 	GRLIB_side_enemy setFriend [resistance, 0];
 };
-
-addMissionEventHandler ["MPEnded", {
-	diag_log "--- LRX Mission End!";
-}];
-
-addMissionEventHandler ['HandleDisconnect', {
-	_this call cleanup_player;
-	if (count (AllPlayers - (entities "HeadlessClient_F")) == 0) then {
-		[] call save_game_mp;
-	};
-	false;
-}];
-
-// AI Skill
-[ 
- true, 
- [ 
-  [GRLIB_side_friendly, 0.5, 0.3, 0.7, 0.6 ], 
-  [GRLIB_side_enemy, 0.5, 0.3, 0.7, 0.6 ]
- ]
-] call BIS_fnc_EXP_camp_dynamicAISkill;
 
 sleep 3;
 GRLIB_init_server = true;

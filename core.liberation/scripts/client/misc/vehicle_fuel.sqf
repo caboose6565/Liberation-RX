@@ -1,11 +1,13 @@
 params ["_unit", "_vehicle"];
 
-private ["_role", "_fuel_veh", "_fuel_collected"];
-private _conso = 0.003;  // fuel capacity = (((1/_conso) * 5) / 60) in minutes
+if (!local _vehicle) exitWith {};
 
-if (_vehicle isKindOf "APC") then { _conso = 0.004 };
-if (_vehicle isKindOf "Tank") then { _conso = 0.005 };
-if (_vehicle isKindOf "Air") then { _conso = 0.006 };
+private ["_role", "_fuel_veh", "_fuel_collected"];
+private _conso = 0.002;  // fuel capacity = (((1/_conso) * 5) / 60) in minutes
+
+if (_vehicle isKindOf "Wheeled_APC_F") then { _conso = 0.003 };
+if (_vehicle isKindOf "Tank") then { _conso = 0.004 };
+if (_vehicle isKindOf "Air") then { _conso = 0.005 };
 
 while {true} do {
     _role = (assignedVehicleRole _unit) select 0;

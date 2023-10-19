@@ -1,9 +1,19 @@
 params ["_grp", "_flagpos", ["_radius", 100]];
-private ["_basepos", "_waypoint"];
-if (isNil "_grp") exitWith {};
+if (isNil "_grp" || isNil "_flagpos") exitWith {};
+if (isNull _grp) exitWith {};
 
-private _patrol_in_water = false;
-if (surfaceIsWater _flagpos) then { _patrol_in_water = true; _radius = 60 };
+private ["_basepos", "_waypoint", "_wp0"];
+private _grp_veh = objectParent (leader _grp);
+
+private _completion_radius = 50;
+if (_grp_veh isKindOf "Air") then { _completion_radius = 150 };
+
+private _patrol_in_water = surfaceIsWater _flagpos;
+if (_grp_veh isKindOf "Ship") then {
+	_flagpos = getPosATL _grp_veh;
+	_patrol_in_water = true;
+};
+if (_patrol_in_water) then { _radius = 60 };
 
 private _patrolcorners = [
 	[ (_flagpos select 0) - _radius, (_flagpos select 1) - _radius, 0 ],
@@ -12,51 +22,61 @@ private _patrolcorners = [
 	[ (_flagpos select 0) - _radius, (_flagpos select 1) + _radius, 0 ]
 ];
 
-while {(count (waypoints _grp)) != 0} do {deleteWaypoint ((waypoints _grp) select 0)};
-sleep 1;
+[_grp] call F_deleteWaypoints;
+
 {
 	if (_patrol_in_water) then {
-		_waypoint = _grp addWaypoint [_x, 0];
-	} else {
 		if (surfaceIsWater _x) then {
-			_waypoint = _grp addWaypoint [_flagpos, _radius];
-		} else {
 			_waypoint = _grp addWaypoint [_x, 0];
+			_waypoint setWaypointType "MOVE";
+			_waypoint setWaypointBehaviour "AWARE";
+			_waypoint setWaypointCombatMode "WHITE";
+			_waypoint setWaypointSpeed "LIMITED";
+			_waypoint setWaypointCompletionRadius _completion_radius;
+		};
+	} else {
+		if !(surfaceIsWater _x) then {
+			_waypoint = _grp addWaypoint [_x, 20];
+			_waypoint setWaypointType "MOVE";
+			_waypoint setWaypointBehaviour "AWARE";
+			_waypoint setWaypointCombatMode "WHITE";
+			_waypoint setWaypointSpeed "LIMITED";
+			_waypoint setWaypointCompletionRadius _completion_radius;
 		};
 	};
-	_waypoint setWaypointType "MOVE";
-	_waypoint setWaypointBehaviour "AWARE";
-	_waypoint setWaypointCombatMode "GREEN";
-	_waypoint setWaypointSpeed "LIMITED";
-	_waypoint setWaypointBehaviour "SAFE";
-	_waypoint setWaypointCompletionRadius 10;
 } foreach _patrolcorners;
 
-_waypoint = _grp addWaypoint [(_patrolcorners select 0), 0];
-_waypoint setWaypointType "CYCLE";
+if (count (waypoints _grp) > 1) then {
+	_wp0 = waypointPosition [_grp, 0];
+	_waypoint = _grp addWaypoint [_wp0, 0];
+	_waypoint setWaypointType "CYCLE";
+};
 {_x doFollow (leader _grp)} foreach units _grp;
 
+if (_grp_veh isKindOf "Ship") exitWith {};
+
 waitUntil {
-	sleep 10;
-	( { alive _x } count (units _grp) == 0 ) || !(isNull ((leader _grp) findNearestEnemy (leader _grp)))
-};
+	sleep 60;
+	_basepos = (leader _grp) findNearestEnemy (leader _grp);
+	if (!isNull _basepos && !_patrol_in_water) then {
+		if (_grp_veh isKindOf "Truck_F") then { [_grp] spawn F_ejectGroup };
+		[_grp] call F_deleteWaypoints;
+		_waypoint = _grp addWaypoint [_basepos, _radius];
+		_waypoint setWaypointType "MOVE";
+		_waypoint setWaypointBehaviour "AWARE";
+		_waypoint setWaypointCombatMode "RED";
+		_waypoint setWaypointSpeed "LIMITED";
+		_waypoint = _grp addWaypoint [_basepos, _radius];
+		_waypoint setWaypointType "SAD";
+		_waypoint = _grp addWaypoint [_basepos, _radius];
+		_waypoint setWaypointType "SAD";
+		_waypoint = _grp addWaypoint [_basepos, _radius];
+		_waypoint setWaypointType "SAD";
+		_waypoint = _grp addWaypoint [_basepos, _radius];
+		_waypoint setWaypointType "CYCLE";
+		{_x doFollow leader _grp} foreach units _grp;
+		sleep 300;
+	};
 
-if ( { alive _x } count (units _grp) > 0 ) then {
-	while {(count (waypoints _grp)) != 0} do { deleteWaypoint ((waypoints _grp) select 0) };
-	{_x doFollow leader _grp} foreach units _grp;
-
-	_basepos = getPosATL (leader _grp);
-	_waypoint = _grp addWaypoint [_basepos, _radius];
-	_waypoint setWaypointType "SAD";
-	_waypoint setWaypointBehaviour "COMBAT";
-	_waypoint setWaypointCombatMode "GREEN";
-	_waypoint setWaypointSpeed "LIMITED";
-	_waypoint = _grp addWaypoint [_basepos, _radius];
-	_waypoint setWaypointType "SAD";
-	_waypoint = _grp addWaypoint [_basepos, _radius];
-	_waypoint setWaypointType "SAD";
-	_waypoint = _grp addWaypoint [_basepos, _radius];
-	_waypoint setWaypointType "SAD";
-	_waypoint = _grp addWaypoint [_basepos, _radius];
-	_waypoint setWaypointType "CYCLE";
+	( { alive _x } count (units _grp) == 0 )
 };

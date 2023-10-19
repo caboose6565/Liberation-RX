@@ -1,13 +1,14 @@
 params [ "_unit" ];
-if (isNull _unit) exitWith {0};
-if (isNil "GRLIB_Ammobox_keep") then {GRLIB_Ammobox_keep = []};
+if (isNil "_unit") exitWith {0};
+if (isNil "GRLIB_Ammobox_keep") then { GRLIB_Ammobox_keep = [] };
+if (isNil "GRLIB_disabled_arsenal") then { GRLIB_disabled_arsenal = [] };
 
 // item name MUST be lowercase
-private _fixed_price = [
+private _fixed_price = LOADOUT_fixed_price + [
 	//["launch_o_vorona_brown_f" , 200]
 ];
 
-private _expensive_items = [
+private _expensive_items = LOADOUT_expensive_items + [
 	"medikit",
 	"toolkit",
 	"srifle_dmr_02",
@@ -28,7 +29,7 @@ private _expensive_items = [
 	"vorona_heat"
 ];
 
-private _free_items = [
+private _free_items = LOADOUT_free_items + [
 	"rnd_",
 	"firstaidkit",
 	"smokeshell",
@@ -43,19 +44,8 @@ private _free_items = [
 	"itemwatch"
 ];
 
-// overide custom list
-if (!iSNil "LOADOUT_fixed_price") then {
-	_fixed_price append LOADOUT_fixed_price;
-};
-if (!iSNil "LOADOUT_expensive_items") then {
-	_expensive_items append LOADOUT_expensive_items;
-};
-if (!iSNil "LOADOUT_free_items") then {
-	_free_items append LOADOUT_free_items;
-};
-
 // functions
-_fn_isfixed = {
+private _fn_isfixed = {
 	params ["_item"];
 	private _ret = -1;
 	{
@@ -64,7 +54,7 @@ _fn_isfixed = {
 	_ret;
 };
 
-_fn_isfree = {
+private _fn_isfree = {
 	params ["_item"];
 	private _ret = false;
 	{
@@ -73,7 +63,7 @@ _fn_isfree = {
 	_ret;
 };
 
-_fn_isexpensive = {
+private _fn_isexpensive = {
 	params ["_item"];
 	private _ret = false;
 	{
@@ -82,7 +72,7 @@ _fn_isexpensive = {
 	_ret;
 };
 
-_fn_getprice = {
+private _fn_getprice = {
 	params ["_item"];
 	private _ret = 0;
 
@@ -110,37 +100,43 @@ _fn_getprice = {
 
 private _val = 0;
 
-if (_unit isKindOf "Man") then {
-	if (count(handgunWeapon _unit) > 0 ) then {
-		_val = _val + ([handgunWeapon _unit] call _fn_getprice);
+if (typeName _unit == "STRING") then {
+	_val = [_unit] call _fn_getprice;
+};
+
+if (typeName _unit == "OBJECT") then {
+	if (_unit isKindOf "Man") then {
+		if (count(handgunWeapon _unit) > 0 ) then {
+			_val = _val + ([handgunWeapon _unit] call _fn_getprice);
+		};
+
+		if (count(primaryWeapon _unit) > 0 ) then {
+			_val = _val + ([primaryWeapon _unit] call _fn_getprice);
+
+			// Weapon items (scope,pointer,..)
+			_weap_items = ([weaponsItems _unit, {(_x select 0) == (primaryWeapon _unit)}] call BIS_fnc_conditionalSelect) select 0;
+			_weap_items deleteAt 0;
+			_weap_items deleteAt 3;
+			_val = _val + (3 * count ([_weap_items, {count _x > 1}] call BIS_fnc_conditionalSelect));
+		};
+
+		if (count(secondaryWeapon _unit) > 0 ) then {
+			_val = _val + ([secondaryWeapon _unit] call _fn_getprice);
+		};
+
+		{
+			_val = _val + ([_x] call _fn_getprice);
+		} forEach (backpackItems _unit + vestItems _unit + uniformItems _unit) + (secondaryWeaponMagazine _unit) select 0;
+
+		{
+			if (_x != "") then {_val = _val + 5};
+		} forEach [headgear _unit, hmd _unit, binocular _unit, vest _unit, uniform _unit, backpack _unit];
+
+		// Player items (map,compass,..)
+		_val = _val + (2 * count(assignedItems _unit));
 	};
 
-	if (count(primaryWeapon _unit) > 0 ) then {
-		_val = _val + ([primaryWeapon _unit] call _fn_getprice);
-
-		// Weapon items (scope,pointer,..)
-		_weap_items = ([weaponsItems _unit, {(_x select 0) == (primaryWeapon _unit)}] call BIS_fnc_conditionalSelect) select 0;
-		_weap_items deleteAt 0;
-		_weap_items deleteAt 3;
-		_val = _val + (3 * count ([_weap_items, {count _x > 1}] call BIS_fnc_conditionalSelect));
-	};
-
-	if (count(secondaryWeapon _unit) > 0 ) then {
-		_val = _val + ([secondaryWeapon _unit] call _fn_getprice);
-	};
-
-	{
-		_val = _val + ([_x] call _fn_getprice);
-	} forEach (backpackItems _unit + vestItems _unit + uniformItems _unit) + (secondaryWeaponMagazine _unit) select 0;
-
-	{
-		if (_x != "") then {_val = _val + 5};
-	} forEach [headgear _unit, hmd _unit, binocular _unit, vest _unit, uniform _unit, backpack _unit];
-
-	// Player items (map,compass,..)
-	_val = _val + (2 * count(assignedItems _unit));
-} else {
-	if (_unit iskindof "LandVehicle" || typeOf _unit in GRLIB_Ammobox_keep) then {
+	if (_unit iskindof "LandVehicle" || typeOf _unit in GRLIB_Ammobox_keep + GRLIB_disabled_arsenal) then {
 		_weap_cargo = weaponCargo _unit;
 		if (count _weap_cargo > 0) then {
 			{
@@ -156,4 +152,5 @@ if (_unit isKindOf "Man") then {
 		};
 	};
 };
+
 _val;

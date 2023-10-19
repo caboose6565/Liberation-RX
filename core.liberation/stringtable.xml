@@ -428,6 +428,10 @@
 			<Portuguese>Não pode construir sobre a água.</Portuguese>
 			<Czech>Na vodě se stavět nedá.</Czech>
 		</Key>
+		<Key ID="STR_BUILD_ERROR_WATER_DEEP">
+			<Original>Not enough depth!\nActual: %1m\nNeeded: %2m</Original>
+			<French>Pas assez de profondeur!\nActuel: %1m\nMinimum: %2m</French>
+		</Key>					
 		<Key ID="STR_BUILD_ERROR_DISTANCE">
 			<Original>Can't build further than %1 meters away from the FOB.</Original>
 			<French>Impossible de construire à plus de %1 mètres de la FOB.</French>
@@ -476,17 +480,21 @@
 			<Portuguese>Caminhão FOB</Portuguese>
 			<Czech>FOB Nakladní auto</Czech>
 		</Key>
+		<Key ID="STR_FOBBOAT">
+			<Original>FOB Boat</Original>
+			<French>Bateau FOB</French>
+		</Key>		
 		<Key ID="STR_RESPAWN_TRUCK">
-			<Original>Mobile respawn</Original>
-			<French>Réapparition mobile</French>
+			<Original>Mobile Respawn</Original>
+			<French>Respawn Mobile</French>
 			<German>Mobiler Respawn</German>
-			<Spanish>Respawn móvil</Spanish>
+			<Spanish>Respawn Móvil</Spanish>
 			<Russian>Мобильная КШМ</Russian>
 			<Chinesesimp>移动重生点</Chinesesimp>
 			<Chinese>移動重生點</Chinese>
 			<Japanese>モバイルリスポーン</Japanese>
-			<Portuguese>Ressurgimento móvel</Portuguese>
-			<Czech>Mobilní respawn</Czech>
+			<Portuguese>Ressurgimento Móvel</Portuguese>
+			<Czech>Mobilní Respawn</Czech>
 		</Key>
 		<Key ID="STR_ARSENAL_BOX">
 			<Original>Arsenal box</Original>
@@ -658,7 +666,7 @@
 		</Key>
 		<Key ID="STR_WIPE_TITLE_3">
 			<Original>Reset Mission Parameters</Original>
-			<French>RAZ Parametres de la Mission</French>
+			<French>RAZ des paramètres de la mission</French>
 		</Key>
 		<Key ID="STR_WIPE_NO">
 			<Original>No</Original>
@@ -817,16 +825,16 @@
 			<Czech>SEKTOR ZAJIŠTĚN</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORCAPTURED_TEXT">
-			<Original>Our forces have captured %1.</Original>
-			<French>Nos forces ont capturé %1.</French>
-			<German>Unsere Truppen haben %1 eingenommen.</German>
-			<Spanish>Nuestras fuerzas han capturado %1</Spanish>
-			<Russian>Наши войска захватили %1.</Russian>
+			<Original>Our forces have captured&lt;br/&gt;%1.</Original>
+			<French>Nos forces ont capturé&lt;br/&gt;%1.</French>
+			<German>Unsere Truppen haben&lt;br/&gt;%1 eingenommen.</German>
+			<Spanish>Nuestras fuerzas han capturado&lt;br/&gt;%1</Spanish>
+			<Russian>Наши войска захватили&lt;br/&gt;%1.</Russian>
 			<Chinesesimp>我军占领了 %1 。</Chinesesimp>
 			<Chinese>我軍佔領了 %1 。</Chinese>
 			<Japanese>我々は %1 を攻略しました。</Japanese>
-			<Portuguese>As nossas forças capturaram %1.</Portuguese>
-			<Czech>Naše síly zajaly %1.</Czech>
+			<Portuguese>As nossas forças capturaram&lt;br/&gt;%1.</Portuguese>
+			<Czech>Naše síly zajaly&lt;br/&gt;%1.</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORATTACKED_TITLE">
 			<Original>SECTOR ATTACKED</Original>
@@ -841,16 +849,16 @@
 			<Czech>SEKTOR POD ÚTOKEM</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORATTACKED_TEXT">
-			<Original>Hostiles forces are attacking %1!</Original>
-			<French>Des forces hostiles attaquent %1!</French>
-			<German>Gegnerische Truppen greifen %1 an!</German>
-			<Spanish>Fuerzas hostiles están atacando %1</Spanish>
-			<Russian>Вражеские силы атакуют %1!</Russian>
-			<Chinesesimp>敌方部队正在攻击 %1 ！</Chinesesimp>
-			<Chinese>敵方部隊正在攻擊 %1 ！</Chinese>
+			<Original>Hostiles forces are attacking&lt;br/&gt;%1!</Original>
+			<French>Des forces hostiles attaquent&lt;br/&gt;%1!</French>
+			<German>Gegnerische Truppen greifen&lt;br/&gt;%1 an!</German>
+			<Spanish>Fuerzas hostiles están atacando&lt;br/&gt;%1</Spanish>
+			<Russian>Вражеские силы атакуют&lt;br/&gt;%1!</Russian>
+			<Chinesesimp>敌方部队正在攻击&lt;br/&gt;%1 ！</Chinesesimp>
+			<Chinese>敵方部隊正在攻擊&lt;br/&gt;%1 ！</Chinese>
 			<Japanese>敵軍が %1 を攻撃しています！</Japanese>
-			<Portuguese>As forças hostis estão atacando %1!</Portuguese>
-			<Czech>Nepřátelské síly útočí %1!</Czech>
+			<Portuguese>As forças hostis estão atacando&lt;br/&gt;%1!</Portuguese>
+			<Czech>Nepřátelské síly útočí&lt;br/&gt;%1!</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORLOST_TITLE">
 			<Original>SECTOR LOST</Original>
@@ -865,16 +873,16 @@
 			<Czech>SEKTOR ZTRACENÝ</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORLOST_TEXT">
-			<Original>We have lost control over %1!</Original>
-			<French>Nous avons perdu le contrôle de %1!</French>
-			<German>Wir haben die Kontrolle ueber %1 verloren!</German>
-			<Spanish>Hemos perdido el control sobre %1!</Spanish>
-			<Russian>Мы потеряли контроль над %1!</Russian>
+			<Original>We have lost control over&lt;br/&gt;%1!</Original>
+			<French>Nous avons perdu le contrôle de&lt;br/&gt;%1!</French>
+			<German>Wir haben die Kontrolle ueber&lt;br/&gt;%1 verloren!</German>
+			<Spanish>Hemos perdido el control sobre&lt;br/&gt;%1!</Spanish>
+			<Russian>Мы потеряли контроль над&lt;br/&gt;%1!</Russian>
 			<Chinesesimp>我们失去了对 %1 的控制！</Chinesesimp>
 			<Chinese>我們失去了對 %1 的控制！</Chinese>
 			<Japanese>我々は %1 の支配を失いました！</Japanese>
-			<Portuguese>Perdemos o controle sobre %1!</Portuguese>
-			<Czech>Ztratili jsme kontrolu %1!</Czech>
+			<Portuguese>Perdemos o controle sobre&lt;br/&gt;%1!</Portuguese>
+			<Czech>Ztratili jsme kontrolu&lt;br/&gt;%1!</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORSAFE_TITLE">
 			<Original>SECTOR SAFE</Original>
@@ -889,16 +897,16 @@
 			<Czech>SEKTOR ZABEZPEČENÝ</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_SECTORSAFE_TEXT">
-			<Original>%1 is no longer under threat.</Original>
-			<French>%1 n'est plus menacé(e).</French>
-			<German>%1 ist ausser Gefahr.</German>
-			<Spanish>%1 ya no está bajo amenaza.</Spanish>
-			<Russian>%1 больше не под угрозой.</Russian>
-			<Chinesesimp>%1 不再受到威胁。</Chinesesimp>
-			<Chinese>%1 不再受到威脅。</Chinese>
-			<Japanese>%1 はもう脅威に晒されなくなりました。</Japanese>
-			<Portuguese>%1 não está mais sob ameaça.</Portuguese>
-			<Czech>%1 již není ohrožen.</Czech>
+			<Original>%1&lt;br/&gt;is no longer under threat.</Original>
+			<French>%1&lt;br/&gt;n'est plus menacé(e).</French>
+			<German>%1&lt;br/&gt;ist ausser Gefahr.</German>
+			<Spanish>%1&lt;br/&gt;ya no está bajo amenaza.</Spanish>
+			<Russian>%1&lt;br/&gt;больше не под угрозой.</Russian>
+			<Chinesesimp>%1&lt;br/&gt;不再受到威胁。</Chinesesimp>
+			<Chinese>%1&lt;br/&gt;不再受到威脅。</Chinese>
+			<Japanese>%1&lt;br/&gt;はもう脅威に晒されなくなりました。</Japanese>
+			<Portuguese>%1&lt;br/&gt;não está mais sob ameaça.</Portuguese>
+			<Czech>%1&lt;br/&gt;již není ohrožen.</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBBUILT_TITLE">
 			<Original>NEW %1 BUILT</Original>
@@ -913,16 +921,16 @@
 			<Czech>NOVÝ %1 POSTAVEN</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBBUILT_TEXT">
-			<Original>%1 %2 is now operational.</Original>
-			<French>%1 %2 est opérationnel.</French>
-			<German>%1 %2 nun funktionsfähig.</German>
-			<Spanish>La %1 %2 es operacional</Spanish>
-			<Russian>%1 %2 сейчас действует.</Russian>
-			<Chinesesimp>%1 %2 现在可以运作了。</Chinesesimp>
-			<Chinese>%1 %2 現在可以運作了。</Chinese>
-			<Japanese>%1 %2 は運用可能です。</Japanese>
-			<Portuguese>%1 %2 agora está operacional.</Portuguese>
-			<Czech>%1 %2 je nyní v provozu.</Czech>
+			<Original>%1 %2&lt;br/&gt;is now operational.</Original>
+			<French>%1 %2&lt;br/&gt;est opérationnel.</French>
+			<German>%1 %2&lt;br/&gt;nun funktionsfähig.</German>
+			<Spanish>La %1 %2&lt;br/&gt;es operacional</Spanish>
+			<Russian>%1 %2&lt;br/&gt;сейчас действует.</Russian>
+			<Chinesesimp>%1 %2&lt;br/&gt;现在可以运作了。</Chinesesimp>
+			<Chinese>%1 %2&lt;br/&gt;現在可以運作了。</Chinese>
+			<Japanese>%1 %2&lt;br/&gt;は運用可能です。</Japanese>
+			<Portuguese>%1 %2&lt;br/&gt;agora está operacional.</Portuguese>
+			<Czech>%1 %2&lt;br/&gt;je nyní v provozu.</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBSAFE_TITLE">
 			<Original>%1 SAFE</Original>
@@ -937,16 +945,16 @@
 			<Czech>%1 BEZPEČNÝ</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBSAFE_TEXT">
-			<Original>%1 %2 is no longer under threat.</Original>
-			<French>%1 %2 n'est plus menacé.</French>
-			<German>%1 %2 ist ausser Gefahr.</German>
-			<Spanish>%1 %2 ya no está bajo amenaza</Spanish>
-			<Russian>%1 %2 больше не находится под угрозой.</Russian>
-			<Chinesesimp>%1 %2 不再受到敌军威胁。</Chinesesimp>
-			<Chinese>%1 %2 不再受到敵軍威脅。</Chinese>
-			<Japanese>%1 %2 は脅威に晒されなくなりました。</Japanese>
-			<Portuguese>%1 %2 não está mais sob ameaça.</Portuguese>
-			<Czech>%1 %2 již není ohrožen.</Czech>
+			<Original>%1 %2&lt;br/&gt;is no longer under threat.</Original>
+			<French>%1 %2&lt;br/&gt;n'est plus menacé.</French>
+			<German>%1 %2&lt;br/&gt;ist ausser Gefahr.</German>
+			<Spanish>%1 %2&lt;br/&gt;ya no está bajo amenaza</Spanish>
+			<Russian>%1 %2&lt;br/&gt;больше не находится под угрозой.</Russian>
+			<Chinesesimp>%1 %2&lt;br/&gt;不再受到敌军威胁。</Chinesesimp>
+			<Chinese>%1 %2&lt;br/&gt;不再受到敵軍威脅。</Chinese>
+			<Japanese>%1 %2&lt;br/&gt;は脅威に晒されなくなりました。</Japanese>
+			<Portuguese>%1 %2&lt;br/&gt;não está mais sob ameaça.</Portuguese>
+			<Czech>%1 %2&lt;br/&gt;již není ohrožen.</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBATTACKED_TITLE">
 			<Original>High Priority - %1 ATTACKED</Original>
@@ -961,16 +969,16 @@
 			<Czech>Vysoká priorita – %1 NAPADNUTO</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBATTACKED_TEXT">
-			<Original>%1 %2 is under attack!&lt;br/&gt;You &lt;t color='#ff0000'&gt;MUST&lt;/t&gt; defend the FOB!</Original>
-			<French>%1 %2 est attaqué !&lt;br/&gt;Vous &lt;t color='#ff0000'&gt;DEVEZ&lt;/t&gt; défendre la FOB !</French>
-			<German>%1 %2 wird angegriffen !</German>
-			<Spanish>%1 %2 está bajo ataque!</Spanish>
-			<Russian>%1 %2 атакована!</Russian>
-			<Chinesesimp>%1 %2 受到了攻击!&lt;br/&gt;你 &lt;t color='#ff0000'&gt;必须&lt;/t&gt; 保卫这个 FOB!</Chinesesimp>
-			<Chinese>%1 %2 受到了攻擊!&lt;br/&gt;你 &lt;t color='#ff0000'&gt;必須&lt;/t&gt; 保衛這個 FOB!</Chinese>
-			<Japanese>%1 %2 が攻撃されています！&lt;br/&gt;あなた &lt;t color='#ff0000'&gt;は&lt;/t&gt; FOBを守ってください！</Japanese>
-			<Portuguese>%1 %2 está sob ataque!&lt;br/&gt;Você &lt;t color='#ff0000'&gt;DEVE&lt;/t&gt; defenda a FOB!</Portuguese>
-			<Czech>%1 %2 pod útokem!&lt;br/&gt;Vy &lt;t color='#ff0000'&gt;MUSÍTE&lt;/t&gt; bránit FOB!</Czech>
+			<Original>%1 %2&lt;br/&gt;is under attack!&lt;br/&gt;You &lt;t color='#ff0000'&gt;MUST&lt;/t&gt; defend the FOB!</Original>
+			<French>%1 %2&lt;br/&gt;est attaqué !&lt;br/&gt;Vous &lt;t color='#ff0000'&gt;DEVEZ&lt;/t&gt; défendre la FOB !</French>
+			<German>%1 %2&lt;br/&gt;wird angegriffen !</German>
+			<Spanish>%1 %2&lt;br/&gt;está bajo ataque!</Spanish>
+			<Russian>%1 %2&lt;br/&gt;атакована!</Russian>
+			<Chinesesimp>%1 %2&lt;br/&gt;受到了攻击!&lt;br/&gt;你 &lt;t color='#ff0000'&gt;必须&lt;/t&gt; 保卫这个 FOB!</Chinesesimp>
+			<Chinese>%1 %2&lt;br/&gt;受到了攻擊!&lt;br/&gt;你 &lt;t color='#ff0000'&gt;必須&lt;/t&gt; 保衛這個 FOB!</Chinese>
+			<Japanese>%1 %2&lt;br/&gt;が攻撃されています！&lt;br/&gt;あなた &lt;t color='#ff0000'&gt;は&lt;/t&gt; FOBを守ってください！</Japanese>
+			<Portuguese>%1 %2&lt;br/&gt;está sob ataque!&lt;br/&gt;Você &lt;t color='#ff0000'&gt;DEVE&lt;/t&gt; defenda a FOB!</Portuguese>
+			<Czech>%1 %2&lt;br/&gt;pod útokem!&lt;br/&gt;Vy &lt;t color='#ff0000'&gt;MUSÍTE&lt;/t&gt; bránit FOB!</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBLOST_TITLE">
 			<Original>%1 DESTROYED</Original>
@@ -985,32 +993,32 @@
 			<Czech>%1 ZNIČENO</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBLOST_TEXT">
-			<Original>%1 %2 has been destroyed!</Original>
-			<French>%1 %2 a été détruit !</French>
-			<German>%1 %2 wurde zerstoert!</German>
-			<Spanish>%1 %2 ha sido destruida!</Spanish>
-			<Russian>%1 %2 была уничтожена!</Russian>
-			<Chinesesimp>%1 %2 已被摧毁!</Chinesesimp>
-			<Chinese>%1 %2 已被摧毀!</Chinese>
-			<Japanese>%1 %2 は破壊されました！</Japanese>
-			<Portuguese>%1 %2 foi destruído!</Portuguese>
-			<Czech>%1 %2 bylo zničeno!</Czech>
+			<Original>%1 %2&lt;br/&gt;has been destroyed!</Original>
+			<French>%1 %2&lt;br/&gt;a été détruit !</French>
+			<German>%1 %2&lt;br/&gt;wurde zerstoert!</German>
+			<Spanish>%1 %2&lt;br/&gt;ha sido destruida!</Spanish>
+			<Russian>%1 %2&lt;br/&gt;была уничтожена!</Russian>
+			<Chinesesimp>%1 %2&lt;br/&gt;已被摧毁!</Chinesesimp>
+			<Chinese>%1 %2&lt;br/&gt;已被摧毀!</Chinese>
+			<Japanese>%1 %2&lt;br/&gt;は破壊されました！</Japanese>
+			<Portuguese>%1 %2&lt;br/&gt;foi destruído!</Portuguese>
+			<Czech>%1 %2&lt;br/&gt;bylo zničeno!</Czech>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBREPACK_TITLE">
 			<Original>%1 FOLDED</Original>
 			<French>%1 REPLIÉ</French>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBREPACK_TEXT">
-			<Original>%1 %2 has been folded!</Original>
-			<French>%1 %2 a été repliée !</French>
+			<Original>%1 %2&lt;br/&gt;has been folded!</Original>
+			<French>%1 %2&lt;br/&gt;a été repliée !</French>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBUPGRADE_TITLE">
 			<Original>%1 UPGRADED</Original>
 			<French>%1 AMÉLIORÉ</French>
 		</Key>
 		<Key ID="STR_NOTIFICATION_FOBUPGRADE_TEXT">
-			<Original>%1 %2 has been upgraded!</Original>
-			<French>%1 %2 a été amélioré !</French>
+			<Original>%1 %2&lt;br/&gt;has been upgraded!</Original>
+			<French>%1 %2&lt;br/&gt;a été amélioré !</French>
 		</Key>
 		<Key ID="STR_NOTIFICATION_BATTLEGROUP_TITLE">
 			<Original>HOSTILE FORCES INCOMING</Original>
@@ -1133,16 +1141,16 @@
 			<Czech>NEPŘÁTELSKÝ POSILY ÚTOČÍ %1.</Czech>
 		</Key>
 		<Key ID="STR_VICTORY_TITLE">
-			<Original>BLUFOR VICTORY</Original>
-			<French>VICTOIRE BLUFOR</French>
-			<German>BLUFOR SIEGREICH</German>
-			<Spanish>VICTORIA DE BLUFOR</Spanish>
+			<Original>VICTORY</Original>
+			<French>VICTOIRE</French>
+			<German>SIEGREICH</German>
+			<Spanish>VICTORIA</Spanish>
 			<Russian>СИНИЕ ПОБЕДИЛИ</Russian>
-			<Chinesesimp>BLUFOR获胜</Chinesesimp>
-			<Chinese>BLUFOR獲勝</Chinese>
+			<Chinesesimp>获胜</Chinesesimp>
+			<Chinese>獲勝</Chinese>
 			<Japanese>我々の勝利です</Japanese>
-			<Portuguese>VITÓRIA BLUFOR</Portuguese>
-			<Czech>ZVÍTĚZILY JSME</Czech>
+			<Portuguese>VITÓRIA</Portuguese>
+			<Czech>ZVÍTĚZILY</Czech>
 		</Key>
 		<Key ID="STR_VICTORY_TEXT">
 			<Original>You have liberated this country from the OPFOR oppression.</Original>
@@ -1852,6 +1860,10 @@
 			<Portuguese>Posição cinematográfica</Portuguese>
 			<Czech>Filmová scéna</Czech>
 		</Key>
+		<Key ID="STR_PARAMS_ARSENAL_FOB">
+			<Original>Enabled at FOB Only.</Original>
+			<French>Activé à FOB uniquement.</French>
+		</Key>
 		<Key ID="STR_PARAMS_ENABLED">
 			<Original>Enabled</Original>
 			<French>Activé</French>
@@ -1875,6 +1887,10 @@
 			<Japanese>無効</Japanese>
 			<Portuguese>Desabilitado</Portuguese>
 			<Czech>Zakázáno</Czech>
+		</Key>
+		<Key ID="STR_PARAMS_USER_DEF">
+			<Original>User defined</Original>
+			<French>Défini par l'utilisateur</French>
 		</Key>
 		<Key ID="STR_PARAMS_FIRSTFOB">
 			<Original>Start the campaign with the first FOB already built</Original>
@@ -1996,6 +2012,10 @@
 			<Portuguese>200% - Servidor dedicado com vários clientes headless recomendados</Portuguese>
 			<Czech>200% - Doporučujeme dedikovaný server s několika headless klienty</Czech>
 		</Key>
+		<Key ID="STR_PARAMS_PATROLS">
+			<Original>Enable the Patrols Manager</Original>
+			<French>Activer le Gestionnaire de Patrouilles</French>
+		</Key>		
 		<Key ID="STR_PARAMS_CIVILIANS">
 			<Original>Enable the Civilian Manager</Original>
 			<French>Activer le Gestionnaire de Civils</French>
@@ -2099,8 +2119,8 @@
 			<Czech>Velikost sektoru (radius)</Czech>
 		</Key>
 		<Key ID="STR_PARAM_PASSIVE_INCOME">
-			<Original>Replace ammo boxes spawns with passive income</Original>
-			<French>Remplacer les caisses de munitions par un revenu passif</French>
+			<Original>Replace ammo boxes spawns with Passive Income</Original>
+			<French>Remplacer les caisses de munitions par un Revenu Passif</French>
 			<German>Ersetzt Munitionskisten durch passives Einkommen</German>
 			<Spanish>Reemplazar cajas de munición por ingresos pasivos</Spanish>
 			<Russian>Заменяет ящики с боеприпасами пассивным доходом</Russian>
@@ -2109,6 +2129,12 @@
 			<Japanese>スポーンする弾薬箱をパッシブインカムに変更</Japanese>
 			<Portuguese>Substitua caixas de munição por renda passiva</Portuguese>
 			<Czech>Nahraďte spawny krabic s municí pasivním příjmem</Czech>
+		</Key>
+		<Key ID="STR_PARAM_PASSIVE_INCOME_DELAY">
+			<Original>Passive Income Delay</Original>
+		</Key>
+		<Key ID="STR_PARAM_PASSIVE_INCOME_AMMOUNT">
+			<Original>Passive Income Ammount</Original>
 		</Key>
 		<Key ID="STR_BUILD1">
 			<Original>Infantry units</Original>
@@ -2897,6 +2923,10 @@
 			<Original>HALO Vehicle</Original>
 			<French>Vehicule HALO</French>
 		</Key>
+		<Key ID="STR_HALO_PARAM_ARTY">
+			<Original>Artillery Fire</Original>
+			<French>Tir d'Artillerie</French>
+		</Key>
 		<Key ID="STR_HALO_PARAM1">
 			<Original>Enabled - No cooldown</Original>
 			<French>Activé - Pas d'attente</French>
@@ -3047,7 +3077,7 @@
 		</Key>
 		<Key ID="STR_CLEANUP_PARAM">
 			<Original>Cleanup abandonned vehicles outside FOBs</Original>
-			<French>Nettoyer les véhicules abandonnés loin d'une FOB</French>
+			<French>Nettoyer les véhicules abandonnés loin des FOB</French>
 			<German>Räumt verlassene Fahrzeuge auserhalb von FOBs weg</German>
 			<Spanish>Limpieza de vehículos abandonados fuera de FOBs</Spanish>
 			<Russian>Удаление брошенной техники вне FOB.</Russian>
@@ -3069,6 +3099,14 @@
 			<Czech>za 15 minut Vymazat</Czech>
 		</Key>
 		<Key ID="STR_CLEANUP_PARAM2">
+			<Original>20 minutes delay</Original>
+			<French> 20 minutes de délai</French>
+			<Chinesesimp>20分钟间隔</Chinesesimp>
+			<Chinese>20分钟间隔</Chinese>
+			<Portuguese>20 minutos de atraso</Portuguese>
+			<Czech>za 20 minut Vymazat</Czech>
+		</Key>
+		<Key ID="STR_CLEANUP_PARAM3">
 			<Original>30 minutes delay</Original>
 			<French> 30 minutes de délai</French>
 			<Chinesesimp>30分钟间隔</Chinesesimp>
@@ -3076,7 +3114,7 @@
 			<Portuguese>30 minutos de atraso</Portuguese>
 			<Czech>za 30 minut vymazat</Czech>
 		</Key>
-		<Key ID="STR_CLEANUP_PARAM3">
+		<Key ID="STR_CLEANUP_PARAM4">
 			<Original>1 hour delay</Original>
 			<French>1 heure de délai</French>
 			<Chinesesimp>1小时间隔</Chinesesimp>
@@ -3084,7 +3122,7 @@
 			<Portuguese>1 hora de atraso</Portuguese>
 			<Czech>za 1 hodinu vymazat</Czech>
 		</Key>
-		<Key ID="STR_CLEANUP_PARAM4">
+		<Key ID="STR_CLEANUP_PARAM5">
 			<Original>2 hours delay</Original>
 			<French>2 heures de délai</French>
 			<Chinesesimp>2小时间隔</Chinesesimp>
@@ -3328,18 +3366,6 @@
 			<Japanese>ランダム</Japanese>
 			<Portuguese>Random</Portuguese>
 			<Czech>Náhodný</Czech>
-		</Key>
-		<Key ID="STR_WEATHER_PARAM5">
-			<Original>Dynamic (WIP)</Original>
-			<French>Dynamic (WIP)</French>
-			<German>Dynamic (WIP)</German>
-			<Spanish>Dynamic (WIP)</Spanish>
-			<Russian>Dynamic (WIP)</Russian>
-			<Chinesesimp>Dynamic (WIP)</Chinesesimp>
-			<Chinese>Dynamic (WIP)</Chinese>
-			<Japanese>Dynamic (WIP)</Japanese>
-			<Portuguese>Dynamic (WIP)</Portuguese>
-			<Czech>Dynamic (WIP)</Czech>
 		</Key>
 		<Key ID="STR_REPAIRING">
 			<Original>Repairing</Original>
@@ -4640,6 +4666,10 @@
 				- Své vybavení můžete zkopírovat do AI pomocí tlačítka (Like Me) v Squad Management.&lt;/t&gt;
 			</Czech>
 		</Key>
+		<Key ID="STR_SECONDARY_MISSION_IN_PROGRESS">
+			<Original>A Secondary Mission (%1) is already in progress...</Original>
+			<French>Une Mission Secondaire (%1) est déjà en cours...</French>	
+		</Key>				
 		<Key ID="STR_SECONDARY_MISSION0">
 			<Original>FOB Hunting</Original>
 			<French>Chasse à la FOB</French>
@@ -4962,78 +4992,6 @@
 					&lt;t size='10'&gt;&lt;img image='res\secondary\convoy_obj.jpg'/&gt;&lt;/t&gt;
 			</Czech>
 		</Key>
-
-		<!-- Added in v0.922 -->
-		<Key ID="STR_PARAM_BLUFOR_DEFENDERS">
-			<Original>BLUFOR defenders in owned sectors</Original>
-			<French>Défenseurs BLUFOR dans les secteurs capturés</French>
-			<German>BLUFOR Verteidiger in besetzten Sektoren</German>
-			<Russian>BLUFOR защитники в захваченных зонах</Russian>
-			<Chinesesimp>BLUFOR所属地区的保护者</Chinesesimp>
-			<Chinese>BLUFOR所屬地區的保護者</Chinese>
-			<Japanese>友軍の守備隊が解放した街に常駐</Japanese>
-			<Portuguese>Defensores do BLUFOR em setores próprios</Portuguese>
-			<Czech>Obránci ve vlastněných sektorech</Czech>
-		</Key>
-		<Key ID="STR_PARAM_FOBS_COUNT">
-			<Original>Maximum number of FOBs allowed</Original>
-			<French>Nombre maximal de FOBs autorisées</French>
-			<German>Maximale Anzahl an erlaubten FOBs</German>
-			<Russian>Максимальное количество FOB</Russian>
-			<Chinesesimp>允许的最大FOB数</Chinesesimp>
-			<Chinese>允許的最大FOB數</Chinese>
-			<Japanese>最大建設可能FOB</Japanese>
-			<Portuguese>Número máximo de FOBs permitido</Portuguese>
-			<Czech>Maximální povolený počet FOB</Czech>
-		</Key>
-		<Key ID="STR_PARAM_FOB_TYPE">
-			<Original>Startup FOB Vehicle</Original>
-			<French>Type du vehicle de FOB</French>
-			<Chinesesimp>启动FOB车辆</Chinesesimp>
-			<Chinese>啟動FOB車輛</Chinese>
-			<Japanese>ミッション開始時のFOBタイプ</Japanese>
-			<Portuguese>Veículo FOBS de Inicialização</Portuguese>
-			<Czech>FOB Vozidlo</Czech>
-		</Key>
-		<Key ID="STR_PARAM_HURON_TYPE">
-			<Original>The type of Huron</Original>
-			<French>Le type de Huron</French>
-			<Chinesesimp>移动重生直升机类型</Chinesesimp>
-			<Chinese>移動重生直升機類型</Chinese>
-			<Japanese>Huronのタイプ</Japanese>
-			<Portuguese>O tipo de Huron</Portuguese>
-			<Czech>FOB Kontejnér</Czech>
-		</Key>
-		<Key ID="STR_HINT_FOB_WRONG_OWNER">
-			<Original>You are NOT the Owner of the FOB!</Original>
-			<French>Vous n'êtes PAS le propriétaire de la FOB!</French>
-		</Key>
-		<Key ID="STR_HINT_OUTPOST_WRONG_OWNER">
-			<Original>You are NOT the Owner of the Outpost!</Original>
-			<French>Vous n'êtes PAS le propriétaire du Poste Avancé FOB!</French>
-		</Key>
-		<Key ID="STR_HINT_FOBS_EXCEEDED">
-			<Original>You are NOT allowed to deploy more than %1 FOBs at the same time.</Original>
-			<French>Vous n'êtes pas autorisé à déployer plus de %1 FOBs en même temps.</French>
-			<German>Sie haben nicht die Erlaubnis mehr als %1 FOBs zur selben Zeit zu errichten.</German>
-			<Russian>Вам не разрешено развертывать более %1 FOB одновременно.</Russian>
-			<Chinesesimp>不允许同时部署超过 %1 个FOB。</Chinesesimp>
-			<Chinese>不允許同時部署超過 %1 個FOB。</Chinese>
-			<Japanese>あなたは同時に %1 以上のFOBを建設する事は出来ません。</Japanese>
-			<Portuguese>Você não tem permissão para implantar mais de %1 FOBs ao mesmo tempo.</Portuguese>
-			<Czech>Není povoleno nasadit více než %1 FOB současně.</Czech>
-		</Key>
-		<Key ID="STR_HINT_LOADOUT_LOADED">
-			<Original>%1 loadout successfully loaded.</Original>
-			<French>Equipement %1 chargé avec succès.</French>
-			<German>Ausrüstungsset %1 erfolgreich geladen.</German>
-			<Russian>Снаряжение %1 успешно загружено.</Russian>
-			<Chinesesimp>%1 装备成功加载。</Chinesesimp>
-			<Chinese>%1 裝備成功加載。</Chinese>
-			<Japanese>%1 装備が正常に呼び出されました。</Japanese>
-			<Portuguese>Carregamento %1 carregado com sucesso.</Portuguese>
-			<Czech>Vybavení %1 bylo úspěšně načteno.</Czech>
-		</Key>
 		<Key ID="STR_SECONDARY_MISSION2">
 			<Original>Search and Rescue</Original>
 			<Russian>Поиск и спасение</Russian>
@@ -5181,8 +5139,124 @@
 					&lt;t size='10'&gt;&lt;img image='res\secondary\fob_obj.jpg'/&gt;&lt;/t&gt;
 			</Czech>
 		</Key>
-
-		<!-- Added in v0.924 -->
+		<Key ID="STR_SECONDARY_MISSION3">
+			<Original>Start the Armageddon</Original>
+			<French>Démarrer l'Armageddon</French>
+		</Key>
+		<Key ID="STR_SECONDARY_BRIEFING3">
+			<Original>
+					&lt;t size='1.3' color='#ffa000'&gt;START THE ARMAGEDDON&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1'&gt;
+					OPFOR forces has developed a monstrous weapon, if they manage to use it, it will be the end of our presence in this region.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1'&gt;
+					Your mission is to destroy this weapon before it goes off. All soldiers must join forces for the ultimate battle between good and the forces of evil.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					There will be no second chance...
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1.15' color='#00a0ff'&gt;Cost: 100&lt;img image='\A3\Ui_f\data\GUI\Cfg\Ranks\general_gs.paa'/&gt;&lt;/t&gt;
+					&lt;br/&gt;
+					&lt;t size='1.15' color='#ffa000'&gt;Reward: Immediate victory for our side.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='10'&gt;&lt;img image='res\secondary\final_situation.jpg'/&gt;&lt;/t&gt;
+			</Original>
+			<French>
+					&lt;t size='1.3' color='#ffa000'&gt;DÉMARRER L'ARMAGEDDON&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1'&gt;
+					Les forces de l'OPFOR ont developpé une arme monstrueuse, s'ils arrivent à l'utiliser, ce sera la fin de notre presence dans cette region.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1'&gt;
+					Votre mission est de détruire cette arme avant son declenchement. Tous les soldats doivent unir leur force pour l'utime combat entre le bien et les forces du mal.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					Il n'y aura pas de seconde chance...
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='1.15' color='#00a0ff'&gt;Coût: 800&lt;img image='\A3\Ui_f\data\GUI\Cfg\Ranks\general_gs.paa'/&gt;&lt;/t&gt;
+					&lt;br/&gt;
+					&lt;t size='1.15' color='#ffa000'&gt;Récompense: Victoire immédiate de notre camp.&lt;/t&gt;
+					&lt;br/&gt;&lt;br/&gt;
+					&lt;t size='10'&gt;&lt;img image='res\secondary\final_situation.jpg'/&gt;&lt;/t&gt;
+			</French>
+		</Key>
+		<Key ID="STR_MISSION3_FAILED">
+			<Original>YOU LOST THE WAR...</Original>
+			<French>VOUS AVEZ PERDU LA GUERRE...</French>
+		</Key>		
+		<Key ID="STR_PARAM_BLUFOR_DEFENDERS">
+			<Original>BLUFOR defenders in owned sectors</Original>
+			<French>Défenseurs BLUFOR dans les secteurs capturés</French>
+			<German>BLUFOR Verteidiger in besetzten Sektoren</German>
+			<Russian>BLUFOR защитники в захваченных зонах</Russian>
+			<Chinesesimp>BLUFOR所属地区的保护者</Chinesesimp>
+			<Chinese>BLUFOR所屬地區的保護者</Chinese>
+			<Japanese>友軍の守備隊が解放した街に常駐</Japanese>
+			<Portuguese>Defensores do BLUFOR em setores próprios</Portuguese>
+			<Czech>Obránci ve vlastněných sektorech</Czech>
+		</Key>
+		<Key ID="STR_PARAM_FOBS_COUNT">
+			<Original>Maximum number of FOBs allowed</Original>
+			<French>Nombre maximal de FOBs autorisées</French>
+			<German>Maximale Anzahl an erlaubten FOBs</German>
+			<Russian>Максимальное количество FOB</Russian>
+			<Chinesesimp>允许的最大FOB数</Chinesesimp>
+			<Chinese>允許的最大FOB數</Chinese>
+			<Japanese>最大建設可能FOB</Japanese>
+			<Portuguese>Número máximo de FOBs permitido</Portuguese>
+			<Czech>Maximální povolený počet FOB</Czech>
+		</Key>
+		<Key ID="STR_PARAM_FOB_TYPE">
+			<Original>Startup FOB Vehicle</Original>
+			<French>Type du vehicle de FOB</French>
+			<Chinesesimp>启动FOB车辆</Chinesesimp>
+			<Chinese>啟動FOB車輛</Chinese>
+			<Japanese>ミッション開始時のFOBタイプ</Japanese>
+			<Portuguese>Veículo FOBS de Inicialização</Portuguese>
+			<Czech>FOB Vozidlo</Czech>
+		</Key>
+		<Key ID="STR_PARAM_HURON_TYPE">
+			<Original>The type of Huron</Original>
+			<French>Le type de Huron</French>
+			<Chinesesimp>移动重生直升机类型</Chinesesimp>
+			<Chinese>移動重生直升機類型</Chinese>
+			<Japanese>Huronのタイプ</Japanese>
+			<Portuguese>O tipo de Huron</Portuguese>
+			<Czech>FOB Kontejnér</Czech>
+		</Key>
+		<Key ID="STR_PARAM_NAVAL_TYPE">
+			<Original>The type of Naval FOB</Original>
+			<French>Le type de FOB Maritime</French>
+		</Key>
+		<Key ID="STR_HINT_FOB_WRONG_OWNER">
+			<Original>You are NOT the Owner of the FOB!</Original>
+			<French>Vous n'êtes PAS le propriétaire de la FOB!</French>
+		</Key>
+		<Key ID="STR_HINT_OUTPOST_WRONG_OWNER">
+			<Original>You are NOT the Owner of the Outpost!</Original>
+			<French>Vous n'êtes PAS le propriétaire du Poste Avancé FOB!</French>
+		</Key>
+		<Key ID="STR_HINT_FOBS_EXCEEDED">
+			<Original>You are NOT allowed to deploy more than %1 FOBs at the same time.</Original>
+			<French>Vous n'êtes pas autorisé à déployer plus de %1 FOBs en même temps.</French>
+			<German>Sie haben nicht die Erlaubnis mehr als %1 FOBs zur selben Zeit zu errichten.</German>
+			<Russian>Вам не разрешено развертывать более %1 FOB одновременно.</Russian>
+			<Chinesesimp>不允许同时部署超过 %1 个FOB。</Chinesesimp>
+			<Chinese>不允許同時部署超過 %1 個FOB。</Chinese>
+			<Japanese>あなたは同時に %1 以上のFOBを建設する事は出来ません。</Japanese>
+			<Portuguese>Você não tem permissão para implantar mais de %1 FOBs ao mesmo tempo.</Portuguese>
+			<Czech>Není povoleno nasadit více než %1 FOB současně.</Czech>
+		</Key>
+		<Key ID="STR_HINT_LOADOUT_LOADED">
+			<Original>%1 loadout successfully loaded.</Original>
+			<French>Equipement %1 chargé avec succès.</French>
+			<German>Ausrüstungsset %1 erfolgreich geladen.</German>
+			<Russian>Снаряжение %1 успешно загружено.</Russian>
+			<Chinesesimp>%1 装备成功加载。</Chinesesimp>
+			<Chinese>%1 裝備成功加載。</Chinese>
+			<Japanese>%1 装備が正常に呼び出されました。</Japanese>
+			<Portuguese>Carregamento %1 carregado com sucesso.</Portuguese>
+			<Czech>Vybavení %1 bylo úspěšně načteno.</Czech>
+		</Key>
 		<Key ID="STR_CIV_PENALTIES">
 			<Original>Penalty for killing civilians</Original>
 			<Russian>Штраф за убийство гражданских</Russian>
@@ -5216,14 +5290,14 @@
 			<Czech>AI Tým při startu.</Czech>
 		</Key>
 		<Key ID="STR_PARAM_SQUAD_SIZE">
-			<Original>AI recruitment limit per squad.</Original>
+			<Original>AI limit per squad.</Original>
 			<Russian>Максимальное количество ИИ в отряде.</Russian>
-			<French>Limite de recrutement d'IA par escouade.</French>
+			<French>Limite d'IA par escouade.</French>
 			<Chinesesimp>每个小队AI招募限制。</Chinesesimp>
 			<Chinese>每個小隊AI招募限制。</Chinese>
 			<Japanese>AIの運用を小隊ごとに制限する。</Japanese>
-			<Portuguese>Limite de recrutamento de IA por esquadrão.</Portuguese>
-			<Czech>Limit náboru AI na tým.</Czech>
+			<Portuguese>Limite de IA por esquadrão.</Portuguese>
+			<Czech>Limit AI na tým.</Czech>
 		</Key>
 		<Key ID="STR_PARAM_SPAWN_MAX">
 			<Original>Maximum Spawn Point per player.</Original>
@@ -5489,9 +5563,38 @@
 			<Portuguese>Informações extravagantes</Portuguese>
 			<Czech>Zajímavé informace</Czech>
 		</Key>
+		<Key ID="STR_GUI_PLATOON">
+			<Original>UI - Show Platoon Overlay</Original>
+		</Key>
+		<Key ID="STR_GUI_NAMETAG">
+			<Original>UI - Show player name tags</Original>
+		</Key>
+		<Key ID="STR_GUI_TEAM">
+			<Original>UI - Show team mates on map</Original>
+		</Key>
+		<Key ID="STR_PERSISTENT_MODE">
+			<Original>Server in Persistent Mode</Original>
+			<French>Serveur en Mode Persistant.</French>
+		</Key>
 		<Key ID="STR_KEEP_SCORE">
 			<Original>Keep Players score on map restart</Original>
 			<French>Garder le score du joueurs au redemarage de la Map</French>
+		</Key>
+		<Key ID="STR_RESPAWN_CD">
+			<Original>Add a cooldown if the player respawn too fast</Original>
+			<French>Ajoute une attente si le joueur respawn trop rapidement</French>
+		</Key>
+		<Key ID="STR_REDEPLOY">
+			<Original>Allow Redeploy to all mobile Respawn</Original>
+			<French>Autoriser le redéploiement sur tous les mobiles Respawn</French>
+		</Key>		
+		<Key ID="STR_KICK_IDLE">
+			<Original>Kick player if idle for too long</Original>
+			<French>Eject le joueur si inactif trop longtemps</French>
+		</Key>
+		<Key ID="STR_KICK_IDLE_MSG">
+			<Original>You are idle since %1min, you must move before %2min or you'll be kicked.</Original>
+			<French>Vous êtes inactif depuis %1min, vous devez vous déplacer avant %2min ou vous serez expulsé.</French>
 		</Key>
 		<Key ID="STR_OPFORMARK">
 			<Original>Dynamic Opfor sector markers</Original>
@@ -5502,6 +5605,10 @@
 			<Japanese>敵占領区域のマーカーを表示する</Japanese>
 			<Portuguese>Ocultar marcadores do setor Opfor</Portuguese>
 			<Czech>Skryjte značky sektorů Nepřítele</Czech>
+		</Key>
+		<Key ID="STR_BLUFORMARK">
+			<Original>Show BLUFOR markers</Original>
+			<French>Affiche les marqueurs BLUFOR</French>
 		</Key>
 		<Key ID="STR_ARSENAL">
 			<Original>Enable Virtual Arsenal</Original>
@@ -5545,7 +5652,7 @@
 		</Key>
 		<Key ID="STR_LIMIT_ARSENAL_PARAM4">
 			<Original>Only items defined in Whitelist</Original>
-		</Key>		
+		</Key>
 		<Key ID="STR_VEH_LOCK">
 			<Original>Enable Vehicles Ownership</Original>
 			<Russian>Включить Владение Транспортом</Russian>
@@ -5662,6 +5769,14 @@
 			<Portuguese>-- ENCONTRAR O CÃO</Portuguese>
 			<Czech>-- DOG HLEDEJ</Czech>
 		</Key>
+		<Key ID="STR_DOG_FIND_GUN">
+			<Original>-- DOG BRINGS WEAPON</Original>
+			<French>-- CHIEN RAMÈNE ARME</French>
+		</Key>
+		<Key ID="STR_DOG_PATROL">
+			<Original>-- DOG PATROL</Original>
+			<French>-- CHIEN PATROUILLE</French>
+		</Key>
 		<Key ID="STR_DOG_RECALL">
 			<Original>-- DOG RECALL</Original>
 			<Russian>-- СОБАКА, ЗА МНОЙ</Russian>
@@ -5685,7 +5800,7 @@
 		<Key ID="STR_DOG_DISMISS">
 			<Original>-- DOG DISMISS</Original>
 			<Russian>-- ВОЗВРАТ СОБАКИ</Russian>
-			<French>-- CHIEN RENVOYER</French>
+			<French>-- RENVOYER CHIEN</French>
 			<Japanese>-- 犬とバイバイする</Japanese>
 			<Chinesesimp>-- 解雇军犬 --</Chinesesimp>
 			<Chinese>-- 解僱軍犬 --</Chinese>
@@ -5695,7 +5810,7 @@
 		<Key ID="STR_SQUAD_MOVE">
 			<Original>-- SQUAD MOVE</Original>
 			<Russian>-- ОТРЯД, ДВИЖЕНИЕ</Russian>
-			<French>-- ESCOUADE BOUGE</French>
+			<French>-- ESCOUADE DEPLACEMENT</French>
 			<Japanese>-- 分隊移動</Japanese>
 			<Chinesesimp>-- 小队移动 --</Chinesesimp>
 			<Chinese>-- 小隊移動 --</Chinese>
@@ -5836,13 +5951,17 @@
 			<Original>-- UPGRADE OUTPOST</Original>
 			<French>-- AMÉLIORER AVANT-POSTE</French>
 		</Key>
+		<Key ID="STR_ONBOARD_SHIP">
+			<Original>-- CLIMB ON BOARD</Original>
+			<French>-- MONTER À BORD</French>
+		</Key>		
 		<Key ID="STR_UPGRADE_OUTPOST_HINT">
 			<Original>upgraded.</Original>
 			<French>amélioré.</French>
 		</Key>
  		<Key ID="STR_UPGRADE_OUTPOST_PAY">
 			<Original>&lt;t align='center'&gt;Upgrade the Outpost for %1 Ammo&lt;br/&gt;Are you sure ?&lt;/t&gt;</Original>
-			<Original>&lt;t align='center'&gt;Améliorer l'Outpost pour %1 Ammo&lt;br/&gt;Êtes-vous sûr ?&lt;/t&gt;</Original>
+			<French>&lt;t align='center'&gt;Améliorer l'Outpost pour %1 Ammo&lt;br/&gt;Êtes-vous sûr ?&lt;/t&gt;</French>
 		</Key>
 		<!-- action_manager_veh.sqf -->
 		<Key ID="STR_SELL_CARGO">
@@ -5958,7 +6077,18 @@
 			<Portuguese>-- REMOVER O CORPO</Portuguese>
 			<Czech>-- ODSTRAŇTE TĚLO</Czech>
 		</Key>
-
+		<Key ID="STR_LOOT_BODY">
+			<Original>-- LOOT BODY</Original>
+			<French>-- LOOTER CORPS</French>
+		</Key>
+		<Key ID="STR_LOADOUT_CARGO_STORED">
+			<Original>%1's gear stored in %2.</Original>
+			<French>Équipement de %1 rangé dans %2.</French>
+		</Key>
+		<Key ID="STR_LOADOUT_NOCARGO">
+			<Original>No empty vehicle nearby.</Original>
+			<French>Pas de véhicule vide à proximité.</French>
+		</Key>
 		<!-- recycle_manager.sqf -->
 		<Key ID="STR_RECYCLE_MANAGER">
 			<Original>-- RECYCLE</Original>
@@ -6060,7 +6190,14 @@
 			<Portuguese>O cachorro encontrou algo a %1m de distância !!</Portuguese>
 			<Czech>Pes našel něco %1m daleko!!</Czech>
 		</Key>
-
+		<Key ID="STR_DOG_FOUND_GUN">
+			<Original>The dog return with a gun !!</Original>
+			<French>Le chien reviens avec une arme !! </French>
+		</Key>
+		<Key ID="STR_DOG_FOUND_MINE">
+			<Original>The dog found a mine here !!</Original>
+			<French>Le chien à trouvé une mine ici !! </French>
+		</Key>
 		<!-- do_eject.sqf -->
 		<Key ID="STR_DO_EJECT">
 			<Original>Warning !!\n -5 pts Malus for Ejecting Civilian.</Original>
@@ -6084,7 +6221,10 @@
 			<Portuguese>%1 está bloqueado!</Portuguese>
 			<Czech>%1 uzamčeno!</Czech>
 		</Key>
-
+		<Key ID="STR_DO_LOCK_MSG">
+			<Original>The vehicle and all its contents belong to you.</Original>
+			<French>Le véhicule et tout son contenu vous appartiennent.</French>
+		</Key>
 		<!-- do_recycle.sqf -->
 		<Key ID="STR_DO_RECYCLE">
 			<Original>&lt;t align='center'&gt;Select Reward:&lt;br/&gt;50 XP or 300 AMMO&lt;/t&gt;</Original>
@@ -6195,6 +6335,9 @@
 		</Key>
 
 		<!-- do_sell.sqf -->
+		<Key ID="STR_SELL_WELCOME_FOB">
+			<Original>Hello solider, The army can recycle your vehicle's cargo!</Original>
+		</Key>
 		<Key ID="STR_SELL_WELCOME">
 			<Original>Hello stranger, I buy your vehicle's cargo for a good price!</Original>
 			<Russian>Привет незнакомец, я куплю груз из вашего транспорта по хорошей цене!</Russian>
@@ -6322,7 +6465,18 @@
 			<Portuguese>-= DICAS =-</Portuguese>
 			<Czech>-= TIPY =-</Czech>
 		</Key>
-
+		<Key ID="STR_SAVE_PLAYER">
+			<Original>-- SAVE PLAYER PROFILE</Original>
+			<French>-- SAUVEGARDER LE JOUEUR</French>
+		</Key>
+		<Key ID="STR_SAVE_PLAYER_MSG">
+			<Original>Player Profile and\n%1 Squad unit(s)\nSaved!</Original>
+			<French>Profil du Joueur et\n%1 unitée(s) d'escouade\nEnregistré !</French>
+		</Key>
+		<Key ID="STR_NO_SAVE_PLAYER_MSG">
+			<Original>Your score (%1) is too LOW to be saved.\nMinimal score is: %2\nPlay more!</Original>
+			<French>Votre score (%1) est trop BAS pour être sauvegardé.\nScore minimum : %2\nJouez plus !</French>
+		</Key>
 		<!-- virtual_garage.hpp -->
 		<Key ID="STR_VIRT_GARAGE">
 			<Original>-- Virtual Garage --</Original>
@@ -6557,12 +6711,16 @@
 		<Key ID="STR_AIRDROP_AIRSUPREMACY">
 			<Original>Air Superiority</Original>
 			<Russian>Воздух</Russian>
-			<French>Suprématie Aéro</French>
+			<French>Air Suprématie</French>
 			<Japanese>制空権</Japanese>
 			<Chinesesimp>夺取制空</Chinesesimp>
 			<Chinese>奪取制空</Chinese>
 			<Portuguese>Primazia Aérea</Portuguese>
 			<Czech>Letecká převaha</Czech>
+		</Key>
+		<Key ID="STR_AIRDROP_ARTY">
+			<Original>Artillery Fire</Original>
+			<French>Tir d'Artillerie</French>
 		</Key>
 		<Key ID="STR_AIRDROP_MENU">
 			<Original>-- Air Support Menu --</Original>
@@ -6654,7 +6812,10 @@
 			<Portuguese>Chame a Superioridade Aérea.\nCusto: %1 de Ammo</Portuguese>
 			<Czech>Call Air Superiority.\nCena: %1 Ammo</Czech>
 		</Key>
-
+		<Key ID="STR_ARTILLERY">
+			<Original>Call Artillery Fire.\nCost: %1 Ammo</Original>
+			<French>Demander un Tir d'Artillerie.\nPrix: %1 Ammo</French>
+		</Key>
 		<!-- liberation_sendammo.hpp -->
 		<Key ID="STR_SENDAMMO_MENU">
 			<Original>-- Send Ammo Menu --</Original>
@@ -7071,7 +7232,7 @@
 		</Key>
 
 		<!-- mission_HostileHelicopter.sqf -->
-		<Key ID="STR_HOSSTILE_HELI">
+		<Key ID="STR_HOSTILE_HELI">
 			<Original>Hostile Helicopter</Original>
 			<Russian>Вертолет противника</Russian>
 			<Japanese>敵のヘリ</Japanese>
@@ -7079,7 +7240,7 @@
 			<Chinese>敵軍直升機</Chinese>
 			<Czech>Hostile Helicopter</Czech>
 		</Key>
-		<Key ID="STR_HOSSTILE_HELI_MESSAGE1">
+		<Key ID="STR_HOSTILE_HELI_MESSAGE1">
 			<Original>An armed &lt;t color='%2'&gt;%1&lt;/t&gt; is patrolling the island. Intercept it and recover its cargo!</Original>
 			<Russian>Вооруженный &lt;t color='%2'&gt;%1&lt;/t&gt; патрулирует остров. Перехватите его и заберите груз!</Russian>
 			<Japanese>武装した &lt;t color='%2'&gt;%1&lt;/t&gt; が飛行している。迎撃して貨物を回収せよ！</Japanese>
@@ -7087,7 +7248,7 @@
 			<Chinese>一架武裝直升機 &lt;t color='%2'&gt;%1&lt;/t&gt; 正在島上巡邏，攔截並收回貨物！</Chinese>
 			<Czech>Ozbrojený &lt;t color='%2'&gt;%1&lt;/t&gt; hlídá na ostrově. Zničte ho a získejte jeho náklad!</Czech>
 		</Key>
-		<Key ID="STR_HOSSTILE_HELI_MESSAGE2">
+		<Key ID="STR_HOSTILE_HELI_MESSAGE2">
 			<Original>The sky is clear again, the enemy patrol was taken out! Ammo crates have fallen near the wreck.</Original>
 			<Russian>Небо снова чистое, вражеский патруль уничтожен! Ящики с боеприпасами упали рядом с обломками.</Russian>
 			<Japanese>ヘリは撃墜された、残骸の近くの弾薬箱を回収せよ。</Japanese>
@@ -7096,6 +7257,16 @@
 			<Czech>Obloha je opět jasná, nepřátelská hlídka byla odstraněna! Poblíž vraku spadly bedny s municí.</Czech>
 		</Key>
 
+		<!-- mission_HostileHelicopter.sqf -->
+		<Key ID="STR_HOSTILE_OFFICER">
+			<Original>Neutralize HVT</Original>
+		</Key>
+		<Key ID="STR_HOSTILE_OFFICER_MESSAGE1">
+			<Original>An enemy &lt;t color='%2'&gt;Officer&lt;/t&gt; makes ready to fly to their HQ in %1.&lt;br/&gt;He has vital information about us. We need to elimiate him and his guards!</Original>
+		</Key>
+		<Key ID="STR_HOSTILE_OFFICER_MESSAGE2">
+			<Original>Congratualtion! The Officer has been eliminated, our informations are safe.</Original>
+		</Key>
 		<!-- mission_MeetResistance.sqf -->
 		<Key ID="STR_RESISTANCE">
 			<Original>The Resistance</Original>
@@ -7154,6 +7325,9 @@
 			<Chinesesimp>前哨站已被占领，干得好。</Chinesesimp>
 			<Chinese>前哨站已被佔領，幹得好。</Chinese>
 			<Czech>Základna byla dobyta, dobrá práce.</Czech>
+		</Key>
+		<Key ID="STR_OUTPOST_MESSAGE_FAIL">
+			<Original>&lt;t color='%1'&gt;FAILURE!&lt;/t&gt;&lt;br/&gt;You killed all the Prisoners...</Original>
 		</Key>
 
 		<!-- mission_SpecialDelivery.sqf -->
@@ -7241,7 +7415,9 @@
 			<Chinese>幹得漂亮！ &lt;br/&gt;&lt;br/&gt;&lt;t color='%1'&gt;%2&lt;/t&gt;&lt;br/&gt;又是個安全的地方了！ &lt;br/&gt;他們的武器現在是你的了！</Chinese>
 			<Czech>Pěkná práce!&lt;br/&gt;&lt;br/&gt;&lt;t color='%1'&gt;%2&lt;/t&gt;&lt;br/&gt;je opět bezpečno!&lt;br/&gt;Jejich věci jsou nyní na váše!</Czech>
 		</Key>
-
+		<Key ID="STR_INVASION_FAILED">
+			<Original>You have &lt;br/&gt;&lt;t color='%1'&gt;FAILED&lt;/t&gt;!!&lt;br/&gt;to defende %2 from the aggression.&lt;br/&gt;We have lost this sector...</Original>
+		</Key>
 		<!-- mission_TownInsurgency.sqf -->
 		<Key ID="STR_INSURGENCY">
 			<Original>Town Insurgency</Original>
@@ -7329,6 +7505,20 @@
 		</Key>
 		<Key ID="STR_SEARCH_INTEL_MESSAGE2">
 			<Original>All the Intels have been found, well done.</Original>
+		</Key>
+		<!-- mission_CaptureVIP.sqf -->
+		<Key ID="STR_VIP_CAP">
+			<Original>Capture VIP</Original>
+		</Key>
+		<Key ID="STR_VIP_CAP_MSG">
+			<Original>An important &lt;t color='%1'&gt;V.I.P&lt;/t&gt; is travelling the island.&lt;br/&gt;Intercept his convoy and capture him &lt;t color='%1'&gt;ALIVE&lt;/t&gt;!</Original>
+		</Key>
+		<!-- mission_HeliCapture.sqf -->
+		<Key ID="STR_HELI_CAP">
+			<Original>Helicopter Capture</Original>
+		</Key>
+		<Key ID="STR_HELI_CAP_MSG">
+			<Original>A &lt;t color='%2'&gt;%1&lt;/t&gt; has been immobilized, go Repair it and take it for your team!</Original>
 		</Key>
 		<!-- speak_manager.sqf -->
 		<Key ID="STR_SPEAKMANAGER1">
@@ -7775,6 +7965,10 @@
 			<Japanese>すみません %1、あなたを生き返らせる分隊員はもう居ません...</Japanese>
 			<Portuguese>Desculpe %1, você não tem mais unidades para reanimá-lo...</Portuguese>
 			<Czech>Omlouváme se %1, již nemáte jednotky, které by vás mohly oživit...</Czech>
+		</Key>
+		<Key ID="STR_PAR_UC_03">
+			<Original>Hey %1, All your units are down, Help them!</Original>
+			<French>Hé %1, Toutes tes unités sont à terre, Aide-les !</French>
 		</Key>
 	</Package>
 
@@ -8256,10 +8450,7 @@
 			<Czech>--------SVV inicializován--------</Czech>
 		</Key>
 		<Key ID="STR_VAM_MAIN_MENU_NAME">
-			<Original>Vehicle Appearance Manager</Original>
-			<Russian>Менеджер внешнего вида машины</Russian>
-			<Korean>차량 형상 관리자</Korean>
-			<Czech>Vzhled vozidla</Czech>
+			<Original>--- PAINT and SHOP ---</Original>
 		</Key>
 		<Key ID="STR_VAM_RESET_VEHICLE">
 			<Original>Reset</Original>
@@ -8279,9 +8470,12 @@
 			<Korean>현  재    차  량 :</Korean>
 			<Czech>Stávájící Vozidlo</Czech>
 		</Key>
+		<Key ID="STR_VAM_FREE_VEHICLE">
+			<Original>Free Space :</Original>
+		</Key>
 		<Key ID="STR_VAM_FOB_CONDITION_CHECK_FAILED">
-			<Original>You should be in %1m from FOB.)</Original>
-			<Russian>Вы должны быть в %1м от FOB.)</Russian>
+			<Original>You should be in %1m from FOB.</Original>
+			<Russian>Вы должны быть в %1м от FOB.</Russian>
 			<Korean>FOB에서 %1m 안에 있어야 합니다.</Korean>
 			<Czech>Měli byste být %1m od FOB.</Czech>
 		</Key>
@@ -8314,6 +8508,15 @@
 			<Russian>Это не компонент.</Russian>
 			<Korean>구성품이 없습니다.</Korean>
 			<Czech>Neexistuje žádná Komponent.</Czech>
+		</Key>
+		<Key ID="STR_VAM_NO_ARSENAL">
+			<Original>There is no items.</Original>
+		</Key>
+		<Key ID="STR_VAM_ARSENAL">
+			<Original>Arsenal Items</Original>
+		</Key>
+		<Key ID="STR_VAM_ARSENAL_VEHICLE">
+			<Original>Put to Cargo</Original>
 		</Key>
 		<Key ID="STR_VAM_MARID_V1_NOTICE">
 			<Original>Your Marid is outdated one.\nVehicle component setup may not be loaded next time.\nPlease contact with your server admin.</Original>

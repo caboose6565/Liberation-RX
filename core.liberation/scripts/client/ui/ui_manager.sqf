@@ -38,7 +38,9 @@ while { true } do {
 			_attacked_string = [ markerpos "opfor_capture_marker" ] call F_getLocationName;
 			(_overlay displayCtrl (401)) ctrlShow true;
 			(_overlay displayCtrl (402)) ctrlSetText _attacked_string;
-			(_overlay displayCtrl (403)) ctrlSetText (markerText "opfor_capture_marker");
+			_attacked_timer = [sector_timer] call F_secondsToTimer;
+			if (sector_timer == 0) then { _attacked_timer = "VULNERABLE" };
+			(_overlay displayCtrl (403)) ctrlSetText _attacked_timer;
 		} else {
 			(_overlay displayCtrl (401)) ctrlShow false;
 			(_overlay displayCtrl (402)) ctrlSetText "";
@@ -66,7 +68,7 @@ while { true } do {
 		};
 
 		if ( _uiticks % 25 == 0 ) then {
-			if (!isNil "active_sectors" && ( [] call F_opforCap >= GRLIB_sector_cap)) then {
+			if (!isNil "active_sectors" && ( opforcap >= GRLIB_sector_cap)) then {
 				(_overlay displayCtrl (517)) ctrlShow true;
 
 				if ( !_active_sectors_hint ) then {

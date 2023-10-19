@@ -1,13 +1,20 @@
-params [ "_veh"];
+params [ "_vehicle" ];
 
-createVehicleCrew _veh;
-sleep 0.1;
-_grp = createGroup [GRLIB_side_friendly, true];
-(crew _veh) joinSilent _grp;
+private _path = format ["mod_template\%1\loadout\%2.sqf", GRLIB_mod_west, "crewman"];
+private _grp = GRLIB_side_friendly createVehicleCrew _vehicle;
+sleep 0.2;
+(crew _vehicle) joinSilent _grp;
 {
-	_x addMPEventHandler ["MPKilled", { _this spawn kill_manager }];
+	[_path, _x] call F_getTemplateFile; 
+	[_x] call reammo_ai;
 	_x addEventHandler ["HandleDamage", { _this call damage_manager_friendly }];
-} foreach (crew _veh);
+	_x addMPEventHandler ["MPKilled", { _this spawn kill_manager }];
+	_x setSkill 0.65;
+	_x allowFleeing 0;
+} foreach (units _grp);
 
-_grp setCombatMode "GREEN";
-_grp setBehaviour "SAFE";
+_vehicle allowCrewInImmobile [true, false];
+_vehicle setUnloadInCombat [true, false];
+
+_grp setCombatMode "WHITE";
+_grp setBehaviour "AWARE";

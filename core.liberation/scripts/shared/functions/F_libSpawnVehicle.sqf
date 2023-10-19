@@ -1,11 +1,12 @@
 params [
 	"_sectorpos",
 	"_classname",
-	[ "_precise_position", false ],
-	[ "_random_rotate", false ],
-	[ "_civilian", false]
+	["_precise_position", false],
+	["_random_rotate", false],
+	["_side", GRLIB_side_enemy]
 ];
 
+if (isNil "_classname") exitWith {};
 diag_log format [ "Spawn vehicle %1 at %2", _classname , time ];
 
 private _vehicle = objNull;
@@ -15,45 +16,64 @@ private _airveh_alt = 300;
 private _radius = GRLIB_capture_size;
 private _max_try = 10;
 
-if ( _precise_position ) then {
-	_spawnpos = _sectorpos;
-} else {
-	while { count _spawnpos == 0 && _max_try > 0 } do {
-		_spawnpos = [4, _sectorpos, _radius, 30, true] call R3F_LOG_FNCT_3D_tirer_position_degagee_sol;
-		_radius = _radius + 20;
-		_max_try = _max_try -1;
-		sleep 0.5;
-	};
-};
-
-if ( count _spawnpos == 0 ) then {
-	_spawnpos = _sectorpos findEmptyPosition [0, _radius, _classname];
-};
-
-if ( count _spawnpos == 0 ) exitWith { diag_log format ["--- LRX Error: No place to build vehicle %1 at position %2", _classname, _sectorpos]; objNull };
-
 if ( _classname isKindOf "Air" ) then {
-	if ( _civilian ) then { _airveh_alt = 200 };
+	private _spawn_sectors = ([sectors_airspawn, [_sectorpos], { (markerpos _x) distance2D _input0 }, "ASCEND"] call BIS_fnc_sortBy);
+	{
+		_spawnpos = markerPos _x;
+		if (_spawnpos distance2D _sectorpos > GRLIB_spawn_min) exitWith {};
+	} foreach _spawn_sectors;
+
+	if ( _side == GRLIB_side_civilian ) then { _airveh_alt = 150 };
 	_spawnpos set [2, _airveh_alt];
-	_vehicle = createVehicle [_classname, _spawnpos, [], 0, "FLY"];
+	_vehicle = createVehicle [_classname, _spawnpos, [], 200, "FLY"];
+	_vehicle allowDamage false;
 } else {
-	_spawnpos set [2, 0.5];
-	if (surfaceIsWater _spawnpos && !(_classname isKindOf "Ship")) then {
-		_classname = selectRandom opfor_boats;
-		if ( _civilian ) then {
-			_classname = selectRandom civilian_boats;
+	if ( _precise_position ) then {
+		_spawnpos = _sectorpos;
+	} else {
+		while { count _spawnpos == 0 && _max_try > 0 } do {
+			_spawnpos = [6, _sectorpos, _radius, 30, true] call R3F_LOG_FNCT_3D_tirer_position_degagee_sol;
+			_radius = _radius + 20;
+			_max_try = _max_try -1;
+			sleep 0.2;
 		};
 	};
-	_vehicle = createVehicle [_classname, _spawnpos, [], 0, "NONE"];
+	if ( count _spawnpos == 0 ) then {
+		_spawnpos = _sectorpos findEmptyPosition [0, _radius, _classname];
+	};
+
+	if ( count _spawnpos == 0 ) exitWith { diag_log format ["--- LRX Error: Cannot find place to build vehicle %1 at position %2", _classname, _sectorpos]; objNull };
+
+	if (_classname isKindOf "LandVehicle") then {
+		_spawnpos set [2, 0.5];
+		if (surfaceIsWater _spawnpos && !(_classname isKindOf "Ship")) then {
+			_classname = "";
+			if (count opfor_boats >= 1 && _side == GRLIB_side_enemy) then {
+				_classname = selectRandom opfor_boats;
+			};
+			if (count boats_west >= 1 && _side == GRLIB_side_friendly) then {
+				_classname = selectRandom boats_west;
+			};			
+			if (count civilian_boats >= 1 && _side == GRLIB_side_civilian) then {
+				_classname = selectRandom civilian_boats;
+			};
+		};
+	};
+
+	if (_classname != "") then {
+		_vehicle = createVehicle [_classname, zeropos, [], 0, "NONE"];
+		_vehicle allowDamage false;
+		_vehicle setPos _spawnpos;
+	};
 };
-waitUntil {!isNull _vehicle};
-_vehicle allowDamage false;
+
+if ( isNull _vehicle ) exitWith { diag_log format ["--- LRX Error: Cannot build vehicle (%1) at position %2", _classname, _sectorpos]; objNull };
 
 if ( _vehicle isKindOf "Air" ) then {
-	if (GRLIB_SOG_enabled) then { _airveh_alt = 100 };
+	if (GRLIB_SOG_enabled) then { _airveh_alt = 50 };
 	_vehicle engineOn true;
 	_vehicle flyInHeight _airveh_alt;
-	_vehicle flyInHeightASL [_airveh_alt, 50, 350];
+	_vehicle flyInHeightASL [_airveh_alt, 100, 300];
 };
 
 if ( _random_rotate ) then {
@@ -68,13 +88,19 @@ if ( _vehicle isKindOf "LandVehicle" ) then {
 	};
 };
 
-if ( !_civilian ) then {
-	if ( _classname in militia_vehicles ) then {
-		[ _vehicle ] call F_libSpawnMilitiaCrew;
+if ( _side != GRLIB_side_civilian ) then {
+	if ( _side == GRLIB_side_friendly ) then {
+		[_vehicle] call F_forceBluforCrew;
+		_vehicle addEventHandler ["HandleDamage", { _this call damage_manager_friendly }];
 	} else {
-		[ _vehicle ] call F_forceOpforCrew;
+		if ( _classname in militia_vehicles ) then {
+			[_vehicle] call F_forceMilitiaCrew;
+		} else {
+			[_vehicle] call F_forceOpforCrew;
+		};
+		_vehicle addEventHandler ["HandleDamage", { _this call damage_manager_enemy }];
 	};
-
+		
 	_vehcrew = crew _vehicle;
 	{ _x allowDamage false } forEach _vehcrew;
 
@@ -84,15 +110,19 @@ if ( !_civilian ) then {
 	};
 
 	// CUP remove tank panel
-	if (GRLIB_CUPV_enabled && _classname isKindOf "Tank") then {
+	if (GRLIB_CUPV_enabled) then {
 		[_vehicle, false, ["hide_front_ti_panels",1,"hide_cip_panel_rear",1,"hide_cip_panel_bustle",1]] call BIS_fnc_initVehicle;
+	};
+
+	// RHS remove tank panel
+	if (GRLIB_RHS_enabled) then {
+		[_vehicle, false, ["IFF_Panels_Hide",1,"Miles_Hide",1]] call BIS_fnc_initVehicle;
 	};
 
 	// LRX textures
 	if (count opfor_texture_overide > 0) then {
 		_texture_name = selectRandom opfor_texture_overide;
-		_texture = [ RPT_colorList, { _x select 0 == _texture_name } ] call BIS_fnc_conditionalSelect select 0 select 1;
-		[_vehicle, _texture, _texture_name] call RPT_fnc_TextureVehicle;
+		[_vehicle, _texture_name] call RPT_fnc_TextureVehicle;
 	};
 
 	[_vehicle, _vehcrew] spawn {
@@ -113,7 +143,7 @@ clearMagazineCargoGlobal _vehicle;
 clearItemCargoGlobal _vehicle;
 clearBackpackCargoGlobal _vehicle;
 
-if ( _civilian ) then { _vehicle allowDamage true };
+if ( _side == GRLIB_side_civilian ) then { _vehicle allowDamage true };
 
 diag_log format [ "Done Spawning vehicle %1 at %2", _classname , time ];
 

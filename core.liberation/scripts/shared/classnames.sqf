@@ -1,4 +1,5 @@
 // *** GLOBAL DEFINITIOON ***
+if (abort_loading) exitWith {};
 
 GRLIB_perm_hidden = 99999;
 markers_reset = [99999,99999,0];
@@ -10,14 +11,40 @@ zeropos = [0,0,10000];
 [] call compileFinal preprocessFileLineNUmbers format ["scripts\shared\default_classnames.sqf"];
 
 // *** FRIENDLIES ***
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_west.sqf", GRLIB_mod_west];
+private _path = format ["mod_template\%1\classnames_west.sqf", GRLIB_mod_west];
+[_path] call F_getTemplateFile;  
+
+MFR_Dogs_classname = [];
+if (GRLIB_MFR_enabled) then {
+	MFR_Dogs = [
+		["MFR_C_GermanShepherd",0,0,0,0],
+		["MFR_C_GermanShepherd_Black",0,0,0,GRLIB_perm_inf],
+		["MFR_C_Shepinois",0,0,0,0],
+		["MFR_C_GermanShepherd_IDAP",0,0,0,0],
+		["MFR_C_GermanShepherd_Black_IDAP",0,0,0,GRLIB_perm_log],
+		["MFR_C_Shepinois_IDAP",0,0,0,0],
+		["MFR_C_GermanShepherd_TAN",0,0,0,0],
+		["MFR_C_GermanShepherd_Black_TAN",0,0,0,GRLIB_perm_inf],
+		["MFR_C_Shepinois_TAN",0,0,0,0],
+		["MFR_C_GermanShepherd_BLK",0,0,0,0],
+		["MFR_C_GermanShepherd_Black_BLK",0,0,0,GRLIB_perm_log],
+		["MFR_C_Shepinois_BLK",0,0,0,0],
+		["MFR_C_GermanShepherd_OD",0,0,0,0],
+		["MFR_C_GermanShepherd_Black_OD",0,0,0,GRLIB_perm_inf],
+		["MFR_C_Shepinois_OD",0,0,0,0]
+	];
+	infantry_units_west = MFR_Dogs + infantry_units_west;
+	{ MFR_Dogs_classname pushBack (_x select 0) } forEach MFR_Dogs;
+};
+
 if (isServer) then {
 	[] call F_calcUnitsCost;
 	publicVariable "infantry_units";
 } else { waitUntil {sleep 0.1; !isNil "infantry_units"} };
 
 // *** BADDIES ***
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_east.sqf", GRLIB_mod_east];
+private _path = format ["mod_template\%1\classnames_east.sqf", GRLIB_mod_east];
+[_path] call F_getTemplateFile;  
 
 if (GRLIB_side_friendly == GRLIB_side_enemy) exitWith {
 abort_loading_msg = format [
@@ -55,7 +82,8 @@ if (GRLIB_side_enemy == INDEPENDENT) then {
 };
 
 // *** CIVILIAN ***
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_civ.sqf", GRLIB_mod_west];
+private _path = format ["mod_template\%1\classnames_civ.sqf", GRLIB_mod_west];
+[_path] call F_getTemplateFile;  
 
 // *** INDEPENDENT ***
 ind_recyclable = [
@@ -112,23 +140,21 @@ if ( isNil "militia_vehicles" ) then {
 };
 
 // *** SUPPORT ***
-support_box_noArsenal = [
-	Box_Ammo_typename,
-	Box_Weapon_typename,
-	Box_Support_typename,
-	Box_Special_typename
-];
-support_vehicles = [
-	[Arsenal_typename,0,35,0,0]
-];
-
-if (!GRLIB_enable_arsenal) then {
-	Arsenal_typename = Box_Ammo_typename;
-	support_vehicles = [
-		[Box_Ammo_typename,0,0,0,0],
+support_vehicles = [];
+if (GRLIB_enable_arsenal == 1) then {
+	support_vehicles append [
+		[Arsenal_typename,0,35,0,0]
+	];
+} else {
+	support_vehicles append [
 		[Box_Weapon_typename,0,180,0,0],
-		[Box_Support_typename,0,250,0,GRLIB_perm_inf],
-		[Box_Special_typename,0,325,0,GRLIB_perm_tank]
+		[Box_Ammo_typename,0,0,0,0],
+		[Box_Grenades_typename,0,100,0,0],
+		[Box_Explosives_typename,0,180,0,0],
+		[Box_Equipment_typename,0,250,0,GRLIB_perm_inf],
+		[Box_Support_typename,0,270,0,GRLIB_perm_inf],
+		[Box_Special_typename,0,365,0,GRLIB_perm_log],
+		[Box_Launcher_typename,0,370,0,GRLIB_perm_tank]
 	];
 };
 
@@ -136,12 +162,13 @@ if (!GRLIB_enable_arsenal) then {
 support_vehicles = support_vehicles + [
 	[medicalbox_typename,5,25,0,0],
 	[mobile_respawn,10,50,0,0],
-	[canister_fuel_typename,0,25,10,0],
+	[canister_fuel_typename,0,25,0,0],
 	[playerbox_typename,0,0,0,20],
-	[Box_Launcher_typename,0,300,0,GRLIB_perm_log],
-	[Respawn_truck_typename,15,150,5,GRLIB_perm_log],
+	[Respawn_truck_typename,10,450,15,GRLIB_perm_log],
+	[huron_typename,10,1550,35,GRLIB_perm_tank],
 	["Land_RepairDepot_01_civ_F",10,300,0,GRLIB_perm_log],
 	["Land_MedicalTent_01_MTP_closed_F",5,100,0,GRLIB_perm_log],
+	[helipad_typename,0,0,0,GRLIB_perm_inf],
 	[repair_sling_typename,0,200,0,GRLIB_perm_log],
 	[fuel_sling_typename,0,150,60,GRLIB_perm_log],
 	[ammo_sling_typename,0,400,0,GRLIB_perm_log],
@@ -149,15 +176,16 @@ support_vehicles = support_vehicles + [
 	[ammo_truck_typename,5,400,10,GRLIB_perm_tank],
 	[repair_truck_typename,5,200,30,GRLIB_perm_tank],
 	[fuel_truck_typename,5,150,70,GRLIB_perm_tank],
-	[FOB_box_outpost,5,500,20,GRLIB_perm_log],
-	[FOB_box_typename,5,1500,80,GRLIB_perm_max],
-	[FOB_truck_typename,5,1500,150,GRLIB_perm_max],
+	[FOB_box_outpost,0,500,0,GRLIB_perm_log],
+	[FOB_box_typename,0,1500,0,GRLIB_perm_max],
+	[FOB_truck_typename,5,1500,10,GRLIB_perm_max],
+	[FOB_boat_typename,5,2500,10,GRLIB_perm_max],
 	[ammobox_b_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
 	[ammobox_o_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
 	[ammobox_i_typename,0,round(300 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
 	[basic_weapon_typename,0,round(150 / GRLIB_recycling_percentage),0,GRLIB_perm_hidden],
 	[waterbarrel_typename,0,110,0,GRLIB_perm_hidden],
-	[fuelbarrel_typename,0,120,0,GRLIB_perm_hidden],
+	[fuelbarrel_typename,0,120,50,GRLIB_perm_hidden],
 	[foodbarrel_typename,0,130,0,GRLIB_perm_hidden]
 ] + support_vehicles_west;
 
@@ -174,17 +202,25 @@ buildings append [
 	[land_cutter_typename,0,0,0,GRLIB_perm_inf]
 ];
 
+all_buildings_classnames = [];
+{ all_buildings_classnames pushback (_x select 0) } foreach buildings;
+
+all_hostile_classnames = [];
+{ all_hostile_classnames pushback (_x select 0) } foreach opfor_recyclable;
+
+all_friendly_classnames = [];
+{ all_friendly_classnames pushback (_x select 0) } foreach (light_vehicles + heavy_vehicles + air_vehicles + static_vehicles + support_vehicles);
+
 // *** ELITES ***
 elite_vehicles = [];
-{ if (_x select 4 == GRLIB_perm_max) then { elite_vehicles pushback (_x select 0)} } foreach light_vehicles + heavy_vehicles + air_vehicles + static_vehicles;
+{ if (_x select 4 == GRLIB_perm_max) then { elite_vehicles pushback (_x select 0)} } foreach (heavy_vehicles + air_vehicles + static_vehicles);
 
 // *** Boats ***
+boats_west = [FOB_boat_typename, FOB_carrier] + boats_west;
 boats_names = [
 	"C_Scooter_Transport_01_F",
 	"C_Boat_Civil_01_F",
-	"C_Boat_Transport_02_F",
-	"B_Boat_Transport_01_F",
-	"B_Boat_Armed_01_minigun_F"
+	"C_Boat_Transport_02_F"
 ] + opfor_boats + boats_west;
 
 if ( isNil "civilian_boats" ) then {
@@ -207,6 +243,7 @@ if ( isNil "guard_squad" ) then {
 		"O_GEN_Soldier_F"
 	];
 };
+
 if ( isNil "guard_loadout_overide" ) then {
 	guard_loadout_overide = [
 		"O_GEN_Commander_F"
@@ -249,6 +286,10 @@ if ( isNil "resistance_squad_static" ) then {
 	resistance_squad_static = "I_static_AA_F";
 };
 
+if ( isNil "vip_vehicle" ) then {
+	vip_vehicle = "C_Offroad_01_covered_F";
+};
+
 // *** SOURCES ***
 
 // Static Weapons
@@ -264,7 +305,8 @@ ai_resupply_sources = [
 	ammo_truck_typename,
 	ammo_sling_typename,
 	Box_Ammo_typename,
-	"Land_Ammobox_rounds_F"
+	"Land_Ammobox_rounds_F",
+	Box_Support_typename
 ] + ai_resupply_sources_west;
 
 // Everything the AI troups should be able to healing from
@@ -300,8 +342,10 @@ vehicle_repair_sources = [
 box_transport_config = [];
 box_transport_offset = [];
 
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_transport.sqf", GRLIB_mod_west];
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_transport.sqf", GRLIB_mod_east];
+private _path = format ["mod_template\%1\classnames_transport.sqf", GRLIB_mod_west];
+[_path] call F_getTemplateFile;  
+private _path = format ["mod_template\%1\classnames_transport.sqf", GRLIB_mod_east];
+[_path] call F_getTemplateFile;  
 
 // Configuration for ammo boxes transport
 // First entry: classname
@@ -365,7 +409,7 @@ GRLIB_vehicle_whitelist = [
 	ammobox_o_typename,
 	ammobox_i_typename,
 	mobile_respawn,
-	basic_weapon_typename,
+	fuelbarrel_typename,
 	medicalbox_typename
 ] + GRLIB_vehicle_whitelist_west + opfor_statics;
 
@@ -380,6 +424,7 @@ GRLIB_vehicle_blacklist = [
 	fuelbarrel_typename,
 	foodbarrel_typename,
 	medicalbox_typename,
+	land_cutter_typename,
 	basic_weapon_typename
 ] + GRLIB_vehicle_blacklist_west;
 
@@ -393,10 +438,14 @@ GRLIB_recycleable_blacklist = [
 	foodbarrel_typename,
 	basic_weapon_typename
 ];
+
 GRLIB_recycleable_classnames = ["LandVehicle","Air","Ship","StaticWeapon","Slingload_01_Base_F","Pod_Heli_Transport_04_base_F"];
 {
-	if (!((_x select 0) in GRLIB_recycleable_blacklist)) then {GRLIB_recycleable_classnames pushBack (_x select 0)};
+	GRLIB_recycleable_classnames pushBackUnique (_x select 0);
 } foreach (support_vehicles + buildings + opfor_recyclable);
+GRLIB_recycleable_classnames = GRLIB_recycleable_classnames arrayIntersect GRLIB_recycleable_classnames;
+GRLIB_recycleable_classnames = GRLIB_recycleable_classnames - GRLIB_recycleable_blacklist;
+GRLIB_recycleable_info = (light_vehicles + heavy_vehicles + air_vehicles + static_vehicles + support_vehicles + buildings + opfor_recyclable + ind_recyclable);
 
 // Filter Mods
 infantry_units = [ infantry_units ] call F_filterMods;
@@ -470,12 +519,11 @@ opfor_squad_8_airkillers = [
 	opfor_rpg,
 	opfor_aa,
 	opfor_aa,
+	opfor_aa,	
+	opfor_aa,
 	opfor_aa,
 	opfor_aa
 ];
-
-all_hostile_classnames = [];
-{ all_hostile_classnames pushback (_x select 0) } foreach opfor_recyclable;
 
 air_vehicles_classnames = [] + opfor_troup_transports_heli;
 { air_vehicles_classnames pushback (_x select 0); } foreach air_vehicles;
@@ -528,6 +576,10 @@ GRLIB_ide_traps = [
 	"VirtualReammoBox_camonet_F"
 ];
 GRLIB_ignore_colisions = [
+	FOB_box_typename,
+	FOB_truck_typename,
+	FOB_boat_typename,
+	FOB_box_outpost,
 	huron_typename,
 	Arsenal_typename,
 	mobile_respawn,
@@ -546,28 +598,39 @@ GRLIB_ignore_colisions = [
 	"CamoNet_BLUFOR_big_F",
 	"Land_NavigLight",
 	"Lamps_base_F",
-	"Land_HelipadSquare_F",
+	"Helipad_base_F",
+	"Land_VASICore",
 	"PowerLines_base_F",
 	"PowerLines_Small_base_F",
 	"PowerLines_Wires_base_F",
  	"Land_PowLine_wire_BB_EP1",
  	"Land_PowLine_wire_AB_EP1",
  	"Land_PowLine_wire_A_left_EP1",
- 	"Land_PowLine_wire_A_right_EP1"
+ 	"Land_PowLine_wire_A_right_EP1",
+	"Land_Destroyer_01_base_F",
+	"Land_Destroyer_01_hull_base_F",
+	"Land_Carrier_01_base_F",
+	"Land_Carrier_01_hull_base_F"
 ];
 
 // Ammobox you want keep contents
 GRLIB_Ammobox_keep = [
 	playerbox_typename,
 	medicalbox_typename,
+	Box_Ammo_typename
+];
+
+// Ammobox when Arsenal is disabled (not saved)
+GRLIB_disabled_arsenal = [
 	Box_Weapon_typename,
 	Box_Ammo_typename,
+	Box_Grenades_typename,
+	Box_Explosives_typename,
+	Box_Equipment_typename,
 	Box_Support_typename,
-	Box_Launcher_typename,
 	Box_Special_typename,
-	"mission_USLaunchers",
-	"CUP_LocalBasicWeaponsBox",
-	"gm_AmmoBox_1000Rnd_762x51mm_ap_DM151_g3"
+	Box_Launcher_typename,
+	basic_weapon_typename
 ];
 
 GRLIB_player_grave = [
@@ -660,4 +723,7 @@ if ( isNil "GRLIB_AirDrop_6_cost" ) then {
 };
 if ( isNil "GRLIB_AirDrop_7_cost" ) then {
 	GRLIB_AirDrop_7_cost = 2000;
+};
+if ( isNil "GRLIB_AirDrop_8_cost" ) then {
+	GRLIB_AirDrop_8_cost = 1000;
 };

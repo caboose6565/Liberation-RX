@@ -37,7 +37,7 @@ infantry_units_west = [
 	["B_T_Diver_F",1,20,0,GRLIB_perm_log],
 	["B_T_ghillie_tna_F",1,40,0,GRLIB_perm_log],
 	["B_T_Soldier_AA_F",1,50,0,GRLIB_perm_log],
-	["B_T_Soldier_AA_F",1,50,0,GRLIB_perm_log],
+	["B_T_Soldier_AT_F",1,50,0,GRLIB_perm_log],
 	[crewman_classname,1,10,0,GRLIB_perm_inf],
 	[pilot_classname,1,10,0,GRLIB_perm_log]
 ];
@@ -45,8 +45,6 @@ infantry_units_west = [
 units_loadout_overide = [
 	"B_crew_F"
 ];
-
-
 
 // *** RESISTANCE - FIA Blu
 resistance_squad = [
@@ -63,9 +61,6 @@ resistance_squad = [
 	"B_G_Soldier_TL_F",
 	"B_G_Soldier_exp_F"
 ];
-
-resistance_squad_static = "B_G_HMG_02_high_F";
-
 
 light_vehicles = [
 	["B_T_Quadbike_01_F",1,5,1,0],
@@ -111,7 +106,6 @@ air_vehicles = [
 	["C_Plane_Civil_01_F",1,50,5,GRLIB_perm_air],
 	["B_Heli_Light_01_F",1,50,15,GRLIB_perm_log],
 	["B_Heli_Light_01_dynamicLoadout_F",1,150,15,GRLIB_perm_tank],
-	["B_Heli_Transport_03_unarmed_F",10,1500,35,GRLIB_perm_tank],
 	["B_Heli_Transport_03_F",10,1700,35,GRLIB_perm_air],
 	["B_Heli_Transport_01_F",10,2000,35,GRLIB_perm_tank],
 	["B_T_VTOL_01_infantry_F",10,1300,40,GRLIB_perm_air],
@@ -119,7 +113,8 @@ air_vehicles = [
 	["B_T_VTOL_01_armed_F",20,2500,40,GRLIB_perm_max],
 	["B_Heli_Attack_01_dynamicLoadout_F",10,2250,30,GRLIB_perm_air],
 	["B_Plane_CAS_01_dynamicLoadout_F",20,3000,50,GRLIB_perm_max],
-	["B_Plane_Fighter_01_F",20,4500,50,GRLIB_perm_max]
+	["B_Plane_Fighter_01_F",20,4500,50,GRLIB_perm_max],
+	["B_Plane_Fighter_01_Stealth_F",20,2000,50,GRLIB_perm_max]	
 ];
 
 blufor_air = [
@@ -130,23 +125,20 @@ blufor_air = [
 ];
 
 static_vehicles = [
-	["B_T_HMG_01_F",1,10,0,GRLIB_perm_log],
-	["B_T_GMG_01_F",1,10,0,GRLIB_perm_tank],
-	["B_T_Mortar_01_F",0,20,0,GRLIB_perm_log],
-	["B_T_Static_AA_F",1,50,0,GRLIB_perm_air],
-	["B_T_Static_AT_F",1,50,0,GRLIB_perm_air],
-	["B_SAM_System_03_F",10,1500,0,GRLIB_perm_tank],
-	["B_SAM_System_01_F",10,1500,0,GRLIB_perm_tank],
+	["B_HMG_01_F",0,10,0,GRLIB_perm_inf],
+	["B_HMG_01_high_F",0,10,0,GRLIB_perm_log],
+	["B_GMG_01_F",0,20,0,GRLIB_perm_inf],
+	["B_GMG_01_high_F",0,20,0,GRLIB_perm_log],
+	["B_T_static_AA_F",0,150,0,GRLIB_perm_tank],
+	["B_T_static_AT_F",0,150,0,GRLIB_perm_tank],
+	["B_Mortar_01_F",0,500,0,GRLIB_perm_tank],
+	["B_SAM_System_01_F",10,1500,0,GRLIB_perm_air],
 	["B_SAM_System_02_F",10,1500,0,GRLIB_perm_air],
 	["B_AAA_System_01_F",10,1500,0,GRLIB_perm_max]
 ];
 
 // *** Static Weapon with AI ***
 static_vehicles_AI = [
-	"B_T_HMG_01_F",
-	"B_T_GMG_01_F",
-	"B_T_Static_AA_F",
-	"B_T_Static_AT_F",
 	"B_SAM_System_03_F",
 	"B_SAM_System_01_F",
 	"B_SAM_System_02_F",
@@ -168,6 +160,13 @@ buildings_west = [
 	["Land_Cargo_House_V1_F",0,0,0,GRLIB_perm_inf],
 	["Land_Cargo_Patrol_V1_F",0,0,0,GRLIB_perm_log],
 	["Flag_NATO_F",0,0,0,0]
+];
+
+
+// Boats
+boats_west = [
+	"B_Boat_Transport_01_F",
+	"B_Boat_Armed_01_minigun_F"
 ];
 
 blufor_squad_inf_light = [
@@ -255,8 +254,6 @@ GRLIB_vehicle_whitelist_west = [
 GRLIB_vehicle_blacklist_west = [
 ];
 
-
-
 GRLIB_AirDrop_1 = [			// cost = 50 Unarmed Offroad
 	"B_T_LSV_01_unarmed_F"
 ];
@@ -276,7 +273,6 @@ GRLIB_AirDrop_4 = [			// cost 300 Large Truck
 GRLIB_AirDrop_5 = [			// cost 750 APC (Armoured personnel carrier)
 	"B_T_APC_Wheeled_01_cannon_F"
 ];
-
 
 GRLIB_AirDrop_6 = [			// cost 250 Boat
 	"B_T_Boat_Transport_01_F"

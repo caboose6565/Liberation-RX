@@ -15,4 +15,7 @@ _medic setSpeedMode (speedMode group player);
 _medic setVariable ["PAR_busy", nil];
 _medic setCaptive false;
 
-_wnded setVariable ['PAR_myMedic', nil];
+private _my_medic = _wnded getVariable ["PAR_myMedic", objNull];
+if (_my_medic == _medic) then {
+  _wnded setVariable ['PAR_myMedic', nil];
+};

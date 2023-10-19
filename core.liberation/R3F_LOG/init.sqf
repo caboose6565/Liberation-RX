@@ -38,8 +38,10 @@
 	R3F_LOG_CFG_CF_blacklist_categories = [];
 
 	#include "config.sqf"
-	call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_west];
-	call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_east];
+	private _path = format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_west];
+	[_path] call F_getTemplateFile;
+	private _path = format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_east];
+	[_path] call F_getTemplateFile;
 
 	// Chargement du fichier de langage
 	call compile preprocessFile format ["R3F_LOG\%1_strings_lang.sqf", R3F_LOG_CFG_language];
@@ -166,8 +168,7 @@
 		// Commandes � faire uniquement sur le serveur
 		if (isServer) then
 		{
-			if (_commande == "setOwnerTo") then
-			{
+			if (_commande == "setOwnerTo") then	{
 				_argument setOwner (owner _parametre);
 			};
 		};
@@ -302,7 +303,7 @@
 					{
 						(_this select 2) action ["GetOut", _this select 0];
 						(_this select 2) action ["Eject", _this select 0];
-						if (player == _this select 2) then {hintC format [STR_R3F_LOG_objet_en_cours_transport, getText (configOf (_this select 0) >> "displayName")];};
+						if (player == _this select 2) then {hintC format [STR_R3F_LOG_objet_en_cours_transport, [(_this select 0)] call F_getLRXName]};
 					};
 				};
 			};

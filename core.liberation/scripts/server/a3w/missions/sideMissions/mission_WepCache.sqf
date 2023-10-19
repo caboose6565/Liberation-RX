@@ -10,9 +10,10 @@ private ["_nbUnits", "_box1", "_box2", "_box3"];
 
 _setupVars =
 {
-	_missionType = localize "STR_WEAPCACHE";
+	_missionType = "STR_WEAPCACHE";
 	_locationsArray = [ForestMissionMarkers] call checkSpawn;
 	_nbUnits = [] call getNbUnits;
+	_precise_marker = false;
 };
 
 _setupObjects =
@@ -21,13 +22,10 @@ _setupObjects =
 	_box1 = [ammobox_o_typename, _missionPos, true] call boxSetup;
 	_box2 = [ammobox_o_typename, _missionPos, true] call boxSetup;
 	_box3 = [basic_weapon_typename, _missionPos, true] call boxSetup;
-
 	[_missionPos, 30] call createlandmines;	
-	_aiGroup = createGroup [GRLIB_side_enemy, true];
-	[_aiGroup, _missionPos, _nbUnits, "infantry"] call createCustomGroup;
-
+	_aiGroup = [_missionPos, _nbUnits, "infantry"] call createCustomGroup;
 	_missionPicture = "\A3\Static_f_gamma\data\ui\gear_StaticTurret_GMG_CA.paa";
-	_missionHintText = localize "STR_WEAPCACHE_MESSAGE1";
+	_missionHintText = "STR_WEAPCACHE_MESSAGE1";
 	A3W_sectors_in_use = A3W_sectors_in_use + [_missionLocation];
 	true;
 };
@@ -45,11 +43,8 @@ _failedExec = {
 
 _successExec = {
 	// Mission completed
-	{
-		_x setVariable ["R3F_LOG_disabled", false, true];
-		_x setVariable ["GRLIB_vehicle_owner", nil, true];
-	} forEach [_box1, _box2, _box3];
-	_successHintMessage = localize "STR_WEAPCACHE_MESSAGE2";
+	{ [_x, "abandon"] call F_vehicleLock } forEach [_box1, _box2, _box3];
+	_successHintMessage = "STR_WEAPCACHE_MESSAGE2";
 	[_missionPos] call showlandmines;
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
 };

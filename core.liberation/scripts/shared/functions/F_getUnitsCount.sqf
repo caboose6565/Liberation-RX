@@ -1,32 +1,24 @@
 params [ "_position", "_distance", "_side" ];
-private [ "_infantrycount1", "_infantrycount2", "_countedvehicles", "_vehiclecrewcount" ];
 
-_infantrycount1 = {
-    (alive _x) && !(captive _x) &&
-    (isNull objectparent _x) &&
-    ((getPosATL _x) select 2 < 200) &&
-    (_x distance2D _position <= _distance) &&
-    !(_x getVariable ["GRLIB_mission_AI", false])
-} count units _side;
+private _count = 0;
 
-_infantrycount2 = {
-    (alive _x) &&
-    (_x distance2D _position <= _distance) &&
-    (_x getVariable ["PAR_Grp_ID", ""] != "")
-} count units GRLIB_side_civilian;
+if (_side == GRLIB_side_friendly) then {
+    _count = {
+        (alive _x) &&
+        (_x distance2D _position <= _distance) &&
+        ((getPosATL _x) select 2 < 150) && (speed (vehicle _x) <= 80) &&
+        ((vehicle _x) getVariable ["GRLIB_vehicle_owner", ""] != "server" || (getPosATL _x) select 2 < 100) &&
+        (_x getVariable ["PAR_Grp_ID", ""] != "")
+    } count (units GRLIB_side_friendly + units GRLIB_side_civilian);
+};
 
-_countedvehicles =  [
-    (_position nearEntities [ ["Car", "Tank", "Air", "Ship"], _distance]), 
-    {
-        !(typeOf _x in uavs) &&
-        ((getPosATL _x) select 2 < 200) &&
-        (speed vehicle _x <= 100) &&
-        (count (crew _x) > 0) &&
+if (_side == GRLIB_side_enemy) then {
+    _count = {
+        (alive _x) && !(captive _x) &&
+        (_x distance2D _position <= _distance) &&
+        ((getPosATL _x) select 2 < 200) && (speed (vehicle _x) <= 100) &&
         !(_x getVariable ["GRLIB_mission_AI", false])
-    }
-] call BIS_fnc_conditionalSelect;
+    } count (units GRLIB_side_enemy);
+};
 
-_vehiclecrewcount = 0;
-{ _vehiclecrewcount = _vehiclecrewcount + (_side countSide (crew _x)) } foreach _countedvehicles;
-
-(_infantrycount1 + _infantrycount2 + _vehiclecrewcount)
+_count;

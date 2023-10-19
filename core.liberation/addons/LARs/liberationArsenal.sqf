@@ -20,6 +20,8 @@
 //
 // - FilterArsenal = 4    Only Whitelist and Blacklist - no autofill
 //
+// - FilterArsenal = 5    AntiStasi style - no autofill
+//
 // The Whitelist and Blacklist apply from FilterArsenal = 1 and up
 //
 // customize Arsenal:
@@ -33,8 +35,14 @@
 
 if (isDedicated) exitWith {};
 
-// Init flag
+// Init
 LRX_arsenal_init_done = false;
+
+// Initalize Blacklist
+GRLIB_blacklisted_from_arsenal = [];			// Global blacklist (All objects will be removed from Arsenal)
+
+// Initalize Withelist
+GRLIB_whitelisted_from_arsenal = [];			// Global whitelist when Arsenal is enabled
 
 // Filters disabled
 waitUntil { sleep 1; !isNil "GRLIB_filter_arsenal" };
@@ -57,20 +65,29 @@ LARs_fnc_overrideVATemplateOK = compileFinal preprocessFileLineNumbers "addons\L
 // LARs Init
 [] call LARs_fnc_initOverride;
 
-// Initalize Blacklist
-GRLIB_blacklisted_from_arsenal = [];			// Global blacklist (All objects will be removed from Arsenal)
-
-// Initalize Withelist
-GRLIB_whitelisted_from_arsenal = [];			// whitelist when Arsenal is enabled
-
 // Import list from Mod template
-[] call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\arsenal.sqf", GRLIB_mod_west];
+private _path = format ["mod_template\%1\arsenal.sqf", GRLIB_mod_west];
+[_path] call F_getTemplateFile;
 
 // Default LRX blacklist
-GRLIB_blacklisted_from_arsenal = blacklisted_bag + blacklisted_weapon;
+GRLIB_blacklisted_from_arsenal = [
+	"Zasleh2",
+	"CMFlare",
+	"SmokeLauncher",
+	"FlareLauncher",
+	"Laserdesignator",
+	"weapon_Fighter"
+] + blacklisted_bag + blacklisted_weapon;
 
 // Default LRX whitelist
 GRLIB_whitelisted_from_arsenal = [mobile_respawn_bag, "B_Parachute"] + whitelisted_from_arsenal;
+
+// TFAR radio
+GRLIB_TFR_radios = [];
+if (GRLIB_TFR_enabled) then {
+	GRLIB_TFR_radios = ["TFAR_anprc152","TFAR_anprc148jem","TFAR_fadak","TFAR_anprc154","TFAR_rf7800str","TFAR_pnr1000a"];
+	GRLIB_whitelisted_from_arsenal append GRLIB_TFR_radios;
+};
 
 // Mod signature
 GRLIB_MOD_signature = [];

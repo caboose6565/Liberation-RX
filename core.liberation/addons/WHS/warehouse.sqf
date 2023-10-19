@@ -111,13 +111,14 @@ while { dialog && alive player } do {
                 _box = GRLIB_warehouse select (lbCurSel 111) select 0;
                 _box_name = [_box] call F_getLRXName;
                 _price = support_vehicles select {(_x select 0) == (_box)} select 0 select 2;
+                _price = round (_price / GRLIB_recycling_percentage);
                 _msg = format [localize "STR_WAREHOUSE_UNLOAD_MSG", _box_name, _price];
                 _result = [_msg, localize "STR_WAREHOUSE_UNLOAD", true, true] call BIS_fnc_guiMessage;
 
                 if (_result) then {
                     if ((GRLIB_warehouse select (lbCurSel 111) select 1) <= 0) exitWith {};
                     buildtype = 9;
-                    build_unit = [_box,[],1,[],[],[]];
+                    build_unit = [_box,[],1,[],[],[],[]];
                     dobuild = 1;
                     closeDialog 0;
                     waitUntil { sleep 0.5; dobuild == 0};

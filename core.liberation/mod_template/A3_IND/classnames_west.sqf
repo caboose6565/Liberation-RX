@@ -44,7 +44,7 @@ units_loadout_overide = [];
 
 light_vehicles = [
 	["I_Quadbike_01_F",1,5,1,0],
-	["I_Boat_Transport_01_F",1,25,1,GRLIB_perm_inf],
+	["I_Boat_Transport_01_F",1,25,1,0],
 	["C_Boat_Transport_02_F",2,25,2,GRLIB_perm_log],
 	["I_Boat_Armed_01_minigun_F",5,30,5,GRLIB_perm_log],
 	["I_SDV_01_F",5,30,5,GRLIB_perm_log],
@@ -72,8 +72,8 @@ heavy_vehicles = [
 	["I_APC_Wheeled_03_cannon_F",10,500,20,GRLIB_perm_tank],
 	["I_APC_tracked_03_cannon_F",10,500,20,GRLIB_perm_tank],
 	["I_MBT_01_cannon_F",15,1000,25,GRLIB_perm_tank],
-	["I_MBT_03_cannon_F",15,4000,25,GRLIB_perm_max],
-	["I_Truck_02_MRL_F",15,3500,25,GRLIB_perm_max]
+	["I_MBT_03_cannon_F",15,3500,25,GRLIB_perm_max],
+	["I_Truck_02_MRL_F",15,4000,25,GRLIB_perm_max]
 ];
 
 air_vehicles = [
@@ -82,11 +82,10 @@ air_vehicles = [
 	["I_UAV_02_dynamicLoadout_F",5,1000,5,GRLIB_perm_air],
 	["I_T_UAV_03_dynamicLoadout_F",5,1500,10,GRLIB_perm_max],
 	["I_UAV_05_F",5,2000,15,GRLIB_perm_max],
-	["C_Plane_Civil_01_F",1,50,5,GRLIB_perm_air],	
+	["C_Plane_Civil_01_F",1,50,5,GRLIB_perm_air],
 	["I_Heli_light_03_unarmed_F",1,50,15,GRLIB_perm_tank],
 	["I_Heli_light_03_dynamicLoadout_F",1,150,15,GRLIB_perm_air],
 	["I_E_Heli_light_03_dynamicLoadout_F",1,150,15,GRLIB_perm_tank],	
-	["I_Heli_Transport_02_F",10,1500,25,GRLIB_perm_air],
 	["I_Plane_Fighter_03_dynamicLoadout_F", 10,3500,50,GRLIB_perm_max],
 	["I_Plane_Fighter_03_Cluster_F",20,3000,50,GRLIB_perm_max],
 	["I_Plane_Fighter_04_F",20,4500,50,GRLIB_perm_max],
@@ -133,6 +132,12 @@ buildings_west = [
 	["Land_Cargo_House_V2_F",0,0,0,GRLIB_perm_inf],
 	["Land_Cargo_Patrol_V2_F",0,0,0,GRLIB_perm_log],
 	["Flag_FIA_F",0,0,0,0]
+];
+
+// Boats
+boats_west = [
+	"I_Boat_Transport_01_F",
+	"I_Boat_Armed_01_minigun_F"
 ];
 
 blufor_squad_inf_light = [

@@ -10,7 +10,7 @@ private ["_nbUnits", "_vehicleName", "_smoke"];
 
 _setupVars =
 {
-	_missionType = "Helicopter Capture";
+	_missionType = "STR_HELI_CAP";
 	_locationsArray = [SpawnMissionMarkers] call checkSpawn;
 	_nbUnits = [] call getNbUnits;
 };
@@ -25,9 +25,7 @@ _setupObjects =
 	_vehicle allowDamage false;
 	_vehicle addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
 	_vehicle setPos (getPos _vehicle);
-	_vehicle setVariable ["R3F_LOG_disabled", true, true];
-	_vehicle setVariable ["GRLIB_vehicle_owner", "server", true];
-	_vehicle setVehicleLock "LOCKED";
+	[_vehicle, "lock", "server"] call F_vehicleLock;
 	_vehicle setFuel 0.1;
 	_vehicle setVehicleAmmo 0.1;
 	_vehicle engineOn false;
@@ -38,12 +36,10 @@ _setupObjects =
 	_vehicle allowDamage true;
 
 	[_missionPos, 30] call createlandmines;
-	_aiGroup = createGroup [GRLIB_side_enemy, true];
-	[_aiGroup, _missionPos, _nbUnits, "infantry"] call createCustomGroup;
-
+	_aiGroup = [_missionPos, _nbUnits, "infantry"] call createCustomGroup;
 	_missionPicture = getText (configOf _vehicle >> "picture");
 	_vehicleName = getText (configOf _vehicle >> "displayName");
-	_missionHintText = format ["A <t color='%2'>%1</t> has been immobilized, go repair it and take it for your team!", _vehicleName, sideMissionColor];
+	_missionHintText = ["STR_HELI_CAP_MSG", _vehicleName, sideMissionColor];
 	A3W_sectors_in_use = A3W_sectors_in_use + [_missionLocation];
 	true;
 };
@@ -61,8 +57,7 @@ _failedExec = {
 
 _successExec = {
 	// Mission completed
-	_vehicle setVariable ["GRLIB_vehicle_owner", nil, true];
-	_vehicle setVehicleLock "UNLOCKED";
+	[_vehicle, "abandon"] call F_vehicleLock;
 	deleteVehicle _smoke;
 	_successHintMessage = format ["The %1 has been captured, well done.", _vehicleName];
 	[_missionPos] call showlandmines;

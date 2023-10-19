@@ -9,8 +9,10 @@ R3F_LOG_CFG_can_be_transported_cargo = [];
 R3F_LOG_CFG_can_be_moved_by_player = [];
 
 call compileFinal preprocessFileLineNUmbers format ["R3F_LOG\addons_config\Liberation.sqf"];
-call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_west];
-call compileFinal preprocessFileLineNUmbers format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_east];
+private _path = format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_west];
+[_path] call F_getTemplateFile;  
+private _path = format ["mod_template\%1\classnames_r3f.sqf", GRLIB_mod_east];
+[_path] call F_getTemplateFile;  
 
 // return cargo space or cargo size
 ACE_getSize = {
@@ -33,7 +35,7 @@ GRLIB_cargoSize = [R3F_LOG_CFG_can_be_transported_cargo, 2] call F_invertArray;
 // Objects that can be moved
 GRLIB_movableObjects = [] + boats_names + R3F_LOG_CFG_can_be_moved_by_player;
 // Adding each buildings to movableObjects
-{GRLIB_movableObjects pushback (_x select 0);} foreach buildings;
+GRLIB_movableObjects = [] + all_buildings_classnames;
 
 // Set object movable with ACE.
 {
@@ -56,7 +58,7 @@ GRLIB_movableObjects = [] + boats_names + R3F_LOG_CFG_can_be_moved_by_player;
 } forEach (GRLIB_cargoSize select 0);
 
 // Set ACE Medical Facility
-{ 
+{
     [_x, "init", { (_this select 0) setVariable ["ace_medical_isMedicalFacility",true, true] }, true, [], true] call CBA_fnc_addClassEventHandler;
 } forEach ai_healing_sources;
 
@@ -70,3 +72,33 @@ R3F_LOG_FNCT_objet_deplacer = compile preprocessFile "R3F_LOG\objet_deplacable\d
 // Add missing objects
 support_vehicles append [["ACE_Wheel",0,0,1,0]];
 support_vehicles append [["ACE_Track",0,0,1,0]];
+
+// ACE Items price
+LOADOUT_fixed_price append [
+    // Medical stuff (in lower case)
+    ["ace_atropine", 1],
+    ["ace_bloodiv",3],
+    ["ace_bloodiv_500",2],
+    ["ace_bloodiv_250",1],
+    ["ace_plasmaiv",3],
+    ["ace_plasmaiv_500",2],
+    ["ace_plasmaiv_250",1],
+    ["ace_salineiv",3],
+    ["ace_salineiv_500",2],
+    ["ace_salineiv_250",1],
+    ["ace_epinephrine", 1],
+    ["ace_morphine", 1],
+    ["ace_packingbandage", 1],
+    ["ace_personalaidkit", 1],
+    ["ace_surgicalkit",1]
+];
+
+LOADOUT_free_items append [
+    // Medical free stuff (in lower case)
+    "ace_fielddressing",
+    "ace_elasticbandage",
+    "ace_quikclot",
+    "ace_bodybag",
+    "ace_bodybagobject",
+    "ace_tourniquet"
+];

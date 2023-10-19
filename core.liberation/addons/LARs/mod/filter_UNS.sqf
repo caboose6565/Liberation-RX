@@ -15,7 +15,7 @@ GRLIB_MOD_signature = GRLIB_MOD_signature + ["uns_"];
 	"
 	(getText (_x >> 'DLC') == GRLIB_mod_west || (['uns_', (configName _x), true] call F_startsWith) || (['UNS_', (configName _x), true] call F_startsWith) ) &&
 	([(configName _x)] call is_allowed_item)  &&
-	((configName _x) iskindof 'Bag_Base') 
+	((configName _x) iskindof 'Bag_Base')
 	"
 	configClasses (configfile >> "CfgVehicles" )
 ) apply { GRLIB_whitelisted_from_arsenal pushback (configName _x) } ;
@@ -32,8 +32,10 @@ GRLIB_MOD_signature = GRLIB_MOD_signature + ["uns_"];
 // Magazines
 (
 	"
+	getNumber (_x >> 'scope') > 1 &&
+	(getNumber (_x >> 'type') == 256 || (getText (_x >> 'type') find '256') >= 0) &&
+	tolower (configName _x) find '_tracer' < 0 &&
 	((configName _x) select [0,4]) == 'uns_' &&
-	(configName _x) find '_Tracer' < 0 &&
 	([(configName _x)] call is_allowed_item)
 	"
 	configClasses (configfile >> "CfgMagazines")

@@ -22,7 +22,6 @@ opfor_sniper = "O_sniper_F";
 opfor_spotter = "O_spotter_F";
 opfor_engineer = "O_engineer_F";
 opfor_paratrooper = "O_soldier_PG_F";
-opfor_mrap = "O_MRAP_02_F";
 opfor_mrap_hmg = "O_MRAP_02_hmg_F";
 opfor_mrap_gmg = "O_MRAP_02_gmg_F";
 opfor_transport_helo = "O_Heli_Transport_04_covered_F";
@@ -103,11 +102,11 @@ opfor_battlegroup_vehicles = [
 	"O_MRAP_02_hmg_F",
 	"O_MRAP_02_gmg_F",
 	"O_MRAP_02_hmg_F",
-	"O_MRAP_02_gmg_F",
 	"O_APC_Tracked_02_cannon_F",
 	"O_APC_Wheeled_02_rcws_v2_F",
 	"O_Truck_03_covered_F",
 	"O_MBT_02_cannon_F",
+	"O_MBT_02_railgun_F",	
 	"O_APC_Tracked_02_AA_F",
 	"O_Heli_Attack_02_dynamicLoadout_F",
 	"O_T_VTOL_02_infantry_F",
@@ -118,6 +117,7 @@ opfor_battlegroup_vehicles = [
 opfor_battlegroup_vehicles_low_intensity = [
 	"O_APC_Tracked_02_cannon_F",
 	"O_APC_Wheeled_02_rcws_v2_F",
+	"O_MBT_02_cannon_F",
 	"O_MRAP_02_hmg_F",
 	"O_MRAP_02_hmg_F",
 	"O_MRAP_02_gmg_F",
@@ -151,6 +151,8 @@ opfor_air = [
 opfor_statics = [
 	"O_HMG_01_high_F",
 	"O_GMG_01_high_F",
+	"O_HMG_01_high_F",
+	"O_GMG_01_high_F",	
 	"O_static_AA_F",
 	"O_static_AT_F",
 	"O_Mortar_01_F"
@@ -178,7 +180,8 @@ opfor_recyclable = [
 	["O_APC_Tracked_02_cannon_F",10,round (1200 / GRLIB_recycling_percentage),10],
 	["O_APC_Tracked_02_AA_F",10,round (1300 / GRLIB_recycling_percentage),10],
 	["O_MBT_02_cannon_F",15,round (1400 / GRLIB_recycling_percentage),15],
-	["O_MBT_04_cannon_F",15,round (2300 / GRLIB_recycling_percentage),15],
+	["O_MBT_02_railgun_F",15,round (1600 / GRLIB_recycling_percentage),15],	
+	["O_MBT_04_cannon_F",15,round (2000 / GRLIB_recycling_percentage),15],
 	["O_MBT_04_command_F",15,round (2300 / GRLIB_recycling_percentage),15],
 	["O_Heli_Attack_02_dynamicLoadout_black_F",10,round (1700 / GRLIB_recycling_percentage),20],
 	["O_Heli_Attack_02_dynamicLoadout_F",10,round (1700 / GRLIB_recycling_percentage),20],

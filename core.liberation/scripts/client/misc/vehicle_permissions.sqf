@@ -1,10 +1,11 @@
 params ["_unit1", "_unit2", "_vehicle"];
 
-if (count GRLIB_all_fobs == 0 && typeOf _vehicle in [FOB_truck_typename,huron_typename]) exitWith { true }; // Allowed at start
+if (_vehicle iskindof "Steerable_Parachute_F") exitWith { true };
+if (count GRLIB_all_fobs == 0 && typeOf _vehicle in [FOB_truck_typename,FOB_boat_typename,huron_typename]) exitWith { true }; // Allowed at start
 
 private _doeject = false;
 private _info = (assignedVehicleRole _unit1);
-if (count _info == 0) exitWith { moveOut _unit1 };  // Eject unit
+if (count _info == 0) exitWith { [_unit1, false] spawn F_ejectUnit };  // Eject unit
 private _role = _info select 0;
 private _turret = [0];
 if (count _info == 2) then { _turret = _info select 1 };
@@ -45,24 +46,26 @@ if (!(_role == "cargo" || _vehicle isKindOf "Steerable_Parachute_F" || typeOf _v
 		};
 	};
 
-	if (GRLIB_permission_vehicles) then {
-		if (!([_unit1, _vehicle] call is_owner) && !([_vehicle] call is_public)) then {
+	if (!_doeject && GRLIB_permission_vehicles) then {
+		private _owner = [_unit1, _vehicle] call is_owner;
+		private _public = [_vehicle] call is_public;
+		if (!_owner && !_public) then {	
 			_msg = localize "STR_PERMISSION_NO_OWN";
 			if (isPlayer _unit1) then {
-				playSound3D ["A3\Sounds_F\sfx\alarmcar.wss", _vehicle, false, getPosASL _vehicle, 1, 1, 500];
+				playSound3D ["A3\Sounds_F\sfx\alarmcar.wss", _vehicle, false, getPosASL _vehicle, 1, 1, 300];
 			};
 			_doeject = true;
 		};
 	};
 
-	if ( side _unit1 != GRLIB_side_friendly ) then {
+	if (side _unit1 != GRLIB_side_friendly) then {
 		_doeject = true;
 		_msg = localize "STR_PERMISSION_NO_PRI";
 	};
 };
 
 if (_doeject) then {
-	moveOut _unit1;
+	[_unit1, false] spawn F_ejectUnit;
 	if (typeName _unit2 == "OBJECT") then {
 		if (!isNull _unit2) then {
 			switch (_role) do {
@@ -78,3 +81,5 @@ if (_doeject) then {
 	[_vehicle] spawn vehicle_defense;
 	[_unit1, _vehicle] spawn vehicle_fuel;
 };
+
+_doeject;

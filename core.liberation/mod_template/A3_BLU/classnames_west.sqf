@@ -49,7 +49,7 @@ units_loadout_overide = [
 
 light_vehicles = [
 	["B_Quadbike_01_F",1,5,1,0],
-	["B_Boat_Transport_01_F",1,25,1,GRLIB_perm_inf],
+	["B_Boat_Transport_01_F",1,25,1,0],
 	["C_Boat_Transport_02_F",2,25,2,GRLIB_perm_log],
 	["B_Boat_Armed_01_minigun_F",5,30,5,GRLIB_perm_log],
 	["B_SDV_01_F",5,30,5,GRLIB_perm_log],
@@ -81,9 +81,6 @@ heavy_vehicles = [
 	["B_APC_Wheeled_01_cannon_F",10,500,20,GRLIB_perm_log],
 	["B_APC_Tracked_01_AA_F",10,500,20,GRLIB_perm_tank],
 	["I_APC_Wheeled_03_cannon_F",10,500,20,GRLIB_perm_tank],
-	//["I_APC_tracked_03_cannon_F",10,500,20,GRLIB_perm_tank],
-	//["I_MBT_03_cannon_F",15,4500,15,GRLIB_perm_max],
-	//["I_E_Truck_02_MRL_F",15,3500,15,GRLIB_perm_max],
 	["B_MBT_01_cannon_F",15,1000,35,GRLIB_perm_tank],
 	["B_MBT_01_TUSK_F",15,1500,35,GRLIB_perm_air],
 	["B_AFV_Wheeled_01_cannon_F",15,3000,35,GRLIB_perm_max],
@@ -104,7 +101,6 @@ air_vehicles = [
 	["I_Heli_light_03_unarmed_F",1,50,5,GRLIB_perm_tank],
 	["I_Heli_light_03_dynamicLoadout_F",10,500,20,GRLIB_perm_air],
 	//["I_Plane_Fighter_03_dynamicLoadout_F", 10,3500,20,GRLIB_perm_max],
-	["B_Heli_Transport_03_unarmed_F",10,1500,35,GRLIB_perm_tank],
 	["B_Heli_Transport_03_F",10,1700,35,GRLIB_perm_air],
 	["B_Heli_Transport_01_F",10,2000,35,GRLIB_perm_tank],
 	["B_T_VTOL_01_infantry_F",10,1300,40,GRLIB_perm_air],
@@ -113,7 +109,7 @@ air_vehicles = [
 	["B_Heli_Attack_01_dynamicLoadout_F",10,2250,30,GRLIB_perm_air],
 	["B_Plane_CAS_01_dynamicLoadout_F",20,3000,50,GRLIB_perm_max],
 	["B_Plane_Fighter_01_F",20,4500,50,GRLIB_perm_max],
-	["B_Plane_Fighter_01_Stealth_F",20,4500,50,GRLIB_perm_max]
+	["B_Plane_Fighter_01_Stealth_F",20,2000,50,GRLIB_perm_max]
 ];
 
 blufor_air = [
@@ -128,8 +124,8 @@ static_vehicles = [
 	["B_HMG_01_high_F",0,10,0,GRLIB_perm_log],
 	["B_GMG_01_F",0,20,0,GRLIB_perm_inf],
 	["B_GMG_01_high_F",0,20,0,GRLIB_perm_log],
-	["B_static_AA_F",0,50,0,GRLIB_perm_tank],
-	["B_static_AT_F",0,50,0,GRLIB_perm_tank],
+	["B_static_AA_F",0,150,0,GRLIB_perm_tank],
+	["B_static_AT_F",0,150,0,GRLIB_perm_tank],
 	["B_Mortar_01_F",0,500,0,GRLIB_perm_tank],
 	["B_SAM_System_01_F",10,1500,0,GRLIB_perm_air],
 	["B_SAM_System_02_F",10,1500,0,GRLIB_perm_air],
@@ -155,6 +151,12 @@ buildings_west = [
 	["Land_Cargo_House_V1_F",0,0,0,GRLIB_perm_inf],
 	["Land_Cargo_Patrol_V1_F",0,0,0,GRLIB_perm_log],
 	["Flag_NATO_F",0,0,0,0]
+];
+
+// Boats
+boats_west = [
+	"B_Boat_Transport_01_F",
+	"B_Boat_Armed_01_minigun_F"
 ];
 
 blufor_squad_inf_light = [

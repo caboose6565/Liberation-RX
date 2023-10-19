@@ -25,6 +25,10 @@ if ( isServer ) then {
 		};
 	};
 
+	if (isNull _killer) then {
+		_killer = _unit getVariable ["GRLIB_last_killer", objNull];
+	};	
+
 	if (isNil "infantry_weight") then { infantry_weight = 33 };
 	if (isNil "armor_weight") then { armor_weight = 33 };
 	if (isNil "air_weight") then { air_weight = 33 };
@@ -65,30 +69,30 @@ if ( isServer ) then {
 
 	if (_unit isKindOf "Man") then {
 		if ( vehicle _unit != _unit ) then {
-			_unit action ["Eject", vehicle _unit];
-			//moveOut _unit;
+			[_unit, false] spawn F_ejectUnit;
 		};
 
 		if (isNull _killer) exitWith {};
 		if ( _unit != _killer ) then {
 			_isPrisonner = _unit getVariable ["GRLIB_is_prisonner", false];
 			_isKamikaz = _unit getVariable ["GRLIB_is_kamikaze", false];
+			_isZombie = ((typeOf _unit) select [0,10] == "RyanZombie");
 			if ( _isKamikaz ) then { 
 				_msg = format ["%1 kill a Kamikaze !! +10 XP", name _killer] ;
 				[gamelogic, _msg] remoteExec ["globalChat", 0];
 				[_killer, 11] call F_addScore;
 			};
-
-			if ( !_isKamikaz && side (group _unit) == GRLIB_side_civilian || _isPrisonner ) then {
+			if ( _isZombie ) then { [_killer, 5] call F_addScore };
+			if ( !_isKamikaz && !_isZombie && side (group _unit) == GRLIB_side_civilian || _isPrisonner ) then {
 				stats_civilians_killed = stats_civilians_killed + 1;
 				if ( isPlayer _killer ) then {
 					stats_civilians_killed_by_players = stats_civilians_killed_by_players + 1;
 					if ( GRLIB_civ_penalties ) then {
 						private _penalty = GRLIB_civ_killing_penalty;
 						private _score = [_killer] call F_getScore;
-						if ( _score < GRLIB_perm_inf ) then { _penalty = 5 };
-						if ( _score > GRLIB_perm_inf ) then { _penalty = 10 };
-						if ( _score > GRLIB_perm_air ) then { _penalty = 20 };
+						if ( _score < GRLIB_perm_inf ) then { _penalty = 10};
+						if ( _score > GRLIB_perm_inf ) then { _penalty = 20 };
+						if ( _score > GRLIB_perm_air ) then { _penalty = 40 };
 						if ( _score > GRLIB_perm_max ) then { _penalty = 60 };
 						[_killer, -_penalty] call F_addScore;
 						[name _unit, _penalty, _killer] remoteExec ["remote_call_civ_penalty", 0];
@@ -117,6 +121,7 @@ if ( isServer ) then {
 					stats_opfor_soldiers_killed = stats_opfor_soldiers_killed + 1;
 					if ( isplayer _killer ) then {
 						stats_opfor_killed_by_players = stats_opfor_killed_by_players + 1;
+						_killer = (getPlayerUID _killer) call BIS_fnc_getUnitByUID;
 						[_killer, 1] call F_addScore;
 					};
 
@@ -131,16 +136,12 @@ if ( isServer ) then {
 					};
 					if (floor random 2 == 0) then { 
 						private _deathsound = format ["A3\sounds_f\characters\human-sfx\P%1\hit_max_%2.wss", selectRandom ["03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18"], selectRandom [1,2,3]];
-						{
-							if ((_x distance2D _unit) <= 300 && lifestate _x != "INCAPACITATED") then {
-								[[_deathsound, _unit, false, getPosASL _unit, 4, 0.8, 300]] remoteExec ["playSound3D", owner _x];
-							};
-						} forEach (AllPlayers - (entities "HeadlessClient_F"));
+						playSound3D [_deathsound, _unit, false, getPosASL _unit, 4, 1, 300];
 					};
 				};
 				if ( side (group _unit) == GRLIB_side_friendly ) then {
 					stats_blufor_teamkills = stats_blufor_teamkills + 1;
-					[_killer, -10] call F_addScore;
+					[_killer, -20] call F_addScore;
 					_msg = localize "STR_FRIENDLY_FIRE";
 					[gamelogic, _msg] remoteExec ["globalChat", 0];
 				};
@@ -152,26 +153,10 @@ if ( isServer ) then {
 		};
 
 	} else {
-		if (!GRLIB_ACE_enabled) then {
-			// unTow
-			private _tow = _unit getVariable ["R3F_LOG_remorque", objNull];
-			if (!isNull _tow) then {
-				_unit setVariable ["R3F_LOG_remorque", objNull, true];
-				_tow setVariable ["R3F_LOG_est_transporte_par", objNull, true];
-				[_tow, "detachSetVelocity", [0, 0, 0.1]] call R3F_LOG_FNCT_exec_commande_MP;
-				waitUntil { sleep 0.3; (isNull attachedTo _tow) };
-			};
+		// unTow
+		[_unit] spawn untow_vehicle;
 
-			private _towed = _unit getVariable ["R3F_LOG_est_transporte_par", objNull];
-			if (!isNull _towed) then {
-				_towed setVariable ["R3F_LOG_remorque", objNull, true];
-				_unit setVariable ["R3F_LOG_est_transporte_par", objNull, true];
-				[_unit, "detachSetVelocity", [0, 0, 0.1]] call R3F_LOG_FNCT_exec_commande_MP;
-				waitUntil { sleep 0.3; (isNull attachedTo _unit) };
-			};
-		};
-
-		if ( (typeof _unit) in [Arsenal_typename, FOB_box_typename, FOB_truck_typename, foodbarrel_typename, waterbarrel_typename] ) exitWith {
+		if ( (typeof _unit) in [Arsenal_typename, FOB_box_typename, FOB_truck_typename, FOB_boat_typename, foodbarrel_typename, waterbarrel_typename] ) exitWith {
 			sleep 30;
 			deleteVehicle _unit;
 		};
@@ -184,8 +169,9 @@ if ( isServer ) then {
 			deleteVehicle _unit;
 		};
 
-		if ((_unit iskindof "LandVehicle") || (_unit iskindof "Air") || (_unit iskindof "Ship") ) then {
-			[_unit] spawn clean_vehicle;
+		 if (typeOf _unit isKindOf "AllVehicles") then {
+			_unit setVariable ["GRLIB_vehicle_owner", "", true];
+			[_unit, false] spawn clean_vehicle;
 		};
 
 		if ( isPlayer _killer ) then {

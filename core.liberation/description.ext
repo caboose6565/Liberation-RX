@@ -1,3 +1,9 @@
+class Header {
+	gameType = CTI;
+	minPlayers = 1;
+	maxPlayers = 10;
+};
+
 author = $STR_MISSION_AUTHOR;
 onLoadName = $STR_MISSION_TITLE;
 briefingName = $STR_MISSION_TITLE;
@@ -41,14 +47,8 @@ class cfgSounds {
  	class parasound {
  		name = "parasound";
  		sound[] = {"res\c130.ogg", 1, 1};
- 		titles[] = {};
+		titles[] = {"parasound"};
  	};
-};
-
-class Header {
-	gameType = CTI;
-	minPlayers = 1;
-	maxPlayers = 22;
 };
 
 class CfgDebriefing {
@@ -73,7 +73,6 @@ class CfgDebriefing {
 #include "addons\WHS\warehouse.hpp"
 #include "addons\SDB_DALE\RscLoadout.hpp"
 #include "addons\JKB\JKB_dialog.hpp"
-#include "addons\VAM\defines.hpp"
 #include "addons\VAM\VAM_GUI_controls.hpp"
 #include "addons\VAM\VAM_GUI_classes.hpp"
 

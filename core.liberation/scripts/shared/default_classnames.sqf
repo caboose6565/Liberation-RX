@@ -4,17 +4,24 @@ if ( isNil "huron_typename" ) then { huron_typename = "B_Heli_Transport_03_unarm
 FOB_typename = "Land_Cargo_HQ_V1_F";
 FOB_box_typename = "B_Slingload_01_Cargo_F";
 FOB_truck_typename = "B_Truck_01_box_F";
+FOB_boat_typename = "C_Boat_Civil_01_rescue_F";
+FOB_carrier = "Land_Destroyer_01_base_F";
+FOB_carrier_center = "Land_Destroyer_01_hull_04_F";
 FOB_outpost = "Land_BagBunker_Tower_F";
 FOB_box_outpost = "Land_Cargo10_grey_F";
 FOB_sign = "SignAd_Sponsor_F";
 Radio_tower = "Land_Communication_F";
 Warehouse_typename = "Land_Warehouse_03_F";
+Warehouse_desk_typename = "Land_PortableDesk_01_black_F";
 Arsenal_typename = "B_supplyCrate_F";
 Box_Weapon_typename = "Box_NATO_Wps_F";
 Box_Ammo_typename = "Box_NATO_Ammo_F";
 Box_Support_typename = "Box_NATO_Support_F";
 Box_Launcher_typename = "Box_NATO_WpsLaunch_F";
 Box_Special_typename = "Box_NATO_WpsSpecial_F";
+Box_Explosives_typename = "Box_NATO_AmmoOrd_F";
+Box_Grenades_typename = "Box_NATO_Grenades_F";
+Box_Equipment_typename = "Box_NATO_Equip_F";
 Respawn_truck_typename = "B_Truck_01_medical_F";
 ammo_truck_typename = "B_Truck_01_ammo_F";
 fuel_truck_typename = "B_Truck_01_fuel_F";
@@ -26,6 +33,7 @@ medic_sling_typename = "B_Slingload_01_Medevac_F";
 mobile_respawn = "Land_TentDome_F";
 mobile_respawn_bag = "B_Kitbag_Base";
 medicalbox_typename = "Box_B_UAV_06_medical_F";
+helipad_typename = "Land_HelipadSquare_F";
 playerbox_typename = "Land_PlasticCase_01_medium_olive_CBRN_F";
 playerbox_cargospace = 1500;
 ammobox_b_typename = "Box_NATO_AmmoVeh_F";
@@ -52,8 +60,8 @@ SHOP_Man = "C_Man_formal_1_F";
 SELL_Man = "C_Story_Mechanic_01_F";
 WRHS_Man = "B_RangeMaster_F";
 uavs = [];
-boats_west = [];
 opfor_boats = [];
+boats_west = [];
 ai_resupply_sources = [];
 ai_healing_sources = [];
 vehicle_rearm_sources = [];
@@ -62,8 +70,12 @@ GRLIB_vehicle_whitelist = [];
 GRLIB_vehicle_blacklist = [];
 opfor_texture_overide = [];
 opfor_statics = [];
+static_vehicles_AI = [];
 units_loadout_overide = [];
 sticky_bombs_typename = ["SatchelCharge_Remote_Ammo", "DemoCharge_Remote_Ammo"];
+LOADOUT_fixed_price = [];
+LOADOUT_expensive_items = [];
+LOADOUT_free_items = [];
 
 // see https://community.bistudio.com/wiki/nearestTerrainObjects for list
 GRLIB_clutter_cutter = ["Tree","Bush","Hide","House","Fence","Ruins","Rock","Rocks","Building"];
@@ -100,10 +112,14 @@ buildings_default = [
 	["Land_Medevac_HQ_V1_F",0,0,0,GRLIB_perm_air],
 	["Land_PortableLight_double_F",0,0,0,GRLIB_perm_log],
 	["Land_TentLamp_01_suspended_F",0,0,0,GRLIB_perm_log],
-    ["Land_TentLamp_01_suspended_red_F",0,0,0,GRLIB_perm_log],
+	["Land_TentLamp_01_suspended_red_F",0,0,0,GRLIB_perm_log],
 	["Land_LampHalogen_F",0,0,0,GRLIB_perm_tank],
 	["Land_LampStreet_02_triple_F",0,0,0,GRLIB_perm_inf],
-	["Land_HelipadSquare_F",0,0,0,GRLIB_perm_log],
+	["PortableHelipadLight_01_blue_F",0,0,0,GRLIB_perm_log],
+	["PortableHelipadLight_01_red_F",0,0,0,GRLIB_perm_log],
+	["PortableHelipadLight_01_white_F",0,0,0,GRLIB_perm_log],
+	["PortableHelipadLight_01_green_F",0,0,0,GRLIB_perm_log],
+	["PortableHelipadLight_01_yellow_F",0,0,0,GRLIB_perm_log],
 	["Land_Razorwire_F",0,0,0,GRLIB_perm_tank],
 	["Land_ToolTrolley_02_F",0,0,0,GRLIB_perm_tank],
 	["Land_WeldingTrolley_01_F",0,0,0,GRLIB_perm_tank],

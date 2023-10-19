@@ -7,11 +7,11 @@
 if (!isServer) exitwith {};
 #include "sideMissionDefines.sqf"
 
-private ["_nbUnits", "_intels"];
+private ["_nbUnits", "_intels", "_grp_civ"];
 
 _setupVars =
 {
-	_missionType = localize "STR_SEARCH_INTEL";
+	_missionType = "STR_SEARCH_INTEL";
 	_locationsArray = [SpawnMissionMarkers] call checkSpawn;
 	_nbUnits = [] call getNbUnits;
 };
@@ -141,10 +141,15 @@ _setupObjects =
 		_x setVariable ["GRLIB_mission_AI", true, true];
 	} forEach (units _aiGroup);
 
+	//----- spawn civilians ---------------------------------
+	_grp_civ = [_missionPos, (5 + random(5))] call F_spawnCivilians;
+	[_grp_civ, _missionPos] spawn add_civ_waypoints;
+
+	//----- spawn mines ---------------------------------
 	[_missionPos, 30] call createlandmines;
 
 	//_missionPicture = getText (configFile >> "CfgVehicles" >> "Land_i_Barracks_V1_F" >> "picture");
-	_missionHintText = format [localize "STR_SEARCH_INTEL_MESSAGE1", count _intels]; ;
+	_missionHintText = ["STR_SEARCH_INTEL_MESSAGE1", count _intels]; ;
 	A3W_sectors_in_use = A3W_sectors_in_use + [_missionLocation];
 	true;
 };
@@ -161,20 +166,38 @@ _waitUntilSuccessCondition = {
 _waitUntilCondition = {
 	_ret = false;
 	{
-		if (_x distance2D _missionPos < GRLIB_capture_size) then {
-			if (_aiGroup knowsAbout _x == 4 ) then {
-				_msg = ["<t color='#FFFFFF' size='2'>You have been Detected!!<br/><br/>Enemies destroy the </t><t color='#ff0000' size='3'>INTELS</t><t color='#FFFFFF' size='2'> !!</t>", "PLAIN", -1, false, true];
-				[_msg] remoteExec ["titleText", owner _x];
-				sleep 10;
-				_ret = true;
-			};
+		if (_x distance2D _missionPos < GRLIB_sector_size) then {
+			if (_aiGroup knowsAbout _x == 4 ) then { _ret = true };
 		};
 	} forEach (AllPlayers - (entities "HeadlessClient_F"));
+
+	if (_ret) then {
+		[_missionPos] spawn {
+			params ["_pos"];
+			private _sound = "A3\data_f_curator\sound\cfgsounds\air_raid.wss";
+			for "_i" from 0 to 1 do {
+				playSound3D [_sound, _pos, false, ATLToASL _pos, 5, 1, 1000];
+				sleep 5;
+			};
+			private _msg = ["<t color='#FFFFFF' size='2'>You have been Detected!!<br/><br/>Enemies destroy the </t><t color='#ff0000' size='3'>INTELS</t><t color='#FFFFFF' size='2'> !!</t>", "PLAIN", -1, false, true];
+
+			{
+				if (_x distance2D _pos < GRLIB_sector_size) then { [_msg] remoteExec ["titleText", owner _x] };
+			} forEach (AllPlayers - (entities "HeadlessClient_F"));
+
+			for "_i" from 0 to 1 do {
+				playSound3D [_sound, _pos, false, ATLToASL _pos, 5, 1, 1000];
+				sleep 5;
+			};
+		};
+		sleep 10;
+	};
 	_ret;
 };
 
 _failedExec = {
 	// Mission failed
+	{ deleteVehicle _x } forEach (units _grp_civ);
 	[_missionPos] call clearlandmines;
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
 };
@@ -190,7 +213,8 @@ _successExec = {
 		};
 	} forEach (AllPlayers - (entities "HeadlessClient_F"));
 
-	_successHintMessage = localize "STR_SEARCH_INTEL_MESSAGE2";
+	_successHintMessage = "STR_SEARCH_INTEL_MESSAGE2";
+	{ deleteVehicle _x } forEach (units _grp_civ);
 	[_missionPos] call showlandmines;
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
 };

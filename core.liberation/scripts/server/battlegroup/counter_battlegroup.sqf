@@ -6,7 +6,7 @@ if ( isNil "air_weight" ) then { air_weight = 33 };
 
 sleep 1800;
 
-while { GRLIB_endgame == 0 } do {
+while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 
 	_sleeptime = (1800 + floor(random 1800)) / (([] call  F_adaptiveOpforFactor) * GRLIB_csat_aggressivity);
 
@@ -22,8 +22,8 @@ while { GRLIB_endgame == 0 } do {
 	};
 
 	_target_lst = [allPlayers, {[_x] call F_getScore >= GRLIB_perm_tank && rating _x > 1000 }] call BIS_fnc_conditionalSelect;
-
-	if ( (count _target_lst > 1) && ([] call F_opforCap < GRLIB_battlegroup_cap) && (diag_fps > 30.0)) then {
+	if ( GRLIB_endgame == 1 || GRLIB_global_stop == 1 ) exitWith {};
+	if ( (count _target_lst > 1) && (opforcap < GRLIB_battlegroup_cap) && (diag_fps > 30.0)) then {
 		_target_player = selectRandom _target_lst;
 		if (_target_player getVariable ["GRLIB_BN_timer", 0] < time) then {
 			_target_player setVariable ["GRLIB_BN_timer", round (time + (30 * 60))];
@@ -32,8 +32,8 @@ while { GRLIB_endgame == 0 } do {
 
 			waitUntil {sleep 2; isNull objectParent _target_player};
 			diag_log format [ "Spawn Attack on player %1 at %2", name _target_player, time ];
-			[getPosATL _target_player, GRLIB_side_enemy] spawn spawn_air;
-			sleep 10;
+			[getPosATL _target_player, GRLIB_side_enemy, 3] spawn spawn_air;
+			sleep 20;
 			[getPosATL _target_player] spawn send_paratroopers;
 		};
 	};

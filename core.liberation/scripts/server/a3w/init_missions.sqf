@@ -7,7 +7,6 @@ if (!isServer) exitWith {};
 cityList = compileFinal preprocessFileLineNumbers "scripts\server\a3w\missions\towns.sqf";
 fn_selectRandomWeighted = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\fn_selectRandomWeighted.sqf";
 fn_refillbox  = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\fn_refillbox.sqf";
-fn_findString = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\fn_findString.sqf";
 checkSpawn = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_checkSpawn.sqf";
 sideMissionProcessor = compileFinal preprocessFileLineNumbers "scripts\server\a3w\missions\sideMissionProcessor.sqf";
 generateMissionWeights = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_generateMissionWeights.sqf";
@@ -20,7 +19,6 @@ cleanMissionVehicles = compileFinal preprocessFileLineNumbers "scripts\server\a3
 createMissionMarker = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_createMissionMarker.sqf";
 createCustomGroup = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_createCustomGroup.sqf";
 getBallMagazine = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_getBallMagazine.sqf";
-missionHint = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_missionHint.sqf";
 processItems = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_processItems.sqf";
 updateMissionsList = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_updateMissionsList.sqf";
 getNbUnits = compileFinal preprocessFileLineNumbers "scripts\server\a3w\scripts\F_getNbUnits.sqf";
@@ -39,15 +37,13 @@ A3W_Mission_timeout = 60*60;		// Time in seconds that a Side Mission will run fo
 // A3W_Mission_delay = 1*60;
 // A3W_Mission_timeout = 5*60;
 
-waitUntil {sleep 1; !isNil "blufor_sectors" };
-waitUntil {sleep 1; !isNil "sectors_allSectors" };
 waitUntil {sleep 1; !isNil "save_is_loaded" };
 
 [] call compileFinal preprocessFileLineNumbers "scripts\server\a3w\missions\setupMissionArrays.sqf";
 
 for "_i" from 1 to 4 do {
 	// Start Permanent controller
-	private _init_sleep = ((2 + floor random 14) * 60);
+	private _init_sleep = ((5 + floor random 14) * 60);
 	while {_init_sleep > 0 && isNil "A3W_debug"} do { sleep 1; _init_sleep = _init_sleep - 1 };
 	diag_log format ["--- LRX A3W Starting Mission Controller #%1 at %2", _i, time];
 	if ((_i == 1) || (_i > 1 && isNil "A3W_debug")) then {

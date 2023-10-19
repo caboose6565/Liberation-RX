@@ -151,7 +151,7 @@ R3F_LOG_CFG_can_transport_cargo = R3F_LOG_CFG_can_transport_cargo +
 
 R3F_LOG_CFG_can_be_transported_cargo = R3F_LOG_CFG_can_be_transported_cargo +
 [
-	["B_Boat_Transport_01_F", 5],
+	["B_Boat_Transport_01_F", 15],
 	["C_Scooter_Transport_01_F", 5],
 	["B_SDV_01_F", 50]
 ];
@@ -178,6 +178,7 @@ R3F_LOG_CFG_can_transport_cargo = R3F_LOG_CFG_can_transport_cargo +
 	[FOB_box_outpost, 0],
 	[playerbox_typename, 0],
  	[FOB_truck_typename, 0],
+	[FOB_boat_typename, 0],
 	[ammo_truck_typename, 0],
 	[fuel_truck_typename, 0],
 	[repair_truck_typename, 0]
@@ -189,6 +190,7 @@ R3F_LOG_CFG_can_be_transported_cargo = R3F_LOG_CFG_can_be_transported_cargo +
 	[Arsenal_typename, 5],
 	[FOB_box_typename, 50],
 	[FOB_box_outpost, 25],
+	//[playerbox_typename,7],
 	[ammobox_b_typename, 15],
 	[ammobox_o_typename, 15],
 	[ammobox_i_typename, 15],
@@ -228,9 +230,8 @@ R3F_LOG_CFG_can_be_moved_by_player = R3F_LOG_CFG_can_be_moved_by_player +
 	fuel_sling_typename,
 	ammo_sling_typename,
 	medic_sling_typename,
-	basic_weapon_typename,
-	"ReammoBox_F",
 	canister_fuel_typename,
+	"ReammoBox_F",
 	"Land_RepairDepot_01_civ_F",
 	"Land_TentLamp_01_suspended_F",
     "Land_TentLamp_01_suspended_red_F",
@@ -311,7 +312,6 @@ R3F_LOG_CFG_can_be_moved_by_player = R3F_LOG_CFG_can_be_moved_by_player +
 	"Land_PortableLight_double_F",
 	"FlagCarrier",
 	"Land_MapBoard_F",
-	"Land_HelipadSquare_F",
 	"Land_Razorwire_F",
 	"Land_ToolTrolley_02_F",
 	"Land_WeldingTrolley_01_F",
@@ -328,7 +328,8 @@ R3F_LOG_CFG_can_be_moved_by_player = R3F_LOG_CFG_can_be_moved_by_player +
 	"Land_Metal_rack_Tall_F",
 	"Land_DieselGroundPowerUnit_01_F",
 	"Land_Pallet_MilBoxes_F",
-	"Land_PaperBox_open_full_F"
+	"Land_PaperBox_open_full_F",
+	"Land_PortableHelipadLight_01_F"
 ];
 
 R3F_LOG_CFG_can_be_transported_cargo = R3F_LOG_CFG_can_be_transported_cargo +
@@ -351,7 +352,6 @@ R3F_LOG_CFG_can_be_transported_cargo = R3F_LOG_CFG_can_be_transported_cargo +
 	["Land_PortableLight_double_F", 5],
 	["FlagCarrier", 5],
 	["Land_MapBoard_F", 5],
-	["Land_HelipadSquare_F", 5],
 	["Land_Razorwire_F", 5],
 	["Land_ToolTrolley_02_F", 5],
 	["Land_WeldingTrolley_01_F", 5],
@@ -368,5 +368,6 @@ R3F_LOG_CFG_can_be_transported_cargo = R3F_LOG_CFG_can_be_transported_cargo +
 	["Land_Metal_rack_Tall_F", 5],
 	["Land_DieselGroundPowerUnit_01_F", 5],
 	["Land_Pallet_MilBoxes_F", 5],
-	["Land_PaperBox_open_full_F", 5]
+	["Land_PaperBox_open_full_F", 5],
+	["Land_PortableHelipadLight_01_F", 1]
 ];

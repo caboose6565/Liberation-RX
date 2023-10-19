@@ -11,7 +11,7 @@ private ["_nbUnits", "_townName", "_man1", "_marker_zone"];
 
 _setupVars =
 {
-	_missionType = localize "STR_AMMODELI";
+	_missionType = "STR_AMMODELI";
 	_missionLocation = [sectors_military] call getMissionLocation;
 	_townName = markerText _missionLocation;
 	_ignoreAiDeaths = true;
@@ -25,6 +25,7 @@ _setupObjects =
 	_man1 = _mission_grp createUnit ["C_Marshal_F", _missionPos, [], 0, "NONE"];
 	_man1 setVariable ['GRLIB_can_speak', true, true];
 	_man1 setVariable ['GRLIB_A3W_Mission_DA', true, true];
+	_man1 setVariable ["acex_headless_blacklist", true, true];
 	_man1 allowDamage false;
 	[_man1, "LHD_krajPaluby"] spawn F_startAnimMP;
 	_marker_zone = createMarker ["A3W_Mission_DF", _missionPos];
@@ -33,7 +34,7 @@ _setupObjects =
 	_marker_zone setMarkerBrush "FDiagonal";
 	_marker_zone setMarkerSize [20,20];
 
-	_missionHintText = format [localize "STR_AMMODELI_MESSAGE1", sideMissionColor, _townName];
+	_missionHintText = ["STR_AMMODELI_MESSAGE1", sideMissionColor, _townName];
 	A3W_sectors_in_use = A3W_sectors_in_use + [_missionLocation];
 	true;
 };
@@ -58,7 +59,7 @@ _failedExec = {
 	// Mission failed
 	deleteVehicle _man1;
 	deleteMarker _marker_zone;
-	_failedHintMessage = format [localize "STR_AMMODELI_MESSAGE2", sideMissionColor, _townName];
+	_failedHintMessage = ["STR_AMMODELI_MESSAGE2", sideMissionColor, _townName];
 	A3W_delivery_failed = A3W_delivery_failed + 1;
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
 };
@@ -66,7 +67,7 @@ _failedExec = {
 _successExec = {
 	sleep 3;
 	// Mission completed
-	_successHintMessage = format [localize "STR_AMMODELI_MESSAGE3", sideMissionColor];
+	_successHintMessage = ["STR_AMMODELI_MESSAGE3", sideMissionColor];
 	deleteVehicle _man1;
 	deleteMarker _marker_zone;
 	A3W_delivery_failed = 0;

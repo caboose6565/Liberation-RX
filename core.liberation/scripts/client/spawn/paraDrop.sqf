@@ -16,7 +16,6 @@ _unit allowDamage true;
 halojumping = false;
 
 while {!isTouchingGround _unit} do {
-	if ((getPosATL _unit) select 2 <= 50 && !(isPlayer _unit)) then {_unit allowDamage false};
 	sleep 1;
 };
 
@@ -28,5 +27,5 @@ if ( _backpack != "" && _backpack != "B_Parachute" ) then {
 		(backpackContainer _unit) setVariable ["GRLIB_mobile_respawn_bag", true, true];
 	};
 };
-_unit allowDamage true;
-_unit doFollow leader player;
+
+_unit doFollow player;

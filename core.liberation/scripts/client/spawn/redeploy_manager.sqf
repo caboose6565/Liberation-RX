@@ -10,7 +10,6 @@ private _basenamestr = "BASE CHIMERA";
 
 if (!GRLIB_player_spawned) then {
 	waitUntil {sleep 0.2; !isNil "GRLIB_all_fobs" };
-	waitUntil {sleep 0.2; !isNil "blufor_sectors" };
 	waitUntil {sleep 0.2; !isNil "save_is_loaded" };
 	waitUntil {sleep 0.2; !isNil "introDone" };
 	waitUntil {sleep 0.2; introDone };
@@ -23,7 +22,7 @@ if (!GRLIB_player_spawned) then {
 };
 
 fullmap = 0;
-_old_fullmap = 0;
+private _old_fullmap = 0;
 waitUntil {
 	sleep 0.1;
 	( vehicle player == player && alive player && !dialog )
@@ -33,12 +32,12 @@ createDialog "liberation_deploy";
 waitUntil { dialog };
 titleText ["","BLACK IN", 5];
 ((findDisplay 5201) displayCtrl 201) ctrlAddEventHandler [ "mouseButtonDblClick" , { deploy = 1; } ];
-_noesckey = (findDisplay 5201) displayAddEventHandler ["KeyDown", "if ((_this select 1) == 1) then { true }"];
+private _noesckey = (findDisplay 5201) displayAddEventHandler ["KeyDown", "if ((_this select 1) == 1) then { true }"];
 disableUserInput false;
 disableUserInput true;
 disableUserInput false;
 deploy = 0;
-_oldsel = -1;
+private _oldsel = -1;
 
 showCinemaBorder false;
 camUseNVG false;
@@ -60,7 +59,7 @@ if ( GRLIB_player_spawned ) then {
 	_saved_loadouts = profileNamespace getVariable ["bis_fnc_saveInventory_data", []];
 	_counter = 0;
 
-	if ( GRLIB_enable_arsenal && !isNil "_saved_loadouts" ) then {
+	if ( GRLIB_enable_arsenal > 0 && !isNil "_saved_loadouts" ) then {
 		{
 			if ( _counter % 2 == 0 && _counter < 40) then {
 				_loadouts_data pushback _x;
@@ -94,12 +93,8 @@ while { dialog && alive player && deploy == 0} do {
 	_respawn_trucks = [] call F_getMobileRespawns;
 
 	for "_idx" from 0 to ((count _respawn_trucks) -1) do {
-		private _owner = (_respawn_trucks select _idx) getVariable ["GRLIB_vehicle_owner", "public"];
-		private _name = "";
-		if (_owner != "public") then {
-			_name = format ["(%1)", name ([_owner] call BIS_fnc_getUnitByUID)];
-		};
-		_choiceslist = _choiceslist + [[format [ "%1 - %2 %3", localize "STR_RESPAWN_TRUCK", mapGridPosition (getpos (_respawn_trucks select _idx)), _name], getpos (_respawn_trucks select _idx), (_respawn_trucks select _idx)]];
+		_vehicle = _respawn_trucks select _idx;
+		_choiceslist = _choiceslist + [[format ["%1 - %2", [_vehicle] call F_getLRXName, mapGridPosition (getpos _vehicle)], getpos _vehicle, _vehicle]];
 	};
 
 	lbClear 201;
@@ -111,11 +106,9 @@ while { dialog && alive player && deploy == 0} do {
 
 	if ( lbCurSel 201 != _oldsel ) then {
 		_oldsel = lbCurSel 201;
-		_objectpos = [0,0,0];
-		if ( dialog ) then {
-			_objectpos = ((_choiceslist select _oldsel) select 1);
-		};
-		if ( surfaceIsWater _objectpos) then {
+		_objectpos = ((_choiceslist select _oldsel) select 1);
+		if ( isNil "_objectpos" ) then { _objectpos = [0,0,0] };
+		if ( surfaceIsWater _objectpos ) then {
 			respawn_object setposasl [_objectpos select 0, _objectpos select 1, 15];
 		} else {
 			respawn_object setpos ((_choiceslist select _oldsel) select 1);
@@ -156,7 +149,6 @@ while { dialog && alive player && deploy == 0} do {
 };
 
 if (dialog && deploy == 1) then {
-
 	// Manage Player Loadout
 	if ( !GRLIB_player_spawned ) then {
 		// respawn loadout
@@ -166,8 +158,8 @@ if (dialog && deploy == 1) then {
 			// init loadout
 			if ( GRLIB_forced_loadout == 0) then {
 				if ( typeOf player in units_loadout_overide ) then {
-					_loadouts_folder = format ["mod_template\%1\loadout\%2.sqf", GRLIB_mod_west, toLower (typeOf player)];
-					[player] call compileFinal preprocessFileLineNumbers _loadouts_folder;
+					private _path = format ["mod_template\%1\loadout\%2.sqf", GRLIB_mod_west, toLower (typeOf player)];
+					[_path, player] call F_getTemplateFile;
 				} else {
 					[player, configOf player] call BIS_fnc_loadInventory;
 				};
@@ -191,13 +183,13 @@ if (dialog && deploy == 1) then {
 	// Redeploy
 	_idxchoice = lbCurSel 201;
 	_spawn_str = (_choiceslist select _idxchoice) select 0;
-
 	player setVariable ["GRLIB_action_inuse", true, true];
+
 	if (((_choiceslist select _idxchoice) select 0) == _basenamestr) then {
 		// LHD (Chimera)
 		call respawn_lhd;
+		player setVariable ["GRLIB_action_inuse", false, true];
 	} else {
-		private _player_pos = getPos player;
 		private _destpos = zeropos;
 		private _destdir = random 360;
 		private _destdist = 4;
@@ -209,41 +201,38 @@ if (dialog && deploy == 1) then {
 		} else {
 			// FOB / Outpost
 			_destpos = ((_choiceslist select _idxchoice) select 1);
-			private _attacked = ([_destpos] call F_sectorOwnership == GRLIB_side_enemy);
-			private _near_sign = nearestObjects [_destpos, [FOB_sign], 10] select 0;
-			private _near_outpost = (_destpos in GRLIB_all_outposts);
-			if (!isNull _near_sign) then {
-				_destdir = (getDir _near_sign) + 180;
-			};
 			_destdist = 12;
-			if (_near_outpost) then { _destdist = 8 };
-			if (!_near_outpost && _attacked) then {
-				_destdir = random 360;
-				_destdist = 4;
-				_destpos = _destpos vectorAdd [0,0,0.6];
+			if (surfaceIsWater _destpos) then { _destpos = (ATLtoASL _destpos) vectorAdd [0, 0, 0.8] };
+			private _near_sign = nearestObjects [_destpos, [FOB_sign], 20] select 0;
+			if !(isNil "_near_sign") then {
+				_destpos = (getPosATL _near_sign) vectorAdd [0, 0, 0.2];
+				_destdir = getDir _near_sign;
+				_destdist = 8;
+				if (surfaceIsWater _destpos) then { _destdist = 5};
 			};
-			player setDir (getDir _near_sign);
 		};
-		player setPos ([_destpos, _destdist, _destdir] call BIS_fnc_relPos);
 
 		private _unit_list = units group player;
 		private _my_squad = player getVariable ["my_squad", nil];
 		if (!isNil "_my_squad") then {
 			{ _unit_list pushBack _x } forEach units _my_squad;
 		};
-		private _unit_list_redep = [_unit_list, { !(isPlayer _x) && (isNull objectParent _x) && (_x distance2D _player_pos) < 30 && lifestate _x != 'INCAPACITATED' }] call BIS_fnc_conditionalSelect;
-		[_unit_list_redep] spawn {
-			params ["_list"];
+		private _unit_list_redep = [_unit_list, { !(isPlayer _x) && (isNull objectParent _x) && (_x distance2D player < 30) && lifestate _x != 'INCAPACITATED' }] call BIS_fnc_conditionalSelect;
+		player setDir _destdir;
+		player setPosATL ([_destpos, _destdist, (_destdir-180)] call BIS_fnc_relPos);
+		[_unit_list_redep, _destpos, _destdist] spawn {
+			params ["_list", "_pos", "_dist"];
+			sleep 1;
 			{
-				sleep 1;
-				_x setpos ([position player, 10, random 360] call BIS_fnc_relPos);
-				_x doFollow leader player;
+				_x setPosATL ([_pos, _dist, random 360] call BIS_fnc_relPos);
+				sleep 0.5;
 			} forEach _list;
+			sleep 3;
+			player setVariable ["GRLIB_action_inuse", false, true];
 		};
 		GRLIB_player_spawned = ([] call F_getValid);
 		cinematic_camera_started = false;
 	};
-	player setVariable ["GRLIB_action_inuse", false, true];
 };
 
 respawn_camera cameraEffect ["Terminate","back"];
@@ -252,10 +241,8 @@ deleteVehicle respawn_object;
 camUseNVG false;
 "spawn_marker" setMarkerPosLocal markers_reset;
 
-if (dialog) then {
-	closeDialog 0;
-	(findDisplay 5201) displayRemoveEventHandler ["KeyDown", _noesckey];
-};
+closeDialog 0;
+(findDisplay 5201) displayRemoveEventHandler ["KeyDown", _noesckey];
 
 if (alive player && deploy == 1) then {
 	if (isNil "_spawn_str") then {_spawn_str = "Somewhere."};

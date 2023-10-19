@@ -1,18 +1,6 @@
 params ["_unit"];
-// Cleanup
-{_unit removeAllEventHandlers _x} count [
-	"GetInMan",
-	"GetOutMan",
-	"SeatSwitchedMan",
-	"InventoryOpened",
-	"InventoryClosed",
-	"FiredMan",
-	"WeaponAssembled",
-	"Take"
-];
 
 // For all
-
 // Cannot DisAssemble
 _unit enableWeaponDisassembly false;
 
@@ -40,8 +28,8 @@ _unit addEventHandler ["InventoryOpened", {
 	params ["_unit", "_container"];
 	_ret = false;
 	playsound "ZoomIn";
+	if (!alive _container) exitWith { _ret };
 	if (GRLIB_permission_vehicles) then {
-		if ((typeOf _container in support_box_noArsenal) || (!alive _container)) exitWith { _ret };
 		if (!([_unit, _container] call is_owner) || locked _container > 1) then {
 			closeDialog 106;
 			_ret = true;
@@ -66,7 +54,6 @@ _unit addEventHandler ["Take", {
 
 _unit addEventHandler ["FiredMan",	{
 	params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_vehicle"];
-	//diag_log format ["DBG: %1", _this];
 
 	// No mines in the base zone (Chimera + FOB)
 	if (([_unit, "LHD", GRLIB_fob_range] call F_check_near) && _weapon == "Put") then { deleteVehicle _projectile };
@@ -103,11 +90,13 @@ if (_unit == player) then {
 	};
 
 	// Unblock units
-	missionNamespace setVariable [
-	"BIS_fnc_addCommMenuItem_menu", [
+	private _actions = missionNamespace getVariable ["BIS_fnc_addCommMenuItem_menu", []];
+	private _id = (count _actions / 2) + 1;
+	_actions = _actions + [
 		["Do it !", true],
-		["Unblock unit.", [2], "", -5, [["expression", "[groupSelectedUnits player] spawn PAR_unblock_AI"]], "1", "1"]
-	]];
+		["Unblock unit.", [_id + 1], "", -5, [["expression", "[groupSelectedUnits player] spawn PAR_unblock_AI"]], str _id, str _id]
+	];
+	missionNamespace setVariable ["BIS_fnc_addCommMenuItem_menu", _actions];
 
 	// UI actions
 	inGameUISetEventHandler ["Action", "
@@ -120,7 +109,6 @@ if (_unit == player) then {
 	"];
 
 	// Get in Vehicle
-	_unit removeAllEventHandlers "GetInMan";
 	_unit addEventHandler ["GetInMan", {
 		params ["_unit", "_role", "_vehicle"];
 		1 fadeSound (round desired_vehvolume / 100.0);
@@ -133,6 +121,7 @@ if (_unit == player) then {
 			_vehicle disableTIEquipment false;
 		};
 		_this spawn vehicle_permissions;
+		if (_vehicle iskindof "Steerable_Parachute_F") exitWith {};
 		_fuel = round (fuel _vehicle * 100);
 		_ammo = round (([_vehicle] call F_getVehicleAmmoDef) * 100);
 		_damage = round (damage _vehicle * 100);
@@ -140,15 +129,15 @@ if (_unit == player) then {
 	}];
 
 	// Get out Vehicle
-	_unit removeAllEventHandlers "GetOutMan";
 	_unit addEventHandler ["GetOutMan", {
 		params ["_unit", "_role", "_vehicle"];
 		1 fadeSound 1;
 		3 fadeMusic 0;
 		NRE_EarplugsActive = 0;
 		if (!GRLIB_ACE_enabled) then {
-			if ( (getPos _unit) select 2 > 20 && !(_unit getVariable ["AR_Is_Rappelling",false]) ) then {
-				[_vehicle, _unit] spawn PAR_unit_eject;
+			if ( (getPos _unit) select 2 >= 50 && !(_unit getVariable ["AR_Is_Rappelling",false]) && (backpack _unit != "B_Parachute")) then {
+				private _para = createVehicle ["Steerable_Parachute_F",(getPos _unit),[],0,'none'];
+				_unit moveInDriver _para;
 			};
 		};
 		[_unit] spawn {
@@ -159,4 +148,38 @@ if (_unit == player) then {
 		};
 	}];
 
+	// Player killed EH
+	player addEventHandler ["Killed", { _this spawn PAR_fn_death }];
+
+	// Player respawn EH
+	player addEventHandler ["Respawn", { [] spawn PAR_Player_Init }];
+
+	// Player Handle Damage EH
+	if (GRLIB_revive != 0) then {
+		player addEventHandler ["HandleDamage", { _this call PAR_HandleDamage_EH }];
+		[] spawn PAR_AI_Manager;
+	};
+} else {
+	// AI killed EH
+	_unit addEventHandler ["Killed", { _this spawn PAR_fn_death }];	
+
+	// AI Handle Damage EH
+	_unit addEventHandler ["HandleDamage", { _this call damage_manager_friendly }];
+	if (GRLIB_revive != 0) then {
+		_unit addEventHandler ["HandleDamage", {
+			params ["_unit","","_dam"];
+			_veh = objectParent _unit;
+
+			private _isNotWounded = !(_unit getVariable ["PAR_wounded", false]);
+			if (_isNotWounded && _dam >= 0.86) then {
+				_unit setVariable ["PAR_wounded", true];
+				if (!isNull _veh) then {[_unit, _veh] spawn PAR_fn_eject};
+				_unit allowDamage false;
+				_unit setUnconscious true;
+				_unit setVariable ["PAR_BleedOutTimer", round(time + PAR_BleedOut), true];
+				[_unit] spawn PAR_fn_unconscious;
+			};
+			_dam min 0.86;
+		}];
+	};
 };

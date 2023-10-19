@@ -1,28 +1,13 @@
 //--- LRX Savegame
+params [["_force", false]];
 if (!isServer) exitWith {};
 if (!isNil "GRLIB_server_stopped") exitWith {};
-if (time < 600 && !hasInterface) exitWith {diag_log format ["--- LRX MP Warmup (no save done), %1sec remaining...", round (600 - time)];};
+
+private _save_warmup = 300;
+if (time < _save_warmup && !_force) exitWith {diag_log format ["--- LRX MP Warmup (no save done), %1sec remaining...", round (_save_warmup - time)];};
 diag_log format ["--- LRX Save start at %1", time];
 
-private _classnames_to_save = [];
-{
-	_classnames_to_save pushback (_x select 0);
-} foreach buildings;
-
-private _classnames_to_save_blu = [FOB_typename, FOB_outpost, FOB_sign, huron_typename];
-{
-	_classnames_to_save_blu pushback (_x select 0);
-} foreach (air_vehicles + heavy_vehicles + light_vehicles + support_vehicles + static_vehicles + ind_recyclable);
-_classnames_to_save_blu = _classnames_to_save_blu arrayIntersect _classnames_to_save_blu;
-
-_classnames_to_save append (_classnames_to_save_blu + all_hostile_classnames);
-_classnames_to_save = _classnames_to_save arrayIntersect _classnames_to_save;
-
-private _vehicles_light = GRLIB_vehicle_blacklist + list_static_weapons + uavs + [mobile_respawn];
-{ _vehicles_light pushback (_x select 0) } foreach support_vehicles;
-_vehicles_light = _vehicles_light arrayIntersect _vehicles_light;
-
-if ( GRLIB_endgame == 1 ) then {
+if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
     if (GRLIB_param_wipe_keepscore == 1) then {
         GRLIB_permissions = profileNamespace getVariable GRLIB_save_key select 12;
         GRLIB_player_scores = [];
@@ -46,18 +31,18 @@ if ( GRLIB_endgame == 1 ) then {
             [],
             GRLIB_mod_west,
             GRLIB_mod_east,
-            [],
+            [2,2,1,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [33, 33, 33],
+            [33,33,33],
             [],
             GRLIB_permissions,
             [],
             0,
             GRLIB_player_scores
         ];
-        profileNamespace setVariable [ GRLIB_save_key, _savegame ];
+        profileNamespace setVariable [GRLIB_save_key, _savegame];
     } else {
-        profileNamespace setVariable [ GRLIB_save_key, nil ];
+        profileNamespace setVariable [GRLIB_save_key, nil];
     };
     saveProfileNamespace;
 } else {
@@ -65,14 +50,13 @@ if ( GRLIB_endgame == 1 ) then {
     private _all_buildings = [];
     {
         _fobpos = _x;
-        _nextbuildings = [ _fobpos nearobjects (GRLIB_fob_range * 2), {
+        _nextbuildings = [ _fobpos nearObjects (GRLIB_fob_range * 2), {
             ( getObjectType _x >= 8 ) &&
             ( !isSimpleObject _x ) &&
-            ((typeof _x) in _classnames_to_save ) &&
+            ((typeof _x) in GRLIB_classnames_to_save ) &&
             ( alive _x) &&
             ( speed vehicle _x < 5 ) &&
             ( isNull attachedTo _x ) &&
-            (((getPosATL _x) select 2) < 10 ) &&
             (_x getVariable ["GRLIB_vehicle_owner", ""] != "server")
         }] call BIS_fnc_conditionalSelect;
         _all_buildings = _all_buildings + _nextbuildings;
@@ -97,15 +81,9 @@ if ( GRLIB_endgame == 1 ) then {
         private _nextdir = [vectorDir _x, vectorUp _x];
         private _hascrew = false;
         private _owner = "";
-        private _color = "";
-        private _color_name = "";
-        private _lst_a3 = [];
-        private	_lst_r3f = [];
-        private	_lst_grl = [];
-        private _compo = [];
 
-        if ( _nextclass in _classnames_to_save_blu + all_hostile_classnames ) then {
-            if (side _x != GRLIB_side_enemy) then {
+        if ( _nextclass in GRLIB_classnames_to_save_blu + all_hostile_classnames ) then {
+            if (side group _x != GRLIB_side_enemy) then {
                 _owner = _x getVariable ["GRLIB_vehicle_owner", ""];
                 _hascrew = _x getVariable ["GRLIB_vehicle_manned", false];
                 if (_owner == "") then {
@@ -116,17 +94,20 @@ if ( GRLIB_endgame == 1 ) then {
                 };
 
                 if (_owner in _keep_score_id) then {
-                    if (_nextclass in _vehicles_light) then {
+                    if (_nextclass in GRLIB_vehicles_light) then {
                         if ( _nextclass == playerbox_typename ) then {
                             buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner, [_x] call F_getCargo ];
                         } else {
                             buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner ];
                         };
                     } else {
-                        _color = _x getVariable ["GRLIB_vehicle_color", ""];
-                        _color_name = _x getVariable ["GRLIB_vehicle_color_name", ""];
-                        _compo = _x getVariable ["GRLIB_vehicle_composant", []];
-                        _lst_a3 = [_x] call F_getCargo;
+                        //_color = _x getVariable ["GRLIB_vehicle_color", ""];
+                        private _color = "";
+                        private _color_name = _x getVariable ["GRLIB_vehicle_color_name", ""];
+                        private _compo = _x getVariable ["GRLIB_vehicle_composant", []];
+                        private _lst_a3 = [_x] call F_getCargo;
+                        private	_lst_r3f = [];
+                        private	_lst_grl = [];
                         {_lst_r3f pushback (typeOf _x)} forEach (_x getVariable ["R3F_LOG_objets_charges", []]);
                         {_lst_grl pushback (typeOf _x)} forEach (_x getVariable ["GRLIB_ammo_truck_load", []]);
                         buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner, _color, _color_name, _lst_a3, _lst_r3f, _lst_grl, _compo];
@@ -150,8 +131,6 @@ if ( GRLIB_endgame == 1 ) then {
     private _buffer = [];
     {
         _uid = _x;
-        _unit = _uid call BIS_fnc_getUnitByUID;
-        [_unit, _uid] call save_context;
         _buffer = localNamespace getVariable [format ["player_context_%1", _uid], []];
         if (count _buffer > 0) then {
             _player_context pushBack _buffer;
@@ -195,6 +174,9 @@ if ( GRLIB_endgame == 1 ) then {
     _stats pushback stats_fobs_lost;
     _stats pushback stats_readiness_earned;
 
+    private _warehouse = [];
+    {_warehouse pushBack (_x select 1)} forEach GRLIB_warehouse;
+
     // Save Blob
     private _lrx_liberation_savegame = [
         blufor_sectors,
@@ -205,7 +187,7 @@ if ( GRLIB_endgame == 1 ) then {
         GRLIB_garage,
         GRLIB_mod_west,
         GRLIB_mod_east,
-        GRLIB_warehouse,
+        _warehouse,
         _stats,
         [ round infantry_weight max 33, round armor_weight max 33, round air_weight max 33 ],
         GRLIB_vehicle_to_military_base_links,
@@ -219,5 +201,3 @@ if ( GRLIB_endgame == 1 ) then {
     saveProfileNamespace;
     diag_log format [ "--- LRX Save %1 in Profile at %2", GRLIB_save_key, time ];
 };
-
-diag_log format [ "--- LRX Save finish at %1", time ];

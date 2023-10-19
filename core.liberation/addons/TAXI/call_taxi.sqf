@@ -4,7 +4,7 @@ if (!isNil "_taxi") exitWith {hintSilent localize "STR_TAXI_ONLY_ONE"};
 
 //check dest place
 buildtype = 9;
-build_unit = [taxi_helipad_type,[],1,[],[],[]];
+build_unit = [taxi_helipad_type,[],1,[],[],[],[]];
 dobuild = 1;
 
 waitUntil { sleep 0.5; dobuild == 0};
@@ -35,13 +35,9 @@ if (_nb_unit > 8) then {_taxi_type = selectRandom taxi_type_14};
 hintSilent format [localize "STR_TAXI_CALLED", getText(configFile >> "cfgVehicles" >> _taxi_type >> "DisplayName")];
 
 // Create Taxi
-private _air_spawnpos = [] call F_getNearestFob;
-if (isNil "GRLIB_all_fobs" || count GRLIB_all_fobs == 0) then {
-	_air_spawnpos = getPos lhd;
-};
-
-private _air_spawnpos = [(((_air_spawnpos select 0) + 125) - floor(random 250)),(((_air_spawnpos select 1) + 125) - floor(random 250)), 120];
-private _vehicle = createVehicle [_taxi_type, _air_spawnpos, [], 0, "FLY"];
+private _spawn_sector = ([sectors_airspawn, [_dest], {(markerpos _x) distance2D _input0}, "ASCEND"] call BIS_fnc_sortBy) select 0;
+private _spawn_pos = markerPos _spawn_sector;
+private _vehicle = createVehicle [_taxi_type, _spawn_pos, [], 0, "FLY"];
 if (isNil "_vehicle") exitWith { diag_log format ["--- LRX Error: Taxi %1 create failed!", _taxi_type]};
 if (_taxi_type isKindOf "Heli_Light_01_civil_base_F") then {
 	[_vehicle, false, ["AddDoors",1,"AddBackseats",1,"AddTread",1,"AddTread_Short",0]] call BIS_fnc_initVehicle;
@@ -64,16 +60,13 @@ private _idact_cancel = _vehicle addAction [format ["<t color='#FF0080'>%1</t>",
 private _idact_eject = _vehicle addAction [format ["<t color='#FF0080'>%1</t>", localize "STR_TAXI_ACTION3"], "addons\TAXI\taxi_eject.sqf","",997,false,true,"","vehicle _this == _target && (getPos _target select 2) > 50 && (getPosATL _target) distance2D GRLIB_taxi_helipad > 300"];
 player setVariable ["GRLIB_taxi_called", _vehicle, true];
 
-private _air_grp = createGroup [GRLIB_side_civilian, true];
-createVehicleCrew _vehicle;
-sleep 0.5;
+private _air_grp = GRLIB_side_civilian createVehicleCrew _vehicle;
+sleep 0.1;
 if (count (crew _vehicle) == 0) exitWith { diag_log format ["--- LRX Error: Taxi %1 create crew failed!", _taxi_type]};
 {
-	[_x] joinSilent _air_grp;	
-    [_x] orderGetIn true;
 	_x allowDamage false;
 	_x allowFleeing 0;
- } foreach (crew _vehicle);
+ } foreach (units _air_grp);
 _vehicle setVariable ["GRLIB_vehicle_group", _air_grp];
 
 _air_grp setBehaviour "CARELESS";
@@ -146,7 +139,7 @@ deleteMarkerLocal "taxi_dz";
 if (GRLIB_taxi_helipad_created) then { deleteVehicle GRLIB_taxi_helipad };
 GRLIB_taxi_eject = nil;
 GRLIB_taxi_helipad = nil;
-[_vehicle, _air_grp, zeropos, "STR_TAXI_RETURN"] call taxi_dest;
+[_vehicle, _air_grp, _spawn_pos, "STR_TAXI_RETURN"] call taxi_dest;
 
 // Cleanup
 hintSilent "";

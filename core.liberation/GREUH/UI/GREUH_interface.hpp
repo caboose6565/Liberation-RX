@@ -72,12 +72,24 @@
 #define SL_DIR            0x400
 #define SL_VERT           0
 #define SL_HORZ           0x400
-
 #define SL_TEXTURES       0x10
 
 // Listbox styles
 #define LB_TEXTURES       0x10
 #define LB_MULTI          0x20
+
+// progress bar
+#define ST_VERTICAL       0x01
+#define ST_HORIZONTAL     0
+
+// Tree styles
+#define TR_SHOWROOT       1
+#define TR_AUTOCOLLAPSE   2
+
+// MessageBox styles
+#define MB_BUTTON_OK      1
+#define MB_BUTTON_CANCEL  2
+#define MB_BUTTON_USER    4
 
 #define FONTM             "puristaMedium"
 
@@ -154,6 +166,9 @@
 #define COLOR_WHITE_TRANSP { 1, 1, 1, 0.5 }
 #define COLOR_BLACK { 0, 0, 0, 1 }
 #define COLOR_BLACK_ALPHA { 0, 0, 0, 0.85 }
+#define COLOR_GREEN_ALPHA { 0.2, 0.23, 0.18, 0.4 }
+#define COLOR_GREEN_NOALPHA { 0.2, 0.23, 0.18, 1 }
+#define COLOR_LIGHTGRAY_ALPHA { 0.6, 0.6, 0.6, 0.55 }
 #define COLOR_BLUFOR_NOALPHA { 0, 0, 1, 1 }
 #define COLOR_OPFOR_NOALPHA { 1, 0, 0, 1 }
 #define COLOR_RED_DISABLED { 1,0,0,0.4 }
@@ -161,8 +176,22 @@
 #define COLOR_BRIGHTGREEN { 0.2,1,0.2,1 }
 
 #define BORDERSIZE      0.01
-
 #define BASE_Y 			0.075
+
+class GREUH_Progress {
+	idc = -1;
+    type = CT_PROGRESS;
+    style = ST_BACKGROUND;
+	shadow = 2;
+	colorBar[] = {0.8,0,0,1};
+	colorExtBar[] = {1,1,1,1};
+	colorFrame[] = {1,1,1,1};	
+    texture = "#(argb,8,8,3)color(1,1,1,1)";
+	x = 0;
+	y = 0;
+    w = 0.4;
+    h = 0.05;
+};
 
 class RscListBox {
 	idc = -1;
@@ -248,10 +277,10 @@ class GREUH_Menu {
 	"GREUH_Slider","GREUH_SliderVD","GREUH_LabelMarkers","GREUH_TeammatesYes","GREUH_TeammatesNo","GREUH_LabelPlatoon",
 	"GREUH_PlatoonYes","GREUH_PlatoonNo","GREUH_LabelPlatoonActive","GREUH_LabelMarkersActive","GREUH_SquadList",
 	"GREUH_ButtonJoin","GREUH_ButtonNew","GREUH_ButtonRename","GREUH_PlatoonZone","GREUH_ViewZone","GREUH_WorldZone",
-	"GREUH_MarkersZone","GREUH_Squad_OuterBG","GREUH_Squad_InnerBG","GREUH_Squad_OuterBG_F","GREUH_Squad_InnerBG_F",
-	"GREUH_ButtonName_Rename","GREUH_ButtonName_Abort","GREUH_Squad_TextField","GREUH_LabelVD","GREUH_ButtonLeader",
-	"GREUH_SliderVeh","GREUH_LabelVDVeh","GREUH_SliderVDVeh","GREUH_SliderObj","GREUH_LabelVDObj","GREUH_SliderVDObj",
-	"GREUH_Leader_OuterBG", "GREUH_Leader_InnerBG", "GREUH_Leader_OuterBG_F", "GREUH_Leader_InnerBG_F",
+	"GREUH_MarkersZone","GREUH_LabelZone","GREUH_Squad_OuterBG","GREUH_Squad_InnerBG","GREUH_Squad_OuterBG_F",
+	"GREUH_Squad_InnerBG_F","GREUH_ButtonName_Rename","GREUH_ButtonName_Abort","GREUH_Squad_TextField","GREUH_LabelVD",
+	"GREUH_ButtonLeader","GREUH_SliderVeh","GREUH_LabelVDVeh","GREUH_SliderVDVeh","GREUH_SliderObj","GREUH_LabelVDObj",
+	"GREUH_SliderVDObj","GREUH_Leader_OuterBG", "GREUH_Leader_InnerBG", "GREUH_Leader_OuterBG_F", "GREUH_Leader_InnerBG_F",
 	"GREUH_ButtonLeader_Choose", "GREUH_ButtonLeader_Abort", "GREUH_Squad_Combo","GREUH_ButtonLock",
 	"GREUH_LabelNametags","GREUH_NametagsActive","GREUH_NametagsYes","GREUH_NametagsNo",
 	"GREUH_FPSLabel","GREUH_FPSEdit","GREUH_earplug","GREUH_Slider2","GREUH_SliderEP","GREUH_LabelEP"};
@@ -771,7 +800,7 @@ class GREUH_Menu {
 	};
 	class GREUH_MarkersZone : GREUH_DefaultZone {
 		idc = 901;
-		y = ((BASE_Y + 0.43) * safezoneH) + safezoneY;
+		y = ((BASE_Y + 0.39) * safezoneH) + safezoneY;
 		h = (0.04 * safezoneH) - (2 * BORDERSIZE);
 	};
 	class GREUH_LabelNametags : GREUH_RegularLabel {
@@ -804,6 +833,11 @@ class GREUH_Menu {
 		text = "No";
 		action = "show_nametags = false";
 	};
+	class GREUH_LabelZone : GREUH_DefaultZone {
+		idc = 910;
+		y = ((BASE_Y + 0.43) * safezoneH) + safezoneY;
+		h = (0.04 * safezoneH) - (2 * BORDERSIZE);
+	};	
 	class GREUH_LabelMarkers : GREUH_RegularLabel {
 		idc = 911;
 		y = ((BASE_Y + 0.43) * safezoneH) + safezoneY;
@@ -923,7 +957,6 @@ class GREUH_respawn {
 		action = "[player] spawn PAR_fn_death";
 		colorDisabled[] = { 1, 1, 1, 1 };
 	};
-
 	class GREUH_RecallMedic : GreuhButton {
 		idc = 679;
 		x = 0.45 * safezoneW + safezoneX;
@@ -934,7 +967,6 @@ class GREUH_respawn {
 		action = "[] spawn PAR_fn_medicRecall";
 		colorDisabled[] = { 1, 1, 1, 1 };
 	};
-
 	class GREUH_RscStructuredText{
 		type = 13;
 		idc = -1;

@@ -5,6 +5,7 @@ titleText ["Loading...","BLACK FADED", 100];
 R3F_LOG_joueur_deplace_objet = objNull;
 GRLIB_player_spawned = false;
 GRLIB_player_is_menuok = false;
+GRLIB_vehicle_lock = true;
 
 waitUntil {!isNil "abort_loading" };
 if (abort_loading) exitWith {
@@ -49,8 +50,16 @@ if (toLower _name in GRLIB_blacklisted_names || (_name == str parseNumber _name)
 	endMission "LOSER";
 };
 
+if (GRLIB_kick_idle > 0) then {
+	[] execVM "scripts\client\misc\kick_idle.sqf";
+};
+
+add_player_actions = compile preprocessFile "scripts\client\actions\add_player_actions.sqf";
+dog_bark = compileFinal preprocessFileLineNumbers "scripts\client\actions\dog_bark.sqf";
+do_onboard = compileFinal preprocessFileLineNumbers "scripts\client\actions\do_onboard.sqf";
 respawn_lhd = compileFinal preprocessFileLineNumbers "scripts\client\spawn\respawn_lhd.sqf";
 spawn_camera = compileFinal preprocessFileLineNumbers "scripts\client\spawn\spawn_camera.sqf";
+paraDrop = compileFinal preprocessFileLineNumbers "scripts\client\spawn\paraDrop.sqf";
 cinematic_camera = compileFinal preprocessFileLineNumbers "scripts\client\ui\cinematic_camera.sqf";
 write_credit_line = compileFinal preprocessFileLineNumbers "scripts\client\ui\write_credit_line.sqf";
 set_rank = compileFinal preprocessFileLineNumbers "scripts\client\misc\set_rank.sqf";
@@ -59,13 +68,12 @@ vehicle_permissions = compileFinal preprocessFileLineNumbers "scripts\client\mis
 vehicle_fuel = compileFinal preprocessFileLineNumbers "scripts\client\misc\vehicle_fuel.sqf";
 vehicle_defense = compileFinal preprocessFileLineNumbers "scripts\client\misc\vehicle_defense.sqf";
 fetch_permission = compileFinal preprocessFileLineNumbers "scripts\client\misc\fetch_permission.sqf";
-fob_init = compileFinal preprocessFileLineNumbers "scripts\client\misc\fob_init.sqf";
 is_menuok = compileFinal preprocessFileLineNumbers "scripts\client\misc\is_menuok.sqf";
 is_menuok_veh = compileFinal preprocessFileLineNumbers "scripts\client\misc\is_menuok_veh.sqf";
 is_neartransport = compileFinal preprocessFileLineNumbers "scripts\client\misc\is_neartransport.sqf";
 is_allowed_item = compileFinal preprocessFileLineNumbers "scripts\client\misc\is_allowed_item.sqf";
-paraDrop = compileFinal preprocessFileLineNumbers "scripts\client\spawn\paraDrop.sqf";
 get_player_name = compileFinal preprocessFileLineNumbers "scripts\client\misc\get_player_name.sqf";
+save_loadout_cargo = compileFinal preprocessFileLineNumbers "scripts\client\misc\save_loadout_cargo.sqf";
 
 private _grp = createGroup [GRLIB_side_friendly, true];
 waitUntil {
@@ -103,12 +111,18 @@ if ( typeOf player == "VirtualSpectator_F" ) exitWith {
 [] execVM "scripts\client\misc\permissions_warning.sqf";
 [] execVM "scripts\client\misc\secondary_jip.sqf";
 [] execVM "scripts\client\misc\stop_renegade.sqf";
-[] execVM "scripts\client\misc\manage_weather.sqf";
 [] execVM "scripts\client\misc\manage_wildlife.sqf";
 [] execVM "scripts\client\misc\manage_manpower.sqf";
+[] execVM "scripts\client\misc\manage_static.sqf";
 [] execVM "scripts\client\misc\no_thermic.sqf";
 [] execVM "scripts\client\misc\init_markers.sqf";
 //[] execVM "scripts\client\misc\logs_markers.sqf";
+
+GRLIB_ActionDist_3 = 3;
+GRLIB_ActionDist_5 = 5;
+GRLIB_ActionDist_10 = 10;
+GRLIB_ActionDist_15 = 15;
+
 [] execVM "scripts\client\actions\action_manager.sqf";
 [] execVM "scripts\client\actions\action_manager_veh.sqf";
 [] execVM "scripts\client\actions\recycle_manager.sqf";
@@ -135,6 +149,7 @@ if (!GRLIB_ACE_enabled) then {
 [] execVM "addons\TAXI\taxi_init.sqf";
 [] execVM "addons\JKB\JKB_init.sqf";
 [] execVM "addons\WHS\warehouse_init.sqf";
+[] execVM "addons\FOB\officer_init.sqf";
 
 // Init Tips Tables from XML
 GREUH_TipsText = [];
@@ -198,7 +213,9 @@ chimera_sign addAction ["<t color='#FFFFFF'>" + localize "STR_TIPS" + "</t> <img
 if (isServer && hasInterface) then {
 	(findDisplay 46) displayAddEventHandler ["Unload",{
 		diag_log "--- LRX Local MP support";
-		[] call save_game_mp;
+		[player, PAR_Grp_ID, true] call save_context;
+		[player, PAR_Grp_ID] call cleanup_player;
+		[true] call save_game_mp;
 	 }];
 };
 
@@ -212,6 +229,6 @@ onPlayerDisconnected {
 
 initAmbientLife;
 enableEnvironment [true, true];
-setTerrainGrid 25;  //High = 12.5, Very High = 6.25, Ultra = 3.125
+setTerrainGrid 12.5;  //Normal = 25, High = 12.5, Very High = 6.25, Ultra = 3.125
 
 diag_log "--- Client Init stop ---";

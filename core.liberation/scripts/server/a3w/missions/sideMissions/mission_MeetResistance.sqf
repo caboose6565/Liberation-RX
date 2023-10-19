@@ -16,7 +16,7 @@ private [
 
 _setupVars =
 {
-	_missionType = localize "STR_RESISTANCE";
+	_missionType = "STR_RESISTANCE";
 	_nbUnits = 10;
 
 	// settings for this mission
@@ -46,7 +46,7 @@ _setupObjects =
 	_chair1 setDir random 90;
 	_chair2 = createVehicle ["Land_CampingChair_V2_F", _missionPos, [], 2, "None"];
 	_chair2 setDir random 180;
-	_fire1	= createVehicle ["Campfire_burning_F", _missionPos, [], 2, "None"];
+	_fire1 = createVehicle ["Campfire_burning_F", _missionPos, [], 2, "None"];
 
 	// R3F disable
 	{ _x setVariable ["R3F_LOG_disabled", true, true] } forEach [_tent1, _chair1, _chair2, _fire1];
@@ -60,12 +60,9 @@ _setupObjects =
 
 	// spawn some resistance
 	_managed_units = (["resistance", 4, _buildingpositions, _missionPos] call F_spawnBuildingSquad);
-	if (count _managed_units > 0) then {
-		_aiGroupRes = group leader (_managed_units select 0);
-	} else {
-		_aiGroupRes = createGroup [GRLIB_side_resistance, true];
-	};
-	[_aiGroupRes, _missionPos, (_nbUnits - (count _managed_units)), "resistance"] call createCustomGroup;
+	_aiGroupRes = [_missionPos, (_nbUnits - (count _managed_units)), "resistance"] call createCustomGroup;
+	_managed_units joinSilent _aiGroupRes;
+	{_x setVariable ["GRLIB_can_speak", true, true]} foreach (units _aiGroupRes);
 
 	// create static weapons + crew
 	_veh1 = createVehicle [resistance_squad_static, _missionPos, [], 100, "None"];
@@ -73,8 +70,8 @@ _setupObjects =
 	_gunner = (units _aiGroupRes) select ((count (units _aiGroupRes)) -1);
 	_gunner assignAsGunner _veh1;
 	_gunner moveInGunner _veh1;
-	[_gunner] orderGetIn true;
 	_veh1 setVariable ["GRLIB_vehicle_gunner", [_gunner]];
+	_veh1 setVariable ["GRLIB_vehicle_owner", "server", true];
 	sleep 1;
 
 	_veh2 = createVehicle [resistance_squad_static, _missionPos, [], 100, "None"];
@@ -82,16 +79,15 @@ _setupObjects =
 	_gunner = (units _aiGroupRes) select ((count (units _aiGroupRes)) -2);
 	_gunner assignAsGunner _veh2;
 	_gunner moveInGunner _veh2;
-	[_gunner] orderGetIn true;
 	_veh2 setVariable ["GRLIB_vehicle_gunner", [_gunner]];
+	_veh2 setVariable ["GRLIB_vehicle_owner", "server", true];
 
 	// remove dead body to let the leader change
 	//{_x addEventHandler ["Killed", {_this spawn {sleep 20;hidebody (_this select 0);sleep 5;deleteVehicle (_this select 0)}}]} forEach units _aiGroupRes;
-	{_x setVariable ['GRLIB_can_speak', true, true]} foreach units _aiGroupRes;
 
 	GRLIB_A3W_Mission_MRR = _aiGroupRes;
 	publicVariable "GRLIB_A3W_Mission_MRR";
-	_missionHintText = format [localize "STR_RESISTANCE_MESSAGE1", sideMissionColor, _townName];
+	_missionHintText = ["STR_RESISTANCE_MESSAGE1", sideMissionColor, _townName];
 	A3W_sectors_in_use = A3W_sectors_in_use + [_missionLocation];
 	true;
 };
@@ -119,18 +115,16 @@ _failedExec = {
 	publicVariable "GRLIB_A3W_Mission_MR";
 	GRLIB_A3W_Mission_MRR = nil;
 	publicVariable "GRLIB_A3W_Mission_MRR";
-	_failedHintMessage = format [localize "STR_RESISTANCE_MESSAGE2", sideMissionColor, _townName];
+	_failedHintMessage = ["STR_RESISTANCE_MESSAGE2", sideMissionColor, _townName];
 	A3W_sectors_in_use = A3W_sectors_in_use - [_missionLocation];
 };
 
 _successExec = {
 	// Mission completed
-	{ 	_x setVariable ["R3F_LOG_disabled", false, true];
-		_x setVariable ["GRLIB_vehicle_owner", nil, true];
-	} forEach [_box1, _box2];
-	_successHintMessage = format [localize "STR_RESISTANCE_MESSAGE3", sideMissionColor, _townName];
+	{ [_x, "abandon"] call F_vehicleLock } forEach [_box1, _box2];
+	_successHintMessage = ["STR_RESISTANCE_MESSAGE3", sideMissionColor, _townName];
 	{ deleteVehicle _x } forEach [_tent1, _chair1, _chair2, _fire1, _veh1, _veh2];
-	{ deleteVehicle _x } forEach units _aiGroupRes;
+	{ deleteVehicle _x } forEach (units _aiGroupRes);
 	GRLIB_A3W_Mission_MR = nil;
 	publicVariable "GRLIB_A3W_Mission_MR";
 	GRLIB_A3W_Mission_MRR = nil;

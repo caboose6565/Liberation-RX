@@ -38,7 +38,7 @@ PAR_unblock_AI = {
 				_unit setPosATL (getPosATL player vectorAdd [([] call F_getRND), ([] call F_getRND), 0.5]);
 				[_unit] joinSilent (group player);
 				_unit enableAI "ALL";
-				_unit doFollow leader player;
+				_unit doFollow player;
 				_unit switchMove "AmovPercMwlkSrasWrflDf";
 				_unit playMoveNow "AmovPercMwlkSrasWrflDf";
 			} else {
@@ -54,6 +54,22 @@ PAR_fn_globalchat = {
   if ((_speaker getVariable ["PAR_Grp_ID","0"]) == format["Bros_%1",PAR_Grp_ID] || isPlayer _speaker) then {
     gamelogic globalChat _msg;
   };
+};
+PAR_fn_fixPos = {
+	params ["_medic", "_wnded"];
+	{ 
+		private _pos = getPosATL _x; 
+		if (surfaceIsWater _pos) then { 
+			_pos = getPosASL _x; 
+			_zpos = _pos select 2; 
+			if (_zpos < -3) then { 
+				_pos set [2, -1 max _zpos];
+				_x setPosASL _pos;
+				_x switchMove ""; 
+				_x playMoveNow "";
+			}; 
+		}; 
+	} forEach [_medic, _wnded];
 };
 PAR_is_medic = {
 	params ["_unit"];
@@ -96,24 +112,6 @@ PAR_public_EH = {
 		};
 	};
 };
-PAR_unit_eject = {
-	params ["_veh", "_unit"];
-	if (isNull _unit) exitWith {};
-	_unit allowDamage false;
-	unAssignVehicle _unit;
-	moveOut _unit;
-	_unit setPos (getPosATL _veh vectorAdd [([[-15,0,15], 2] call F_getRND), ([[-15,0,15], 2] call F_getRND), 0]);
-	if (alive _unit) then {
-		if (getPos _unit select 2 > 20) then {
-			_para = createVehicle ['Steerable_Parachute_F', (getPosATL _unit),[],0,'none'];
-			_unit moveInDriver _para;
-			sleep 1;
-			if (isnull driver (_para)) then {deleteVehicle _para};
-		};
-		sleep 3;
-	};
-	_unit allowDamage true;
-};
 PAR_show_marker = {
 	_mk1 = createMarker [format ["PAR_marker_%1", name player], position player];
 	_mk1 setMarkerType "loc_Hospital";
@@ -127,50 +125,21 @@ PAR_del_marker = {
 // AI Section
 PAR_fn_AI_Damage_EH = {
 	params ["_unit"];
-
-	if ( _unit getVariable ["PAR_EH_Installed", false] ) exitWith {};
+	if (_unit getVariable ["PAR_EH_Installed", false]) exitWith {};
 	_unit setVariable ["PAR_EH_Installed", true];
-	_unit removeAllEventHandlers "HandleDamage";
-	_unit addEventHandler ["HandleDamage", { _this call damage_manager_friendly }];
-
-	if (GRLIB_revive != 0) then {
-		_unit addEventHandler ["HandleDamage", {
-			params ["_unit","","_dam"];
-			_veh = objectParent _unit;
-			if (!(isNull _veh) && !(player in (crew _veh)) && damage _veh > 0.8) then {[_veh, _unit, true] spawn PAR_fn_eject};
-
-			private _isNotWounded = !(_unit getVariable ["PAR_wounded", false]);
-			if (_isNotWounded && _dam >= 0.86) then {
-				if (!isNull _veh) then {[_veh, _unit] spawn PAR_fn_eject};
-				_unit allowDamage false;
-				_unit setVariable ["PAR_wounded", true];
-				_unit setUnconscious true;
-				_unit setVariable ["PAR_BleedOutTimer", round(time + PAR_BleedOut), true];
-				[_unit] spawn PAR_fn_unconscious;
-			};
-			_dam min 0.86;
-		}];
-	};
-	if (GRLIB_ACE_enabled) then {
-		_unit addMPEventHandler ["MPKilled", { _this spawn kill_manager }];
-	} else {
-		_unit removeAllMPEventHandlers "MPKilled";
-		_unit addMPEventHandler ["MPKilled", { _this spawn PAR_fn_death }];
-	};
+	[_unit] call PAR_EventHandler;
+	_unit addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
 	_unit setVariable ["PAR_wounded", false];
 	_unit setVariable ["PAR_myMedic", nil];
 	_unit setVariable ["PAR_busy", nil];
 	_unit setVariable ["PAR_heal", nil];
 	_unit setVariable ["PAR_healed", nil];
-	_unit setVariable ["PAR_AI_score", 5, true];
-	[_unit] call PAR_EventHandler;
+	_unit setVariable ["PAR_AI_score", ((GRLIB_rank_level find (rank _unit)) + 1) * 5, true];
 };
 
 // Player Section
 PAR_Player_Init = {
-	player removeAllMPEventHandlers "MPKilled";
 	player addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
-	player setVariable ["GREUH_isUnconscious", 0, true];
 	player setVariable ["PAR_isUnconscious", 0, true];
 	player setVariable ["PAR_wounded", false];
 	player setVariable ["PAR_isDragged", 0, true];
@@ -188,8 +157,7 @@ PAR_Player_Init = {
 
 	PAR_isDragging = false;
 	[player] call AR_Add_Player_Actions;
-	player addAction ["<t color='#FF8000'>" + localize "STR_EXTENDED_OPTIONS" + "</t>","GREUH\scripts\GREUH_dialog.sqf","",-997,false,true];
-	player addAction ["<t color='#ffffff'>" + localize "STR_JKB_ACTION" + "</t>","addons\JKB\fn_openJukeBox.sqf","",0,false,true,"","!(isNull objectParent player)"];
+	[player] call add_player_actions;
 	1 fadeSound 1;
 	1 fadeRadio 1;
 	NRE_EarplugsActive = 0;
@@ -226,17 +194,14 @@ PAR_HandleDamage_EH = {
 		};
 	};
 
-	if (!(isNull _veh_unit) && damage _veh_unit > 0.8) then {[_veh_unit, _unit, true] spawn PAR_fn_eject};
-
 	if ( _isNotWounded && _amountOfDamage >= 0.86) then {
-		if (!(isNull _veh_unit)) then {[_veh_unit, _unit] spawn PAR_fn_eject};		
+		if (!(isNull _veh_unit)) then {[_unit, _veh_unit] spawn PAR_fn_eject};		
 		_unit setVariable ["PAR_wounded", true];
 		_unit setVariable ["PAR_isUnconscious", 1, true];
 		_unit setCaptive true;
 		_unit allowDamage false;
 		_unit setVariable ["PAR_BleedOutTimer", round(time + PAR_BleedOut), true];
 		[_unit, _killer] spawn PAR_Player_Unconscious;
-		closedialog 0;
 	};
 
 	_amountOfDamage min 0.86;
@@ -266,7 +231,7 @@ PAR_Player_Unconscious = {
 	disableUserInput false;
 
 	// PAR AI Revive Call
-	_unit setVariable ["GREUH_isUnconscious", 1, true];
+	_unit setVariable ["GREUH_isUnconscious", 1];
 	_unit setUnconscious true;
 
 	// Mute Radio
@@ -281,7 +246,6 @@ PAR_Player_Unconscious = {
 
 	while { !isNull _unit && alive _unit && _unit getVariable ["PAR_isUnconscious", 0] == 1 } do {
 		_bleedOut = player getVariable ["PAR_BleedOutTimer", 0];
-		hintSilent format [localize "STR_BLEEDOUT_MESSAGE" + "\n", round (_bleedOut - time)];
 		public_bleedout_message = format [localize "STR_BLEEDOUT_MESSAGE", round (_bleedOut - time)];
 		public_bleedout_timer = round (_bleedOut - time);
 		sleep 0.5;
@@ -291,9 +255,6 @@ PAR_Player_Unconscious = {
 		// Player got revived
 		_unit switchMove "amovppnemstpsraswrfldnon";
 		_unit playMoveNow "amovppnemstpsraswrfldnon";
-
-		// Clear the "medic nearby" hint
-		hintSilent "";
 
 		// Unmute Radio
 		5 fadeRadio 1;
