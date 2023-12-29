@@ -28,7 +28,7 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
             [],
             time_of_day,
             0,
-            [],
+            GRLIB_game_ID,
             GRLIB_mod_west,
             GRLIB_mod_east,
             [2,2,1,0],
@@ -43,6 +43,7 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
         profileNamespace setVariable [GRLIB_save_key, _savegame];
     } else {
         profileNamespace setVariable [GRLIB_save_key, nil];
+        GRLIB_game_ID = round floor random 65535;
     };
     saveProfileNamespace;
 } else {
@@ -53,8 +54,8 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
         _nextbuildings = [ _fobpos nearObjects (GRLIB_fob_range * 2), {
             ( getObjectType _x >= 8 ) &&
             ( !isSimpleObject _x ) &&
+            ( alive _x) && !(isObjectHidden _x) &&
             ((typeof _x) in GRLIB_classnames_to_save ) &&
-            ( alive _x) &&
             ( speed vehicle _x < 5 ) &&
             ( isNull attachedTo _x ) &&
             (_x getVariable ["GRLIB_vehicle_owner", ""] != "server")
@@ -96,7 +97,7 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
                 if (_owner in _keep_score_id) then {
                     if (_nextclass in GRLIB_vehicles_light) then {
                         if ( _nextclass == playerbox_typename ) then {
-                            buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner, [_x] call F_getCargo ];
+                            buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner, [_x, true] call F_getCargo ];
                         } else {
                             buildings_to_save pushback [ _nextclass, _savedpos, _nextdir, _hascrew, _owner ];
                         };
@@ -105,7 +106,7 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
                         private _color = "";
                         private _color_name = _x getVariable ["GRLIB_vehicle_color_name", ""];
                         private _compo = _x getVariable ["GRLIB_vehicle_composant", []];
-                        private _lst_a3 = [_x] call F_getCargo;
+                        private _lst_a3 = [];
                         private	_lst_r3f = [];
                         private	_lst_grl = [];
                         {_lst_r3f pushback (typeOf _x)} forEach (_x getVariable ["R3F_LOG_objets_charges", []]);
@@ -184,7 +185,7 @@ if ( GRLIB_endgame >= 1 || GRLIB_global_stop == 1 ) then {
         buildings_to_save,
         time_of_day,
         round combat_readiness,
-        GRLIB_garage,
+        GRLIB_game_ID,
         GRLIB_mod_west,
         GRLIB_mod_east,
         _warehouse,

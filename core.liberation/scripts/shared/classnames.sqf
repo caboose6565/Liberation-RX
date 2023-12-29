@@ -169,6 +169,7 @@ support_vehicles = support_vehicles + [
 	["Land_RepairDepot_01_civ_F",10,300,0,GRLIB_perm_log],
 	["Land_MedicalTent_01_MTP_closed_F",5,100,0,GRLIB_perm_log],
 	[helipad_typename,0,0,0,GRLIB_perm_inf],
+	["Land_fs_feed_F",0,200,50,GRLIB_perm_tank],
 	[repair_sling_typename,0,200,0,GRLIB_perm_log],
 	[fuel_sling_typename,0,150,60,GRLIB_perm_log],
 	[ammo_sling_typename,0,400,0,GRLIB_perm_log],
@@ -189,8 +190,18 @@ support_vehicles = support_vehicles + [
 	[foodbarrel_typename,0,130,0,GRLIB_perm_hidden]
 ] + support_vehicles_west;
 
+// RESPAWN VEHICLES
+if (isNil "respawn_vehicles_west") then { respawn_vehicles_west = [] };
+respawn_vehicles = [
+	Respawn_truck_typename,
+	huron_typename
+] + respawn_vehicles_west;
+
 // *** BUILDINGS ***
-buildings = [[FOB_sign,0,0,0,GRLIB_perm_hidden]];
+buildings = [
+	[FOB_sign,0,0,0,GRLIB_perm_hidden],
+	[Warehouse_typename,0,0,0,GRLIB_perm_inf]	
+];
 if (isNil "buildings_west_overide") then {
 	buildings append buildings_default + buildings_west;
 } else {
@@ -198,7 +209,6 @@ if (isNil "buildings_west_overide") then {
 };
 
 buildings append [
-	[Warehouse_typename,0,0,0,GRLIB_perm_inf],
 	[land_cutter_typename,0,0,0,GRLIB_perm_inf]
 ];
 
@@ -293,11 +303,13 @@ if ( isNil "vip_vehicle" ) then {
 // *** SOURCES ***
 
 // Static Weapons
-list_static_weapons = [resistance_squad_static] + opfor_statics;
+blufor_statics = [];
 {
 	private _veh = _x select 0;
-	if (!(_veh in uavs)) then { list_static_weapons pushback _veh };
+	if (!(_veh in uavs)) then { blufor_statics pushback _veh };
 } foreach static_vehicles;
+
+list_static_weapons = [resistance_squad_static] + blufor_statics + opfor_statics;
 
 // Everything the AI troups should be able to resupply from
 ai_resupply_sources = [
@@ -311,7 +323,7 @@ ai_resupply_sources = [
 
 // Everything the AI troups should be able to healing from
 ai_healing_sources = [
-	Respawn_truck_typename,
+	medic_truck_typename,
 	medicalbox_typename,
 	medic_sling_typename,
 	"Land_MedicalTent_01_MTP_closed_F"
@@ -439,6 +451,25 @@ GRLIB_recycleable_blacklist = [
 	basic_weapon_typename
 ];
 
+// FORCE DELETE (used by GC)
+GRLIB_force_cleanup_classnames = [
+	"Plane_Canopy_Base_F",
+	"Ejection_Seat_Base_F",
+	"CUP_A10_Ejection_Seat",
+	"CUP_A10_Canopy",
+	"rhs_a10_canopy",
+	"rhs_f22_canopy",
+	"rhs_su25_canopy",
+	"rhs_t50_canopy",
+	"rhs_k36d5_seat",
+	"rhs_ka52_blade",
+	"rhs_ka52_ejection_vest",
+	"rhs_mi28_wing_right",
+	"rhs_mi28_wing_left",
+	"rhs_mi28_door_gunner",
+	"rhs_mi28_door_pilot"
+];
+
 GRLIB_recycleable_classnames = ["LandVehicle","Air","Ship","StaticWeapon","Slingload_01_Base_F","Pod_Heli_Transport_04_base_F"];
 {
 	GRLIB_recycleable_classnames pushBackUnique (_x select 0);
@@ -562,9 +593,9 @@ GRLIB_ide_traps = [
 	"Land_GarbageWashingMachine_F",
 	"Land_GarbageBarrel_01_F",
 	"Land_Sacks_heap_F",
-	"Land_CanisterFuel_White_F",
 	"Land_CanisterFuel_Blue_F",
-	"Land_CanisterFuel_Red_F",
+    "Land_CanisterFuel_White_F",
+	"Land_BarrelTrash_F",
 	"Land_GasTank_01_khaki_F",
 	"Land_FirstAidKit_01_closed_F",
 	"Box_C_UAV_06_Swifd_F",
@@ -632,13 +663,6 @@ GRLIB_disabled_arsenal = [
 	Box_Launcher_typename,
 	basic_weapon_typename
 ];
-
-GRLIB_player_grave = [
-	"Land_Grave_rocks_F",
-	"Land_Grave_forest_F",
-	"Land_Grave_dirt_F"
-];
-GRLIB_player_gravebox = "Land_PlasticCase_01_small_black_F";
 
 // Air Drop Support
 if ( isNil "GRLIB_AirDrop_Taxi_cost" ) then {

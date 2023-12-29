@@ -9,7 +9,9 @@ if ( !( _sector in GRLIB_military_sectors_already_activated )) then {
 
 	if ( !GRLIB_passive_income ) then {
 		_crates_amount = round ((1 + floor random 4) * GRLIB_resources_multiplier) min 6;
-
+		if (GRLIB_difficulty_modifier > 1.5) then {
+			_crates_amount = round (floor random 3);
+		};
 		_spawnpos = [4, (markerpos _sector), 100, 30, false] call R3F_LOG_FNCT_3D_tirer_position_degagee_sol;
 		if (count _spawnpos > 0) then {
 			_vehicle = opfor_transport_truck createVehicle _spawnpos;
@@ -19,10 +21,7 @@ if ( !( _sector in GRLIB_military_sectors_already_activated )) then {
 
 		for "_i" from 1 to _crates_amount do {
 			_newbox = [ammobox_o_typename, markerpos _sector, true] call boxSetup;
-			clearWeaponCargoGlobal _newbox;
-			clearMagazineCargoGlobal _newbox;
-			clearItemCargoGlobal _newbox;
-			clearBackpackCargoGlobal _newbox;
+			[_newbox] call F_clearCargo;
 		};
 	};
 	[markerPos _sector] spawn manage_intels;

@@ -40,7 +40,8 @@ if (count _context >= 1) then {
                                 if (surfaceIsWater _pos) then { _pos = getPosASL player };
                                 private _unit = (group player) createUnit [_class, _pos, [], 10, "NONE"];
                                 [_unit] joinSilent (group player);
-                                _unit setVariable ["PAR_Grp_ID", format["Bros_%1", (getPlayerUID player)], true];
+                                _unit setVariable ["PAR_Grp_ID", format["Bros_%1", PAR_Grp_ID], true];
+	                            clearAllItemsFromBackpack _unit;
                                 _unit setUnitLoadout _loadout;
                                 _unit setUnitRank _rank;
                                 _unit setSkill (0.6 + (GRLIB_rank_level find _rank) * 0.05);
@@ -49,6 +50,7 @@ if (count _context >= 1) then {
                                 //_unit setpos (getpos _unit);
                                 _unit switchMove "AmovPercMwlkSrasWrflDf";
 				                _unit playMoveNow "AmovPercMwlkSrasWrflDf";
+                                [_unit] spawn F_fixModUnit;
                                 [_unit] spawn PAR_fn_AI_Damage_EH;
                                 gamelogic globalChat format ["Adds %1 (%2) to your squad.", name _unit, rank _unit];
                             }
@@ -59,7 +61,7 @@ if (count _context >= 1) then {
                     _wait = false;
                     //diag_log format ["--- LRX Loading %1 unit(s) for %2 Squad.", count (_context select 2), name _player];
                 } else {
-                    if (_player distance2D (markerPos "respawn_west") > 100) then {
+                    if (_player distance2D (markerPos GRLIB_respawn_marker) > 100) then {
                         [localize "$STR_SQUAD_WAIT"] remoteExec ["hintSilent", owner _player];
                     };
                 };

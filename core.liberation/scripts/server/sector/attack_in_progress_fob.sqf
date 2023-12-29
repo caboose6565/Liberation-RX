@@ -3,6 +3,7 @@ params [ "_fobpos" ];
 sleep 30;
 private _ownership = [ _fobpos ] call F_sectorOwnership;
 if ( _ownership != GRLIB_side_enemy ) exitWith {};
+if ( GRLIB_endgame == 1 || GRLIB_global_stop == 1 ) exitWith {};
 
 diag_log format ["Spawn Attack FOB %1 at %2", _fobpos, time];
 private _max_prisonners = 4;
@@ -69,7 +70,7 @@ if ( _ownership == GRLIB_side_enemy ) then {
 			_enemy_left = [(units GRLIB_side_enemy), {(alive _x) && (vehicle _x == _x) && ((_fobpos distance2D _x) < GRLIB_capture_size * 0.8)}] call BIS_fnc_conditionalSelect;
 			{
 				if ( _max_prisonners > 0 && ((random 100) < GRLIB_surrender_chance) ) then {
-					[_x] spawn prisonner_ai;
+					[_x] spawn prisoner_ai;
 					_max_prisonners = _max_prisonners - 1;
 				};
 			} foreach _enemy_left;

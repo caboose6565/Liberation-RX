@@ -2802,15 +2802,6 @@
 			<Portuguese>Sua pontuação é muito BAIXA para usar veículos aéreos.</Portuguese>
 			<Czech>Vaše skóre je příliš NÍZKÉ na to, abyste mohli používat Letectvo.</Czech>
 		</Key>
-		<Key ID="STR_PERMISSION_WARNING">
-			<Original>Automatic creation of default permissions.</Original>
-			<Russian>Автоматическое создание разрешений по умолчанию.</Russian>
-			<French>Création automatique des permissions par defaut.</French>
-			<Chinesesimp>自动创建默认权限。</Chinesesimp>
-			<Chinese>自动创建默认权限。</Chinese>
-			<Portuguese>Criação automática de permissões padrão.</Portuguese>
-			<Czech>Automatické vytváření výchozích oprávnění.</Czech>
-		</Key>
 		<Key ID="STR_ARSENAL_TITLE">
 			<Original>ARSENAL</Original>
 			<French>ARSENAL</French>
@@ -3076,16 +3067,7 @@
 			<Czech>Nelze stavět: nepřátelské síly poblíž.</Czech>
 		</Key>
 		<Key ID="STR_CLEANUP_PARAM">
-			<Original>Cleanup abandonned vehicles outside FOBs</Original>
-			<French>Nettoyer les véhicules abandonnés loin des FOB</French>
-			<German>Räumt verlassene Fahrzeuge auserhalb von FOBs weg</German>
-			<Spanish>Limpieza de vehículos abandonados fuera de FOBs</Spanish>
-			<Russian>Удаление брошенной техники вне FOB.</Russian>
-			<Chinesesimp>清理FOB以外的被遗弃车辆</Chinesesimp>
-			<Chinese>清理FOB以外的被遺棄車輛</Chinese>
-			<Japanese>FOB外に放棄された車両を削除</Japanese>
-			<Portuguese>Limpeza de veículos abandonados fora dos FOBs</Portuguese>
-			<Czech>Čištění opuštěných vozidel mimo FOB</Czech>
+			<Original>Garbage Collector Timer</Original>
 		</Key>
 		<Key ID="STR_AUTO_SAVE">
 			<Original>AutoSave Timer</Original>
@@ -5155,7 +5137,7 @@
 					&lt;br/&gt;&lt;br/&gt;
 					There will be no second chance...
 					&lt;br/&gt;&lt;br/&gt;
-					&lt;t size='1.15' color='#00a0ff'&gt;Cost: 100&lt;img image='\A3\Ui_f\data\GUI\Cfg\Ranks\general_gs.paa'/&gt;&lt;/t&gt;
+					&lt;t size='1.15' color='#00a0ff'&gt;Cost: 800&lt;img image='\A3\Ui_f\data\GUI\Cfg\Ranks\general_gs.paa'/&gt;&lt;/t&gt;
 					&lt;br/&gt;
 					&lt;t size='1.15' color='#ffa000'&gt;Reward: Immediate victory for our side.&lt;/t&gt;
 					&lt;br/&gt;&lt;br/&gt;
@@ -5577,16 +5559,28 @@
 			<French>Serveur en Mode Persistant.</French>
 		</Key>
 		<Key ID="STR_KEEP_SCORE">
-			<Original>Keep Players score on map restart</Original>
-			<French>Garder le score du joueurs au redemarage de la Map</French>
+			<Original>Keep players score on map restart</Original>
+			<French>Garder le score des joueurs au redemarage de la Map</French>
 		</Key>
+		<Key ID="STR_RESPAWN">
+			<Original>Waiting before player can respawn (sec)</Original>
+			<French>Attente avant que le joueur puisse réapparaître (sec)</French>
+		</Key>		
 		<Key ID="STR_RESPAWN_CD">
-			<Original>Add a cooldown if the player respawn too fast</Original>
-			<French>Ajoute une attente si le joueur respawn trop rapidement</French>
+			<Original>Cooldown if player respawn too fast (min)</Original>
+			<French>Attente si le joueur réapparaît trop rapidement (min)</French>
+		</Key>
+		<Key ID="STR_PARAM_SECTOR_DESPAWN">
+			<Original>Clear unattacked Sectors (min)</Original>
+			<French>Nettoyer secteurs non attaqués (min)</French>
 		</Key>
 		<Key ID="STR_REDEPLOY">
 			<Original>Allow Redeploy to all mobile Respawn</Original>
 			<French>Autoriser le redéploiement sur tous les mobiles Respawn</French>
+		</Key>			
+		<Key ID="STR_ENABLE_AIR_SUPPORT">
+			<Original>Allow Air Support</Original>
+			<French>Autoriser le Support Aerien</French>
 		</Key>		
 		<Key ID="STR_KICK_IDLE">
 			<Original>Kick player if idle for too long</Original>
@@ -5597,14 +5591,8 @@
 			<French>Vous êtes inactif depuis %1min, vous devez vous déplacer avant %2min ou vous serez expulsé.</French>
 		</Key>
 		<Key ID="STR_OPFORMARK">
-			<Original>Dynamic Opfor sector markers</Original>
-			<Russian>Скрыть маркеры секторов противника</Russian>
-			<French>Marqueurs OPFOR dynamiques</French>
-			<Chinesesimp>隐藏Opfor地区标记</Chinesesimp>
-			<Chinese>隱藏Opfor地區標記</Chinese>
-			<Japanese>敵占領区域のマーカーを表示する</Japanese>
-			<Portuguese>Ocultar marcadores do setor Opfor</Portuguese>
-			<Czech>Skryjte značky sektorů Nepřítele</Czech>
+			<Original>Dynamic Opfor Markers (fog of war)</Original>
+			<French>Marqueurs OPFOR dynamiques (fog of war)</French>
 		</Key>
 		<Key ID="STR_BLUFORMARK">
 			<Original>Show BLUFOR markers</Original>
@@ -5651,7 +5639,7 @@
 			<Portuguese>Strict + MOD: Rígido + itens do Mod atual</Portuguese>
 		</Key>
 		<Key ID="STR_LIMIT_ARSENAL_PARAM4">
-			<Original>Only items defined in Whitelist</Original>
+			<Original>Personal Arsenal</Original>
 		</Key>
 		<Key ID="STR_VEH_LOCK">
 			<Original>Enable Vehicles Ownership</Original>
@@ -5672,6 +5660,10 @@
 			<Japanese>デフォルト装備</Japanese>
 			<Portuguese>Forçar equipamento padrão</Portuguese>
 			<Czech>Vynutit výchozí vybavení</Czech>
+		</Key>
+		<Key ID="STR_FREE_LOADOUT">
+			<Original>Equipment is worthless</Original>
+			<French>L'équipement ne vaut rien</French>		
 		</Key>
 		<Key ID="STR_THERMAL">
 			<Original>Enable Thermal equipments</Original>
@@ -6080,6 +6072,10 @@
 		<Key ID="STR_LOOT_BODY">
 			<Original>-- LOOT BODY</Original>
 			<French>-- LOOTER CORPS</French>
+		</Key>	
+		<Key ID="STR_SEND_ARSENAL">
+			<Original>-- CARGO TO ARSENAL</Original>
+			<French>-- CARGO VERS ARSENAL</French>
 		</Key>
 		<Key ID="STR_LOADOUT_CARGO_STORED">
 			<Original>%1's gear stored in %2.</Original>
@@ -6509,7 +6505,11 @@
 			<Czech>-- VYLOŽIT --</Czech>
 		</Key>
 
-		<!-- virtual_garage.sqf -->
+		<!-- virtual_garage.sqf -->		
+		<Key ID="STR_PARAM_GARAGE_SIZE">
+			<Original>Virtual Garage vehicle limit.</Original>
+			<French>Limite de véhicules du garage virtuel.</French>
+		</Key>
 		<Key ID="STR_FULL_GARAGE">
 			<Original>Garage is Full !!\nMax %1 vehicles.</Original>
 			<Russian>Гараж полон !!\nМаксимум %1 транспортных средств.</Russian>
@@ -6520,16 +6520,6 @@
 			<Portuguese>A garagem está cheia !!\nMax %1 veículos.</Portuguese>
 			<Czech>Garáž je plná!!\nMaximálně %1 vozidel.</Czech>
 		</Key>
-		<Key ID="STR_CANT_PARK">
-			<Original>Loaded Vehicles cannot be Parked !</Original>
-			<Russian>Загруженные автомобили нельзя парковать!</Russian>
-			<French>Les Véhicules Chargés ne peuvent pas rentrer dans le Garage Virt. !</French>
-			<Japanese>その乗り物はガレージに入れられません！</Japanese>
-			<Chinesesimp>不能停放已装载的车辆！</Chinesesimp>
-			<Chinese>不能停放已裝載的車輛！</Chinese>
-			<Portuguese>Veículos carregados não podem ser estacionados!</Portuguese>
-			<Czech>Naložená vozidla nelze zaparkovat!</Czech>
-		</Key>
 		<Key ID="STR_CANT_PARKUAV">
 			<Original>Vehicles with crew cannot be Parked !</Original>
 			<Russian>Машины с экипажем парковать нельзя!</Russian>
@@ -6539,16 +6529,6 @@
 			<Chinese>不能停放有乘員的載具！</Chinese>
 			<Portuguese>Veículos com tripulação não podem ser estacionados!</Portuguese>
 			<Czech>Vozidla s posádkou nelze zaparkovat!</Czech>
-		</Key>
-		<Key ID="STR_ONLY_WEAPONS">
-			<Original>&lt;t align='center'&gt;Only Weapons and Cargo is Saved !!&lt;br/&gt;Are you sure ?&lt;/t&gt;</Original>
-			<Russian>&lt;t align='center'&gt;Сохраняется только оружие и груз !!&lt;br/&gt;Вы уверены ?&lt;/t&gt;</Russian>
-			<French>&lt;t align='center'&gt;Uniquement Armes et Cargo sont sauvegardés !!&lt;br/&gt;Es tu sûr ?&lt;/t&gt;</French>
-			<Japanese>&lt;t align='center'&gt;武器と荷物だけが保存されます！！&lt;br/&gt;よろしいですか？&lt;/t&gt;</Japanese>
-			<Chinesesimp>&lt;t align='center'&gt;只保存武器和库存！&lt;br/&gt;你确定吗？&lt;/t&gt;</Chinesesimp>
-			<Chinese>&lt;t align='center'&gt;只保存武器和庫存！ &lt;br/&gt;你確定嗎？ &lt;/t&gt;</Chinese>
-			<Portuguese>&lt;t align='center'&gt;Apenas armas e carga são salvas !!&lt;br/&gt;Tem certeza ?&lt;/t&gt;</Portuguese>
-			<Czech>&lt;t align='center'&gt;Zachráněny jsou pouze zbraně a náklad!!&lt;br/&gt;Jsi si jistý ?&lt;/t&gt;</Czech>
 		</Key>
 		<Key ID="STR_WARNING">
 			<Original>Warning !</Original>
@@ -7946,6 +7926,10 @@
 			<Portuguese>%1 está curando %2 agora...</Portuguese>
 			<Czech>%1 se nyní léčí %2...</Czech>
 		</Key>
+		<Key ID="STR_PAR_ST_02">
+			<Original>%1 XP reward for %2's healing.</Original>
+			<French>%1 XP bonus pour la guérison de %2.</French>
+		</Key>			
 		<Key ID="STR_PAR_UC_01">
 			<Original>I need a Medic !!</Original>
 			<Russian>Мне нужен Медик!!</Russian>
@@ -7969,6 +7953,10 @@
 		<Key ID="STR_PAR_UC_03">
 			<Original>Hey %1, All your units are down, Help them!</Original>
 			<French>Hé %1, Toutes tes unités sont à terre, Aide-les !</French>
+		</Key>
+		<Key ID="STR_PAR_DE_01">
+			<Original>Bad news, we lost soldier %1...</Original>
+			<French>Mauvaise nouvelle, on as perdu le soldat %1...</French>
 		</Key>
 	</Package>
 
@@ -7998,6 +7986,10 @@
 			<Original>-- TAXI Ejection</Original>
 			<French>-- TAXI Éjection</French>
 		</Key>
+		<Key ID="STR_TAXI_TOO_CLOSE">
+			<Original>Sorry, too close from HQ, no Taxi.</Original>
+			<French>Désolé, trop proche d'un HQ, pas de Taxi.</French>
+		</Key>		
 		<Key ID="STR_TAXI_ONLY_ONE">
 			<Original>Sorry, only one Taxi at time.</Original>
 			<Russian>Извините, только один вертолет за раз.</Russian>

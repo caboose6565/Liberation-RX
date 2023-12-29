@@ -74,7 +74,7 @@ if ( isServer ) then {
 
 		if (isNull _killer) exitWith {};
 		if ( _unit != _killer ) then {
-			_isPrisonner = _unit getVariable ["GRLIB_is_prisonner", false];
+			_isPrisonner = _unit getVariable ["GRLIB_is_prisoner", false];
 			_isKamikaz = _unit getVariable ["GRLIB_is_kamikaze", false];
 			_isZombie = ((typeOf _unit) select [0,10] == "RyanZombie");
 			if ( _isKamikaz ) then { 
@@ -96,6 +96,9 @@ if ( isServer ) then {
 						if ( _score > GRLIB_perm_max ) then { _penalty = 60 };
 						[_killer, -_penalty] call F_addScore;
 						[name _unit, _penalty, _killer] remoteExec ["remote_call_civ_penalty", 0];
+						combat_readiness = combat_readiness + (0.5 * GRLIB_difficulty_modifier);
+						stats_readiness_earned = stats_readiness_earned + (0.5 * GRLIB_difficulty_modifier);
+						if ( combat_readiness > 100 && GRLIB_difficulty_modifier < 2 ) then { combat_readiness = 100 };
 					};
 				};
 				_isDriver = (driver (vehicle _killer) == _killer);
@@ -105,8 +108,7 @@ if ( isServer ) then {
 					if (_owner_id == "") then {
 						_owner_id = (_killer getVariable ["PAR_Grp_ID", "0_0"]) splitString "_" select 1;
 					};
-
-					if (_owner_id != "0") then {
+					if (_owner_id != "0" && GRLIB_civ_penalties) then {
 						_owner_player = _owner_id call BIS_fnc_getUnitByUID;
 						[_owner_player, -GRLIB_civ_killing_penalty] call F_addScore;
 						_msg = format ["%1, Your AI kill Civilian !!", name _owner_player] ;
@@ -153,9 +155,6 @@ if ( isServer ) then {
 		};
 
 	} else {
-		// unTow
-		[_unit] spawn untow_vehicle;
-
 		if ( (typeof _unit) in [Arsenal_typename, FOB_box_typename, FOB_truck_typename, FOB_boat_typename, foodbarrel_typename, waterbarrel_typename] ) exitWith {
 			sleep 30;
 			deleteVehicle _unit;
@@ -167,11 +166,6 @@ if ( isServer ) then {
 			sleep random 2;
 			( "R_80mm_HE" createVehicle (getPosATL _unit) ) setVelocity [0, 0, -200];
 			deleteVehicle _unit;
-		};
-
-		 if (typeOf _unit isKindOf "AllVehicles") then {
-			_unit setVariable ["GRLIB_vehicle_owner", "", true];
-			[_unit, false] spawn clean_vehicle;
 		};
 
 		if ( isPlayer _killer ) then {
@@ -199,13 +193,8 @@ if ( isServer ) then {
 			stats_blufor_vehicles_killed = stats_blufor_vehicles_killed + 1;
 		};
 
+		[_unit, false, true, true] spawn clean_vehicle;
+
 	};
 
-	_unit setVariable ["R3F_LOG_disabled", true, true];
-
-	// ACE Cleanup
-	if (GRLIB_ACE_medical_enabled && isPlayer _unit) then { [_unit] remoteExec ["PAR_fn_death", owner _unit] };
-
-	//sleep 3;
-	//_unit enableSimulationGlobal false;
 };

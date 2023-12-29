@@ -18,7 +18,7 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 	_civ_veh = objNull;
 	_usable_sectors = [];
 	{
-		if ( (count ([getmarkerpos _x, GRLIB_spawn_max] call F_getNearbyPlayers) > 0) ) then {
+		if ( (count ([markerPos  _x, GRLIB_spawn_max] call F_getNearbyPlayers) > 0) ) then {
 			_usable_sectors pushback _x;
 		};
 	} foreach (sectors_bigtown + sectors_capture + sectors_factory - active_sectors);
@@ -34,8 +34,6 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 			_unit assignAsDriver _civ_veh;
 			_unit moveInDriver _civ_veh;
 			[_unit] orderGetIn true;
-			_civ_veh lockDriver true;
-			_civ_veh lockCargo true;
 			_civ_veh addEventHandler ["HandleDamage", {
 				params ["_unit", "_selection", "_damage", "_source"];
 				private _dam = 0;
@@ -67,9 +65,9 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 		[_civ_grp, _sectorpos] spawn add_civ_waypoints;
 
 		if (local _civ_grp) then {
-			_headless_client = [] call F_lessLoadedHC;
-			if (!isNull _headless_client) then {
-				_civ_grp setGroupOwner ( owner _headless_client );
+			private _hc = [] call F_lessLoadedHC;
+			if (!isNull _hc) then {
+				_civ_grp setGroupOwner (owner _hc);
 			};
 		};
 
@@ -87,13 +85,13 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 				(diag_fps < 25) ||
 				({alive _x} count (units _civ_grp) == 0) ||
 				//(round (speed (leader _civ_grp)) == 0) ||
-				([getPos (leader _civ_grp), _radius, GRLIB_side_friendly] call F_getUnitsCount == 0) ||
+				([(leader _civ_grp), _radius, GRLIB_side_friendly] call F_getUnitsCount == 0) ||
 				(time > _unit_ttl)
 			)
 		};
 
 		// Cleanup
-		if (!isNull _civ_veh) then { [_civ_veh] spawn clean_vehicle };
+		[_civ_veh] call clean_vehicle;
 		{ deleteVehicle _x } forEach (units _civ_grp);
 		deleteGroup _civ_grp;	
 	};

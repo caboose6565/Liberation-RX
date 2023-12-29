@@ -26,6 +26,24 @@ addMissionEventHandler ['HandleDisconnect', {
  ]
 ] call BIS_fnc_EXP_camp_dynamicAISkill;
 
+// Relationship
+civilian setFriend [GRLIB_side_friendly, 1];
+GRLIB_side_friendly setFriend [civilian, 1];
+civilian setFriend [GRLIB_side_enemy, 1];
+GRLIB_side_enemy setFriend [civilian, 1];
+
+if (GRLIB_side_enemy == INDEPENDENT) then {
+	resistance setFriend [GRLIB_side_enemy, 1];
+	GRLIB_side_enemy setFriend [resistance, 1];
+	resistance setFriend [GRLIB_side_friendly, 0];
+	GRLIB_side_friendly setFriend [resistance, 0];
+} else {
+	resistance setFriend [GRLIB_side_friendly, 1];
+	GRLIB_side_friendly setFriend [resistance, 1];
+	resistance setFriend [GRLIB_side_enemy, 0];
+	GRLIB_side_enemy setFriend [resistance, 0];
+};
+
 // Init owner on map vehicles
 {
 	if (_x isKindOf "AllVehicles") then {
@@ -46,6 +64,9 @@ addMissionEventHandler ['HandleDisconnect', {
 	};
 } forEach (allMissionObjects "");
 
+// Init Chimera unit look
+[] call compileFinal preprocessFileLineNumbers "scripts\server\game\chimera_units_overide.sqf";
+
 // Cleanup
 cleanup_player = compileFinal preprocessFileLineNumbers "scripts\server\game\cleanup_player.sqf";
 
@@ -54,7 +75,7 @@ add_civ_waypoints = compileFinal preprocessFileLineNumbers "scripts\server\ai\ad
 add_defense_waypoints = compileFinal preprocessFileLineNumbers "scripts\server\ai\add_defense_waypoints.sqf";
 battlegroup_ai = compileFinal preprocessFileLineNumbers "scripts\server\ai\battlegroup_ai.sqf";
 building_defence_ai = compileFinal preprocessFileLineNumbers "scripts\server\ai\building_defence_ai.sqf";
-prisonner_ai = compileFinal preprocessFileLineNumbers "scripts\server\ai\prisonner_ai.sqf";
+prisoner_ai = compileFinal preprocessFileLineNumbers "scripts\server\ai\prisoner_ai.sqf";
 prisonner_captured = compileFinal preprocessFileLineNumbers "scripts\server\ai\prisonner_captured.sqf";
 bomber_ai = compileFinal preprocessFileLineNumbers "scripts\server\ai\bomber_ai.sqf";
 troup_transport = compileFinal preprocessFileLineNumbers "scripts\server\ai\troup_transport.sqf";
@@ -71,8 +92,6 @@ save_game_mp  = compileFinal preprocessFileLineNumbers "scripts\server\game\save
 load_context = compileFinal preprocessFileLineNumbers "scripts\server\game\load_context.sqf";
 save_context = compileFinal preprocessFileLineNumbers "scripts\server\game\save_context.sqf";
 check_victory_conditions = compileFinal preprocessFileLineNumbers "scripts\server\game\check_victory_conditions.sqf";
-attach_object_direct = compileFinal preprocessFileLineNumbers "scripts\server\game\attach_object_direct.sqf";
-load_object_direct = compileFinal preprocessFileLineNumbers "scripts\server\game\load_object_direct.sqf";
 get_rank = compileFinal preprocessFileLineNumbers "scripts\server\game\get_rank.sqf";
 
 // Bases
@@ -80,7 +99,6 @@ fob_init = compileFinal preprocessFileLineNumbers "scripts\server\base\fob_init.
 fob_init_officer = compileFinal preprocessFileLineNumbers "scripts\server\base\fob_init_officer.sqf";
 
 // Patrol
-reinforcements_manager = compileFinal preprocessFileLineNumbers "scripts\server\patrols\reinforcements_manager.sqf";
 send_paratroopers = compileFinal preprocessFileLineNumbers "scripts\server\patrols\send_paratroopers.sqf";
 
 // Secondary objectives
@@ -96,7 +114,6 @@ destroy_fob = compileFinal preprocessFileLineNumbers "scripts\server\sector\dest
 ied_manager = compileFinal preprocessFileLineNumbers "scripts\server\sector\ied_manager.sqf";
 ied_trap_manager = compileFinal preprocessFileLineNumbers "scripts\server\sector\ied_trap_manager.sqf";
 static_manager = compileFinal preprocessFileLineNumbers "scripts\server\sector\static_manager.sqf";
-patrol_manager = compileFinal preprocessFileLineNumbers "scripts\server\sector\patrol_manager.sqf";
 manage_ammoboxes = compileFinal preprocessFileLineNumbers "scripts\server\sector\manage_ammoboxes.sqf";
 manage_intels = compileFinal preprocessFileLineNumbers "scripts\server\sector\manage_intels.sqf";
 manage_one_sector = compileFinal preprocessFileLineNumbers "scripts\server\sector\manage_one_sector.sqf";
@@ -123,7 +140,6 @@ if (abort_loading) exitWith {
 	publicVariable "abort_loading_msg";
 };
 
-[] execVM "scripts\server\game\chimera_units_overide.sqf";
 [] execVM "scripts\server\game\apply_saved_scores.sqf";
 [] execVM "scripts\server\game\apply_default_permissions.sqf";
 [] execVM "scripts\server\base\fobbox_manager.sqf";
@@ -159,17 +175,9 @@ if (abort_loading) exitWith {
 global_locked_group = [];
 publicVariable "global_locked_group";
 
-if (GRLIB_side_enemy == INDEPENDENT) then {
-	resistance setFriend [GRLIB_side_enemy, 1];
-	GRLIB_side_enemy setFriend [resistance, 1];
-	resistance setFriend [GRLIB_side_friendly, 0];
-	GRLIB_side_friendly setFriend [resistance, 0];
-} else {
-	resistance setFriend [GRLIB_side_friendly, 1];
-	GRLIB_side_friendly setFriend [resistance, 1];
-	resistance setFriend [GRLIB_side_enemy, 0];
-	GRLIB_side_enemy setFriend [resistance, 0];
-};
+// Low = 50 (NoGrass), Normal = 25, High = 12.5, Very High = 6.25, Ultra = 3.125
+setTerrainGrid 25;
+setViewDistance 1600;
 
 sleep 3;
 GRLIB_init_server = true;

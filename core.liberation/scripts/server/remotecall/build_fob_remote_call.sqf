@@ -1,7 +1,7 @@
 if (!isServer && hasInterface) exitWith {};
 params ["_classname", "_veh_pos", "_veh_dir", "_veh_vup", "_owner"];
 
-private _vehicle = _classname createVehicle zeropos;
+private _vehicle = createVehicle [_classname, ([] call F_getFreePos), [], 0, "NONE"];
 if (isNull _vehicle) exitWith {};
 _vehicle allowDamage false;
 _vehicle setVectorDirAndUp [_veh_dir, _veh_vup];

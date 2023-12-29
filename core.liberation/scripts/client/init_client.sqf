@@ -6,8 +6,9 @@ R3F_LOG_joueur_deplace_objet = objNull;
 GRLIB_player_spawned = false;
 GRLIB_player_is_menuok = false;
 GRLIB_vehicle_lock = true;
+GRLIB_arsenal_open = false;
 
-waitUntil {!isNil "abort_loading" };
+waitUntil {!isNil "abort_loading"};
 if (abort_loading) exitWith {
 	private _msg = format ["Sorry, An error occured on Server startup.\nPlease check the error logs.\n\n%1", abort_loading_msg];
 	titleText [_msg, "BLACK FADED", 100];
@@ -50,8 +51,32 @@ if (toLower _name in GRLIB_blacklisted_names || (_name == str parseNumber _name)
 	endMission "LOSER";
 };
 
+playMusic GRLIB_music_startup;
+
+waitUntil {sleep 1; !isNil "GRLIB_global_stop"};
+if (GRLIB_global_stop == 1) exitWith {
+	private _msg = "The Final Mission is running...\nNew connections are prohibited until the end!";
+	titleText [_msg, "BLACK FADED", 100];
+	uisleep 10;
+	endMission "LOSER";
+};
+
 if (GRLIB_kick_idle > 0) then {
 	[] execVM "scripts\client\misc\kick_idle.sqf";
+};
+
+if (GRLIB_respawn_cooldown > 0) then {
+	if (isServer) exitWith {};
+	waitUntil {sleep 1; !isNil "BTC_logic"};
+	private _cooldown = BTC_logic getVariable [format ["%1_last_respawn", PAR_Grp_ID], 0];
+	if (_cooldown > time) then {
+		while { time < _cooldown } do {
+			private _msg = format ["You Reconnect or Respawn too fast!\nPlease Wait %1 sec.", round (_cooldown - time)];
+			titleText [_msg, "BLACK FADED", 100];
+			sleep 2;
+		};
+		titleText ["", "BLACK FADED", 100];
+	};
 };
 
 add_player_actions = compile preprocessFile "scripts\client\actions\add_player_actions.sqf";
@@ -64,6 +89,7 @@ cinematic_camera = compileFinal preprocessFileLineNumbers "scripts\client\ui\cin
 write_credit_line = compileFinal preprocessFileLineNumbers "scripts\client\ui\write_credit_line.sqf";
 set_rank = compileFinal preprocessFileLineNumbers "scripts\client\misc\set_rank.sqf";
 set_sticky_bomb = compileFinal preprocessFileLineNumbers "scripts\client\misc\set_sticky_bomb.sqf";
+artillery_cooldown = compileFinal preprocessFileLineNumbers "scripts\client\misc\artillery_cooldown.sqf";
 vehicle_permissions = compileFinal preprocessFileLineNumbers "scripts\client\misc\vehicle_permissions.sqf";
 vehicle_fuel = compileFinal preprocessFileLineNumbers "scripts\client\misc\vehicle_fuel.sqf";
 vehicle_defense = compileFinal preprocessFileLineNumbers "scripts\client\misc\vehicle_defense.sqf";
@@ -74,6 +100,8 @@ is_neartransport = compileFinal preprocessFileLineNumbers "scripts\client\misc\i
 is_allowed_item = compileFinal preprocessFileLineNumbers "scripts\client\misc\is_allowed_item.sqf";
 get_player_name = compileFinal preprocessFileLineNumbers "scripts\client\misc\get_player_name.sqf";
 save_loadout_cargo = compileFinal preprocessFileLineNumbers "scripts\client\misc\save_loadout_cargo.sqf";
+save_personal_arsenal = compileFinal preprocessFileLineNumbers "scripts\client\actions\save_personal_arsenal.sqf";
+load_personal_arsenal = compileFinal preprocessFileLineNumbers "scripts\client\actions\load_personal_arsenal.sqf";
 
 private _grp = createGroup [GRLIB_side_friendly, true];
 waitUntil {
@@ -108,7 +136,6 @@ if ( typeOf player == "VirtualSpectator_F" ) exitWith {
 [] execVM "scripts\client\markers\hostile_groups.sqf";
 [] execVM "scripts\client\markers\huron_marker.sqf";
 [] execVM "scripts\client\misc\broadcast_squad_colors.sqf";
-[] execVM "scripts\client\misc\permissions_warning.sqf";
 [] execVM "scripts\client\misc\secondary_jip.sqf";
 [] execVM "scripts\client\misc\stop_renegade.sqf";
 [] execVM "scripts\client\misc\manage_wildlife.sqf";
@@ -123,6 +150,7 @@ GRLIB_ActionDist_5 = 5;
 GRLIB_ActionDist_10 = 10;
 GRLIB_ActionDist_15 = 15;
 
+[] execVM "GREUH\scripts\GREUH_activate.sqf";
 [] execVM "scripts\client\actions\action_manager.sqf";
 [] execVM "scripts\client\actions\action_manager_veh.sqf";
 [] execVM "scripts\client\actions\recycle_manager.sqf";
@@ -130,15 +158,8 @@ GRLIB_ActionDist_15 = 15;
 [] execVM "scripts\client\actions\dog_manager.sqf";
 [] execVM "scripts\client\actions\man_manager.sqf";
 [] execVM "scripts\client\actions\squad_manager.sqf";
-[] execVM "GREUH\scripts\GREUH_activate.sqf";
-
-if (!GRLIB_ACE_enabled) then {
-	[] execVM "addons\MGR\MagRepack_init.sqf";
-	[] execVM "addons\NRE\NRE_init.sqf";
-	[] execVM "addons\KEY\shortcut_init.sqf";
-	[] execVM "scripts\client\misc\support_manager.sqf";
-};
-
+[] execVM "scripts\client\misc\support_manager.sqf";
+[] execVM "addons\KEY\shortcut_init.sqf";
 [] execVM "addons\PAR\PAR_AI_Revive.sqf";
 [] execVM "addons\LARs\liberationArsenal.sqf";
 [] execVM "addons\VAM\VAM_GUI_init.sqf";
@@ -150,6 +171,12 @@ if (!GRLIB_ACE_enabled) then {
 [] execVM "addons\JKB\JKB_init.sqf";
 [] execVM "addons\WHS\warehouse_init.sqf";
 [] execVM "addons\FOB\officer_init.sqf";
+
+// ACE inCompatible addons
+if (!GRLIB_ACE_enabled) then {
+	[] execVM "addons\NRE\NRE_init.sqf";
+	[] execVM "addons\MGR\MagRepack_init.sqf";	
+};
 
 // Init Tips Tables from XML
 GREUH_TipsText = [];
@@ -168,13 +195,6 @@ addMissionEventHandler ["Draw3D",{
 	private _pos = ASLToAGL getPosASL chimera_sign;
 	if (player distance2D _pos <= 30) then {
 		drawIcon3D ["", [1,1,1,1], _pos vectorAdd [0, 0, 3], 0, 0, 0, "- READ ME -", 2, 0.05, "TahomaB"];
-	};
-
-	private _near_grave = nearestObjects [player, GRLIB_player_grave, 2];
-	if (count (_near_grave) > 0) then {
-		private _grave = _near_grave select 0;
-		private _grave_pos = ASLToAGL getPosASL _grave;
-		drawIcon3D [getMissionPath "res\skull.paa", [1,1,1,1], _grave_pos vectorAdd [0, 0, 1], 2, 2, 0, (_grave getVariable ["GRLIB_grave_message", ""]), 2, 0.05, "RobotoCondensed", "center"];
 	};
 
 	private _near_sign = nearestObjects [player, [FOB_sign], 5];
@@ -229,6 +249,5 @@ onPlayerDisconnected {
 
 initAmbientLife;
 enableEnvironment [true, true];
-setTerrainGrid 12.5;  //Normal = 25, High = 12.5, Very High = 6.25, Ultra = 3.125
 
 diag_log "--- Client Init stop ---";

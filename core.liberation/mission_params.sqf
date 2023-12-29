@@ -34,11 +34,14 @@ LRX_Mission_Params = [
 	["Aggressivity",1],				// CSAT aggression - [default 1] - values = [0.25,0.5,1,2,4] - Text {Anemic,Weak,Normal,Strong,Extreme}
 	["AdaptToPlayercount", 1],		// Hostile presence adapts to player count - [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["SectorRadius", 0],			// The size of the sector - [default 0] - values = {0,300,400,500,600,700,800,900,1000,1200,1500};
+	["SectorDespawn", 72], 			// Time for a sector to Despawn if no attackers - [default 72] - values = [(3*12), (6*12), (8*12), (12*12), (16*12), (20*12)]
 	["DayDuration", 1],				// Day duration (multiplier) - [default 1] - values = [0.25, 0.5, 1, 1.5, 2, 2.5, 3, 5, 10, 20, 30, 60]
 	["NightDuration", 1],			// Night duration (multiplier) - [default 1] - values = [0.25, 0.5, 1, 1.5, 2, 2.5, 3, 5, 10, 20, 30, 60]
 	["Thermic", 1],					// Enable Thermal Equipment [default 1] - values = [2,1,0] - Text {Enabled,Only at night,Disabled}
 	["EnableArsenal", 1],			// Enable the Arsenal [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["FilterArsenal", 1],			// Arsenal Filter Mode [default 1] - values = [0,1,2,3,4] - Text {Disabled,"Soft","Strict","Strict+MOD",Whitelist only}
+	["ForcedLoadout", 1],			// Force player default equipment  [default 0] - values = [0,1,2] - Text {Disabled,Preset1,Preset2}
+	["FreeLoadout", 0],				// All equipment is worthless [default 0] - values = [1,0] - Text {Enabled,Disabled}
 	["ModPresetWest", 0],			// Select MOD Preset for Friendly side - value =  { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25 } Text = "A3_BLU", "A3_OPF",  etc...
 	["ModPresetEast", 0],			// Select MOD Preset for Enemy side - values = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25 } text "A3_OPF", "A3_BLU", "A3_IND",  etc...
 	["Weather", 1],					// Weather - [default 4] - values = [1,2,3,4] - Text {Always Sunny,Random without rain,Random Cloudy,Random}
@@ -61,24 +64,28 @@ LRX_Mission_Params = [
 	["HuronType", 0],				// The type of Huron - [default 0] - values = [0,1,2] - Text {"CH-67 Huron", "CH-49 Mohawk", "UH-80 Ghost Hawk"}
 	["NavalFobType", 0],			// The type of Naval FOB - [default 0] - values = [0,1,2] - Text {"USS Liberty", "USS Freedom", "Offshare plateform"}
 	["SquadSize", 2],				// AI per squad at startup [default 2]  - values = {0,1,2,3,4,5,6}
-	["MaxSquadSize", 7],			// AI recruitment limit per squad [default 7] - values = {0,1,2,3,4,5,6,7}
+	["MaxSquadSize", 5],			// AI recruitment limit per squad [default 5] - values = {0,1,2,3,4,5,6,7,8,9,10}
+	["MaxGarageSize", 6],			// Virtual Garage vehicle limit [default 6] - values = {0,1,2,3,4,5,6,7,8,9,10}
 	["MaxSpawnPoint", 3],			// Spawn Point limit per player. [default 3] - values = {1,2,3,4}
 	["Redeploy", 1],				// Allow Redeploy to all mobile Respawn - [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["Permissions", 1],				// Permissions management - [default 1] - values = [1,0] - Text {Enabled,Disabled}
+	["AirSupport", 1],				// Enable Air Support - [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["EnableLock", 1],				// Enable Vehicles Ownership - [default 1] - values = [1,0] - Text {Enabled,Disabled}
-	["CleanupVehicles", 1800],		// Cleanup abandoned vehicles outside FOBs - values = {0,900,1800,3600,7200,14400}
+	["LRX_Cleanup", 1800],			// Cleanup abandoned vehicles outside FOBs - values = {0,900,1800,3600,7200,14400}
 	["AutoSave", 1800],				// LRX Game Auto Save Delay - values = {0,900,1800,3600,7200}
 	["AdminMenu", 1],				// Enable the Admin Cheat Menu [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["HideOpfor", 1],				// Hide Opfor marker - [default 1] - values = [1,0] - Text {Enabled,Disabled}
 	["ShowBlufor", 2],				// Hide Blufor marker - [default 1] - values = [0,1,2] - Text {Disabled,"player only",Enabled}
-	["ForcedLoadout", 1],			// Force player default equipment  [default 0] - values = [0,1,2] - Text {Disabled,Preset1,Preset2}
 	["DeathChat", 0],				// Disable chat/voice if wounded  [default 0] - values = [1,0] - Text {Enabled,Disabled}
 	["FancyInfo", 1],				// Enable colorfull, fancy Informations [default 2] - values = [2,1,0] - Text {Enabled,Info,Disabled}
 	["KeepScore", 0],				// Keep the Players datas (score/permissions) - [default 0] - values = [0,1] - Text {Disabled,Enabled}
-	["RespawnCD", 0],				// Cooldown if player respawn too fast - [default 0] - values = [0,1] - Text {Disabled,Enabled}
+	["Respawn", 20],				// Cooldown before can player respawn - [default 20] - values = [0,xxx] - Text {Disabled,Enabled}
+	["RespawnCD", 0],				// Cooldown if player respawn too fast - [default 0] - values = [0,xxx] - Text {Disabled,Enabled}
 	["KickIdle", 0],				// Kick player if idle too long - [default 0] - values = {0,900,1200,1800,3600,7200}
 	["Persistent", 0]				// Server start with Persistent Mode - [default 0] - values = [0,1] - Text {Disabled,Enabled}
 ];
+
+//add sec,min,hour translation
 
 LRX_Mission_Params_Def = [
 	["ModPresetWest", "MOD Preset - Friendly", _list_west],
@@ -151,6 +158,14 @@ LRX_Mission_Params_Def = [
 		localize "STR_PARAMS_REVIVE3"
 		]
 	],
+	["Respawn", localize "STR_RESPAWN", 
+		["5", "10", "20", "25", "30", "60"],
+		[5, 10, 20, 25, 30, 60]
+	],	
+	["RespawnCD", localize "STR_RESPAWN_CD", 
+		[localize "STR_PARAMS_DISABLED", "4", "5", "6", "7", "8", "9", "10"],
+		[0, 240, 300, 360, 420, 480, 540, 600]
+	],
 	["TK_count", localize "STR_TK_COUNT",
 		["3", "4", "5", "6", "7", "8", "9", "10"],
 		[3, 4, 5, 6, 7, 8, 9, 10]
@@ -184,11 +199,18 @@ LRX_Mission_Params_Def = [
 	["MaxSquadSize", localize "STR_PARAM_SQUAD_SIZE",
 		["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 	],
+	["MaxGarageSize", localize "STR_PARAM_GARAGE_SIZE",
+		["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+	],	
 	["MaxSpawnPoint", localize "STR_PARAM_SPAWN_MAX",
 		["1", "2", "3", "4", "5", "6"],
 		[1, 2, 3, 4, 5, 6]
 	],
-	["CleanupVehicles", localize "STR_CLEANUP_PARAM", [
+	["SectorDespawn", localize "STR_PARAM_SECTOR_DESPAWN",
+		["3", "6", "8", "12", "16", "20"],
+		[(3*12), (6*12), (8*12), (12*12), (16*12), (20*12)]
+	],
+	["LRX_Cleanup", localize "STR_CLEANUP_PARAM", [
 		localize "STR_PARAMS_DISABLED",
 		localize "STR_CLEANUP_PARAM1",
 		localize "STR_CLEANUP_PARAM2",
@@ -239,7 +261,7 @@ LRX_Mission_Params_Def = [
 	["NameTags",localize "STR_GUI_NAMETAG", [localize "STR_PARAMS_USER_DEF",localize "STR_PARAMS_ENABLED",localize "STR_PARAMS_DISABLED"]],
 	["MapMarkers",localize "STR_GUI_TEAM", [localize "STR_PARAMS_USER_DEF",localize "STR_PARAMS_ENABLED",localize "STR_PARAMS_DISABLED"]],
 	["HuronType", localize "STR_PARAM_HURON_TYPE", ["CH-67 Huron","CH-49 Mohawk","UH-80 Ghost Hawk"]],
-	["NavalFobType", localize "STR_PARAM_NAVAL_TYPE", ["USS Liberty","USS Freedom","Offshore Plateform"]],
+	["NavalFobType", localize "STR_PARAM_NAVAL_TYPE", [localize "STR_PARAMS_DISABLED","USS Liberty","USS Freedom","(not yet)Offshore Plateform"]],
 	["TK_mode", localize "STR_TK_MODE", [localize "STR_PARAMS_DISABLED",localize "STR_TK_MODE_RELAX",localize "STR_TK_MODE_STRICT"]],
 	["DeploymentCinematic", localize "STR_PARAMS_DEPLOYMENTCAMERA", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["AdaptToPlayercount", localize "STR_PARAM_ADAPT_TO_PLAYERCOUNT", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
@@ -258,9 +280,10 @@ LRX_Mission_Params_Def = [
 	["HideOpfor", localize "STR_OPFORMARK", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["ShowBlufor", localize "STR_BLUFORMARK", [localize "STR_PARAMS_DISABLED","Player only",localize "STR_PARAMS_ENABLED"]],
 	["ForcedLoadout", localize "STR_FORCE_LOADOUT", [localize "STR_PARAMS_DISABLED","Preset 1","Preset 2"]],
+	["FreeLoadout", localize "STR_FREE_LOADOUT", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["DeathChat", localize "STR_DEATHCHAT", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["FancyInfo", localize "STR_FANCY", [localize "STR_PARAMS_DISABLED","Info",localize "STR_PARAMS_ENABLED"]],
-	["RespawnCD", localize "STR_RESPAWN_CD", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
+	["AirSupport", localize "STR_ENABLE_AIR_SUPPORT", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["Redeploy", localize "STR_REDEPLOY", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["KeepScore", localize "STR_KEEP_SCORE", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]],
 	["Persistent", localize "STR_PERSISTENT_MODE", [localize "STR_PARAMS_DISABLED",localize "STR_PARAMS_ENABLED"]]

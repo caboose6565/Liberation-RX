@@ -13,15 +13,16 @@ if (!isnull objectParent _medic) then {
   doGetOut _medic;
   sleep 3;
 };
-doStop _medic;
+_medic stop true;
 sleep 1;
 {_medic disableAI _x} count ["TARGET","AUTOTARGET","AUTOCOMBAT","SUPPRESSION"];
 _medic setUnitPos "UP";
 _medic setSpeedMode "FULL";
 _medic allowFleeing 0;
 _medic allowDamage true;
+_medic stop false;
 
-_dist = round (_wnded distance2D _medic);
+private _dist = (_wnded distance2D _medic);
 if ( _dist <= 6 ) then {
   [_wnded, _medic] spawn PAR_fn_checkMedic;
 } else {

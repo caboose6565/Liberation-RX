@@ -3,7 +3,6 @@ private [ "_overlay", "_hide_HUD", "_attacked_string", "_active_sectors_string",
 private _overlayshown = false;
 private _sectorcontrols = [201,202,203,244,205];
 private _active_sectors_hint = false;
-private _first_iteration = true;
 private _uiticks = 0;
 GRLIB_ui_notif = "";
 
@@ -19,14 +18,12 @@ while { true } do {
 	if ( alive player && !dialog && !_overlayshown && !cinematic_camera_started && !halojumping && !_hide_HUD) then {
 		"LibUI" cutRsc ["statusoverlay", "PLAIN", 1];
 		_overlayshown = true;
-		_first_iteration = true;
 		_uiticks = 0;
 	};
 
 	if ( ( !alive player || dialog || cinematic_camera_started || _hide_HUD) && _overlayshown) then {
 		"LibUI" cutRsc ["blank", "PLAIN", 0];
 		_overlayshown = false;
-		_first_iteration = true;
 	};
 
 	if ( _overlayshown ) then {
@@ -68,7 +65,7 @@ while { true } do {
 		};
 
 		if ( _uiticks % 25 == 0 ) then {
-			if (!isNil "active_sectors" && ( opforcap >= GRLIB_sector_cap)) then {
+			if (opforcap >= GRLIB_opfor_cap || count active_sectors >= GRLIB_max_active_sectors) then {
 				(_overlay displayCtrl (517)) ctrlShow true;
 
 				if ( !_active_sectors_hint ) then {
@@ -117,12 +114,8 @@ while { true } do {
 				_barwidth = 0.084 * safezoneW * _ratio;
 				_bar = _overlay displayCtrl (244);
 				_bar ctrlSetPosition [(ctrlPosition _bar) select 0,(ctrlPosition _bar) select 1,_barwidth,(ctrlPosition _bar) select 3];
-				if ( _first_iteration ) then {
-					_first_iteration = false;
-					_bar ctrlCommit 0;
-				} else {
-					_bar ctrlCommit 2;
-				};
+				_bar ctrlCommit 1;
+				
 				(_overlay displayCtrl (205)) ctrlSetText (markerText _nearest_active_sector);
 				{ (_overlay displayCtrl (_x)) ctrlShow true; } foreach _sectorcontrols;
 

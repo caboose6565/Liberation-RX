@@ -47,7 +47,7 @@ GRLIB_permissions = [];
 GRLIB_player_context = [];
 resources_intel = 0;
 GRLIB_player_scores = [];
-GRLIB_garage = [];
+GRLIB_game_ID = 0;
 GRLIB_warehouse = [
 	[waterbarrel_typename, 2],
 	[fuelbarrel_typename, 2],
@@ -93,7 +93,7 @@ if ( !isNil "_lrx_liberation_savegame" ) then {
 	buildings_to_load = _lrx_liberation_savegame select 2;
 	time_of_day = _lrx_liberation_savegame select 3;
 	combat_readiness = _lrx_liberation_savegame select 4;
-	GRLIB_garage = _lrx_liberation_savegame select 5;
+	GRLIB_game_ID = _lrx_liberation_savegame select 5;
 	_side_west = _lrx_liberation_savegame select 6;
 	_side_east = _lrx_liberation_savegame select 7;
 	_warehouse = _lrx_liberation_savegame select 8;
@@ -212,11 +212,12 @@ if ( !isNil "_lrx_liberation_savegame" ) then {
 		_nextbuilding setPosWorld _nextpos;
 		_buildings_created pushback _nextbuilding;
 
+		if (_nextclass iskindOf "AllVehicles") then {
+			[_nextbuilding] call F_fixModVehicle;
+		};
+
 		if (!(_nextclass in GRLIB_Ammobox_keep)) then {
-			clearWeaponCargoGlobal _nextbuilding;
-			clearMagazineCargoGlobal _nextbuilding;
-			clearItemCargoGlobal _nextbuilding;
-			clearBackpackCargoGlobal _nextbuilding;
+			[_nextbuilding] call F_clearCargo;
 		};
 
         if ( _nextclass in vehicle_rearm_sources ) then {
@@ -279,12 +280,6 @@ if ( !isNil "_lrx_liberation_savegame" ) then {
 					[_nextbuilding, _compo] call RPT_fnc_CompoVehicle;
 				};
 				if (_nextclass isKindOf "LandVehicle" || _nextclass isKindOf "Air" || _nextclass isKindOf "Ship") then {
-					if (GRLIB_CUPV_enabled) then {
-						[_nextbuilding, false, ["hide_front_ti_panels",1,"hide_cip_panel_rear",1,"hide_cip_panel_bustle",1]] call BIS_fnc_initVehicle;
-					};
-					if (GRLIB_RHS_enabled) then {
-						[_nextbuilding, false, ["IFF_Panels_Hide",1,"Miles_Hide",1]] call BIS_fnc_initVehicle;
-					};
 					if (count _lst_a3 > 0) then {
 						[_nextbuilding, _lst_a3] call F_setCargo;
 					};
@@ -380,13 +375,18 @@ if ( count GRLIB_vehicle_to_military_base_links == 0 ) then {
 	if (count (_x nearObjects [FOB_outpost, 20]) > 0) then { GRLIB_all_outposts pushBack _x };
 } forEach GRLIB_all_fobs;
 
-publicVariable "GRLIB_garage";
+if (typeName GRLIB_game_ID == "ARRAY") then { GRLIB_game_ID = round floor random 65535 };
+if (GRLIB_game_ID == 0) then { GRLIB_game_ID = round floor random 65535 };
+publicVariable "GRLIB_game_ID";
+if (count GRLIB_permissions == 0) then {
+	GRLIB_permissions = [["Default",[true,false,false,true,false,true]]];
+};
+publicVariable "GRLIB_permissions";
 publicVariable "GRLIB_warehouse";
 publicVariable "blufor_sectors";
 publicVariable "GRLIB_all_fobs";
 publicVariable "GRLIB_all_outposts";
 publicVariable "GRLIB_mobile_respawn";
 publicVariable "GRLIB_vehicle_to_military_base_links";
-publicVariable "GRLIB_permissions";
 publicVariable "GRLIB_player_scores";
 save_is_loaded = ([] call F_getValid); publicVariable "save_is_loaded";

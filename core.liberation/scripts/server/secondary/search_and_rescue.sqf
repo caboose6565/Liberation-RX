@@ -16,7 +16,8 @@ private _helowreck = GRLIB_sar_wreck createVehicle _helopos;
 _helowreck allowDamage false;
 _helowreck setpos (getpos _helowreck);
 
-private _helofire = GRLIB_sar_fire createVehicle (getpos _helowreck);
+private _helofire = GRLIB_sar_fire createVehicle _helopos;
+_helofire attachTo [_helowreck, [0, 1.5, 0]];
 
 private _pilotsGrp = createGroup [GRLIB_side_enemy, true];
 private _pilotsPos = [ getpos _helowreck, 25, random 360 ] call BIS_fnc_relPos;
@@ -24,7 +25,7 @@ pilot_classname createUnit [ _pilotsPos, _pilotsGrp,'this addMPEventHandler ["MP
 pilot_classname createUnit [ _pilotsPos, _pilotsGrp,'this addMPEventHandler ["MPKilled", {_this spawn kill_manager}]', 0.5, "private"];
 private _pilotUnits = units _pilotsGrp;
 {
-	[ _x, true, false ] spawn prisonner_ai;
+	[ _x, true, false ] spawn prisoner_ai;
 	_x setDir (random 360);
 } foreach (_pilotUnits);
 sleep 5;

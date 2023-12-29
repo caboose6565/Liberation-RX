@@ -16,20 +16,11 @@ publicVariable "GRLIB_secondary_in_progress";
 GRLIB_global_stop = 1;
 publicVariable "GRLIB_global_stop";
 
-[] remoteExec ["remote_call_final_fight", 0];
-
 { deleteVehicle _x } foreach (units GRLIB_SELL_Group);
 { deleteVehicle _x } foreach (units GRLIB_SHOP_Group);
+{ deleteVehicle _x } foreach (units GRLIB_side_enemy);
 
-// weather cloudy
-[] spawn {
-	while { overcast <= 0.85 } do {
-		_chosen_weather = (overcast + 0.10);
-		0 setOvercast _chosen_weather;
-		forceWeatherChange;
-		sleep 20;
-	};
-};
+sleep 30;
 
 // create marker
 _spawnpos = selectRandom _spawnlist;
@@ -51,7 +42,7 @@ opfor_target addEventHandler ["HandleDamage", {
 	private _amountOfDamage = (_damage - _ret);
 	if (!isNull _killer && side _killer == GRLIB_side_friendly && _amountOfDamage > 1) then {
 		if ( _unit getVariable ["GRLIB_isProtected", 0] < time ) then {
-			_ret = _ret + 0.05;
+			_ret = _ret + 0.02 + (floor random 0.04);
 			_unit setVariable ["GRLIB_isProtected", round(time + 3), true];
 		};
 	};
@@ -67,20 +58,44 @@ private _grp = [_marker, "csat", ([] call F_getAdaptiveSquadComp)] call F_spawnR
 private _vehicle = [_spawnpos, (selectRandom opfor_vehicles)] call F_libSpawnVehicle;
 (driver _vehicle) doFollow leader _grp;
 
-private _mission_delay = (45 * 60);
+private _mission_delay = (40 * 60);
 private _timer = round (time + _mission_delay);
 private _continue = true;
 private _success = false;
 private _last_send = 0;
 private _target = objNull;
 
-[_marker, 1, _mission_delay] remoteExec ["remote_call_sector", 0];
-sleep 60;
+// weather cloudy
+[] spawn {
+	while { overcast <= 0.85 } do {
+		_chosen_weather = (overcast + 0.10);
+		0 setOvercast _chosen_weather;
+		forceWeatherChange;
+		sleep 20;
+	};
+};
 
+skipTime ((10 - dayTime + 24) % 24);
+setTimeMultiplier 0;
+
+[_marker, 1, _mission_delay] remoteExec ["remote_call_sector", 0];
+sleep 10;
+[] remoteExec ["remote_call_final_fight", 0];
+sleep 30;
+
+private _last = 0;
 while { _continue } do {
 	combat_readiness = 100;
 
-	if ((time > _last_send || opforcap < 50) && opforcap < GRLIB_sector_cap ) then {
+	if ({alive _x} count (units _grp) == 0) then {
+		if (time > _last) then {
+			_grp = [_marker, "csat", ([] call F_getAdaptiveSquadComp)] call F_spawnRegularSquad;
+			[_grp, _spawnpos, 200] spawn add_defense_waypoints;
+			_last = round (time + 180);
+		};
+	};
+
+	if ((time > _last_send || opforcap < 50) && opforcap < GRLIB_opfor_cap ) then {
 		_last_send = round (time + 300);
 		_target = objNull;
 		while { isNull _target } do {
@@ -117,12 +132,12 @@ publicVariable "GRLIB_secondary_in_progress";
 
 if (_success) then {
 	[5] remoteExec ["BIS_fnc_earthquake", 0];
-	private _smoke = "test_EmptyObjectForSmoke" createVehicle (getPos opfor_target);
-	_smoke attachTo [opfor_target, [0, 1.5, 0]];
 	{ _x setDamage 1 } foreach (units GRLIB_side_enemy);
+	private _smoke = GRLIB_sar_fire createVehicle (getPos opfor_target);
+	_smoke attachTo [opfor_target, [0, 1.5, 0]];
 	0 setOvercast 0;
 	forceWeatherChange;
-	sleep 5;
+	sleep 10;
 	blufor_sectors = sectors_allSectors;
 	opfor_sectors = [];
 	[] spawn check_victory_conditions;
@@ -140,7 +155,7 @@ if (_success) then {
 	_opfor_target_assembled setPosWorld _savedpos;
 	GRLIB_endgame = 2;
 	publicVariable "GRLIB_endgame";
-	sleep 100;
+	sleep 300;
 	endMission "END";
 	forceEnd;
 };

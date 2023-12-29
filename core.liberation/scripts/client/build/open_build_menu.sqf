@@ -40,7 +40,7 @@ private _near_outpost = ([player, "OUTPOST", GRLIB_fob_range] call F_check_near)
 private _water_fob = surfaceIsWater ([] call F_getNearestFob);
 private _squad_leader = (player == leader group player);
 private _has_box = false;
-{ if ((_x select 0) == playerbox_typename && (_x select 1) == getPlayerUID player) exitWith {_has_box = true} } foreach GRLIB_garage;
+{ if ((_x select 0) == playerbox_typename) exitWith {_has_box = true} } foreach GRLIB_virtual_garage;
 if (count ([entities playerbox_typename, {[player, _x] call is_owner}] call BIS_fnc_conditionalSelect) > 0) then {_has_box = true};
 
 private _squadname = "";
@@ -71,7 +71,7 @@ private _is_linked = {
 ctrlEnable [120, false];
 ctrlEnable [121, false];
 
-while { dialog && alive player && (dobuild == 0 || buildtype == 1)} do {
+while { dialog && alive player && (dobuild == 0 || buildtype == 1 || buildtype == 8)} do {
 	if (_old_buildtype != buildtype) then { build_refresh = true };
 
 	if (build_refresh) then {
@@ -126,7 +126,8 @@ while { dialog && alive player && (dobuild == 0 || buildtype == 1)} do {
 				if(isText  (configFile >> "CfgVehicleIcons" >> _icon)) then {
 					_icon = (getText (configFile >> "CfgVehicleIcons" >> _icon));
 				};
-				lnbSetPicture  [110, [((lnbSize 110) select 0) - 1, 0],_icon];
+				if (_icon == "") then { _icon = "\A3\ui_f\data\map\VehicleIcons\iconObject_ca.paa" };
+				lnbSetPicture  [110, [((lnbSize 110) select 0) - 1, 0], _icon];
 			} else {
 				if ( ((lnbSize  110) select 0) <= count squads_names ) then {
 					_squadname = squads_names select ((lnbSize  110) select 0);
@@ -155,7 +156,7 @@ while { dialog && alive player && (dobuild == 0 || buildtype == 1)} do {
 						_affordable = false;
 					};
 				} else {
-					if ((count PAR_AI_bros >= GRLIB_squad_size + GRLIB_squad_size_bonus || !(player getVariable ["GRLIB_squad_context_loaded", false]))) then {
+					if ((count PAR_AI_bros >= (GRLIB_squad_size + GRLIB_squad_size_bonus) || !(player getVariable ["GRLIB_squad_context_loaded", false]))) then {
 						_affordable = false;
 					};
 				};
@@ -171,16 +172,19 @@ while { dialog && alive player && (dobuild == 0 || buildtype == 1)} do {
 
 			if ( buildtype == 7 ) then {
 				if (_build_class == mobile_respawn) then {
-					if (([getPlayerUID player] call F_getMobileRespawnsPlayer) select 1) then {
+					if (([PAR_Grp_ID] call F_getMobileRespawnsPlayer) select 1) then {
 						_affordable = false;
 					};
 				};
 				if (_build_class == playerbox_typename && _has_box) then {
 					_affordable = false;
 				};
-				if (_build_class in [Respawn_truck_typename, huron_typename] && GRLIB_allow_redeploy == 0) then {
+				if (_build_class in respawn_vehicles && GRLIB_allow_redeploy == 0) then {
 					_affordable = false;
 				};
+				if (_build_class == FOB_boat_typename && GRLIB_naval_type == 0) then {
+					_affordable = false;
+				};		
 			};
 
 			if ( buildtype == 8 ) then {

@@ -1,7 +1,7 @@
 private _fob_pos = [] call F_getNearestFob;
 private _fob_name = [_fob_pos] call F_getFobName;
 private _fob_owner = [_fob_pos] call F_getFobOwner;
-if ((getPlayerUID player != _fob_owner) && !([] call is_admin)) exitWith { hintSilent localize "STR_HINT_FOB_WRONG_OWNER" };
+if ((PAR_Grp_ID != _fob_owner) && !([] call is_admin)) exitWith { hintSilent localize "STR_HINT_FOB_WRONG_OWNER" };
 if (player distance2D _fob_pos > 20) exitWith {};
 
 build_confirmed = 1;
@@ -14,6 +14,10 @@ if (surfaceIsWater _fob_pos) then {
 	ctrlEnable [121, false];
 	ctrlEnable [122, false];
 	ctrlEnable [123, true];
+};
+
+if (GRLIB_naval_type == 0) then {
+	ctrlEnable [123, false];
 };
 
 while { dialog && alive player && dorepackage == 0 } do {
@@ -43,12 +47,9 @@ if ( dorepackage > 0 ) then {
 	private _fob_box = _box_typename createVehicle _fob_pos;
 	sleep 1;
 
-	clearWeaponCargoGlobal _fob_box;
-	clearMagazineCargoGlobal _fob_box;
-	clearItemCargoGlobal _fob_box;
-	clearBackpackCargoGlobal _fob_box;
+	[_fob_box] call F_clearCargo;
 	_fob_box addMPEventHandler ["MPKilled", { _this spawn kill_manager }];
-	_fob_box setVariable ["GRLIB_vehicle_owner", getPlayerUID player, true];
+	_fob_box setVariable ["GRLIB_vehicle_owner", PAR_Grp_ID, true];
 	hintSilent format ["%1 %2 "+ localize "STR_FOB_REPACKAGE_HINT", "FOB", _fob_name];
 
 	if (dorepackage == 3) then {

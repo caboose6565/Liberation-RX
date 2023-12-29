@@ -1,6 +1,8 @@
 diag_log "--- Liberation RX: FPARMA Edition by pSiKO/caboose ---";
 [] call compileFinal preprocessFileLineNUmbers "build_info.sqf";
 diag_log "--- Init start ---";
+if (!isNil "startup") then { deleteVehicle startup }; // remove logic sound
+if (!isNil "endgame") then { deleteVehicle endgame }; // remove logic sound
 
 profileNamespace setVariable ["BIS_SupportDevelopment", nil];
 enableSaving [false, false];
@@ -46,9 +48,6 @@ if (!isDedicated && hasInterface) then {
 	titleText ["-- Liberation RX: FPARMA Edition --","BLACK FADED", 100];
 	waitUntil { sleep 1; !isNil "GRLIB_init_server" };
 	[] execVM "scripts\client\init_client.sqf";
-} else {
-	setViewDistance 2000;
-	setTerrainGrid 25;
 };
 
 diag_log "--- Init stop ---";

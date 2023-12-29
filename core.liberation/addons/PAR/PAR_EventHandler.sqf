@@ -17,10 +17,11 @@ _unit addEventHandler ["GetOutMan", {
 }];
 
 _unit addEventHandler ["InventoryClosed", {
-	params ["_unit"];
+	params ["_unit", "_container"];
 	[_unit] call F_filterLoadout;
 	if (_unit == player) then {
 		hintSilent format ["Inventory value:\n%1 AMMO.", ([_unit] call F_loadoutPrice)];
+		if (GRLIB_filter_arsenal == 4 && _container == GRLIB_personal_box) then { [] spawn save_personal_arsenal };
 	};
 }];
 
@@ -76,6 +77,12 @@ _unit addEventHandler ["FiredMan",	{
 	// 		};
 	// 	};
 	// };
+
+	// Limit artillery fire
+	if (isNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "artilleryScanner")) then {
+		private _res = getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "artilleryScanner");
+		if (_res == 1) then { [] spawn artillery_cooldown };	
+	};
 }];
 
 // Player
@@ -90,13 +97,8 @@ if (_unit == player) then {
 	};
 
 	// Unblock units
-	private _actions = missionNamespace getVariable ["BIS_fnc_addCommMenuItem_menu", []];
-	private _id = (count _actions / 2) + 1;
-	_actions = _actions + [
-		["Do it !", true],
-		["Unblock unit.", [_id + 1], "", -5, [["expression", "[groupSelectedUnits player] spawn PAR_unblock_AI"]], str _id, str _id]
-	];
-	missionNamespace setVariable ["BIS_fnc_addCommMenuItem_menu", _actions];
+	[player,"LRX_Unstuck",nil,nil,""] call BIS_fnc_addCommMenuItem;
+	[player,"LRX_Taxi",nil,nil,""] call BIS_fnc_addCommMenuItem;
 
 	// UI actions
 	inGameUISetEventHandler ["Action", "
@@ -157,7 +159,6 @@ if (_unit == player) then {
 	// Player Handle Damage EH
 	if (GRLIB_revive != 0) then {
 		player addEventHandler ["HandleDamage", { _this call PAR_HandleDamage_EH }];
-		[] spawn PAR_AI_Manager;
 	};
 } else {
 	// AI killed EH
@@ -172,10 +173,9 @@ if (_unit == player) then {
 
 			private _isNotWounded = !(_unit getVariable ["PAR_wounded", false]);
 			if (_isNotWounded && _dam >= 0.86) then {
-				_unit setVariable ["PAR_wounded", true];
+				_unit setVariable ["PAR_wounded", true, true];
 				if (!isNull _veh) then {[_unit, _veh] spawn PAR_fn_eject};
 				_unit allowDamage false;
-				_unit setUnconscious true;
 				_unit setVariable ["PAR_BleedOutTimer", round(time + PAR_BleedOut), true];
 				[_unit] spawn PAR_fn_unconscious;
 			};

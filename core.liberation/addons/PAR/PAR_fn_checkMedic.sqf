@@ -27,26 +27,21 @@ _check_sortie = {
   _ret;
 };
 
-_release_medic = {
-  params ["_wnded","_medic"];
-  [_medic,_wnded] call PAR_fn_medicRelease;
-};
-
 while {lifeState _wnded == "INCAPACITATED" || lifeState _medic != "INCAPACITATED" || isNil {_wnded getVariable ["PAR_myMedic", nil]} } do {
 
   if (lifeState _medic == "INCAPACITATED" || _fail > 6 || isNil {_wnded getVariable ["PAR_myMedic", nil]}) exitWith {
-      [_wnded,_medic] call _release_medic;
+    [_medic,_wnded] call PAR_fn_medicRelease;
   };
 
   if ([_wnded, _medic] call _check_sortie) exitWith {[_wnded,_medic] call PAR_fn_sortie};
-  if (_fail == 99) exitWith {[_wnded,_medic] call _release_medic};
+  if (_fail == 99) exitWith {[_medic,_wnded] call PAR_fn_medicRelease};
 
   _msg = "";
   _dist = round (_wnded distance2D _medic);
-  if (_dist > 600) exitWith {[_wnded,_medic] call _release_medic};
+  if (_dist > 500) exitWith {[_medic,_wnded] call PAR_fn_medicRelease};
   if (_dist >= _old && round (speed vehicle _medic) == 0) then {
     _fail = _fail + 1;
-    doStop _medic;
+    _medic stop true;
     _medic setDir (_medic getDir _wnded);
     sleep 0.5;
     unassignVehicle _medic;
@@ -54,9 +49,9 @@ while {lifeState _wnded == "INCAPACITATED" || lifeState _medic != "INCAPACITATED
       doGetOut _medic;
       sleep 3;
     };
-
+    _medic stop false;
     if ([_wnded,_medic] call _check_sortie) exitWith {[_wnded,_medic] call PAR_fn_sortie};
-    if (_fail == 99) exitWith {[_wnded,_medic] call _release_medic};
+    if (_fail == 99) exitWith {[_medic,_wnded] call PAR_fn_medicRelease};
 
     if (_fail < 3) then {
       if (_wnded distance2D _medic < 25) then {
@@ -74,7 +69,7 @@ while {lifeState _wnded == "INCAPACITATED" || lifeState _medic != "INCAPACITATED
       sleep 1;
       _medic allowDamage true;
       if ([_wnded,_medic] call _check_sortie) exitWith {[_wnded,_medic] call PAR_fn_sortie};
-      if (_fail == 99) exitWith {[_wnded,_medic] call _release_medic};
+      if (_fail == 99) exitWith {[_medic,_wnded] call PAR_fn_medicRelease};
 
       _dist = round (_wnded distance2D _medic);
     };
@@ -111,4 +106,4 @@ while {lifeState _wnded == "INCAPACITATED" || lifeState _medic != "INCAPACITATED
   sleep 3;
 };
 
- [_medic, _wnded] call PAR_fn_medicRelease;
+[_medic, _wnded] call PAR_fn_medicRelease;

@@ -9,29 +9,36 @@ waitUntil {sleep 1; !isNil "GRLIB_mobile_respawn"};
 
 private _no_marker_classnames = [
 	playerbox_typename,
-	GRLIB_player_gravebox,
+	PAR_grave_box,
 	GRLIB_sar_wreck,
+	GRLIB_sar_fire,
 	Warehouse_desk_typename,
+	"ParachuteBase",
+	"NVTarget",
+	"LaserTarget",
 	"Land_Campfire_F",
-	"GroundWeaponHolder",
-	"WeaponHolderSimulated",
 	"Kart_01_Base_F",
 	"Land_CashDesk_F",
 	"Land_HumanSkull_F",
-	"Land_HumanSkeleton_F"
-] + GRLIB_ide_traps + GRLIB_intel_items + all_buildings_classnames;
+	"Land_HumanSkeleton_F",
+	"WeaponHolderSimulated"
+] + GRLIB_force_cleanup_classnames + GRLIB_ide_traps + GRLIB_intel_items + all_buildings_classnames;
 
 if (GRLIB_allow_redeploy == 1) then {
-	_no_marker_classnames = _no_marker_classnames + [Respawn_truck_typename, huron_typename];
+	_no_marker_classnames = _no_marker_classnames + respawn_vehicles;
 };
 
 while { true } do {
 	_veh_list = [vehicles, {
-		alive _x &&
+		(alive _x) && !(isObjectHidden _x) &&
 		(count (crew _x) == 0 || typeOf _x in (uavs + static_vehicles_AI)) &&
 		(_x distance2D lhd > GRLIB_fob_range) &&
 		!([typeOf _x, _no_marker_classnames] call F_itemIsInClass) &&
-		(isNull (_x getVariable ["R3F_LOG_est_transporte_par", objNull]))
+		(isNull (_x getVariable ["R3F_LOG_est_transporte_par", objNull])) &&
+		(
+			(side _x == GRLIB_side_friendly) ||
+			(side _x == GRLIB_side_civilian && count (crew _x) == 0)
+		)
 	}] call BIS_fnc_conditionalSelect;
 
 	_vehmarkers_bak = [];
@@ -101,9 +108,8 @@ while { true } do {
 		_nextmarker setMarkerTypeLocal _marker_type;
 		_nextmarker setMarkerAlphaLocal _marker_show;
 	} foreach _veh_list;
-	
+
 	{ deleteMarkerLocal _x} foreach (_vehmarkers - _vehmarkers_bak);
 	_vehmarkers = _vehmarkers_bak;
-
-	sleep 5;
+	sleep 6;
 };

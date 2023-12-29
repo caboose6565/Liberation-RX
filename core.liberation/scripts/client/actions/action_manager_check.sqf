@@ -3,7 +3,7 @@ GRLIB_checkAdmin = {
 };
 
 GRLIB_checkOperator = {
-	(GRLIB_player_is_menuok && ([] call is_admin || getPlayerUID player in GRLIB_whitelisted_moderators) && GRLIB_admin_menu)
+	(GRLIB_player_is_menuok && ([] call is_admin || PAR_Grp_ID in GRLIB_whitelisted_moderators) && GRLIB_admin_menu)
 };
 
 GRLIB_checkSquad = {
@@ -58,18 +58,24 @@ GRLIB_checkLeader = {
 };
 
 GRLIB_checkAirDrop = {
-	(GRLIB_player_is_menuok && (player distance2D ([] call F_getNearestFob)) >= (2 * GRLIB_fob_range) && !GRLIB_player_near_lhd)
+	(GRLIB_player_is_menuok && GRLIB_air_support && GRLIB_player_fobdistance >= (2 * GRLIB_fob_range) && !GRLIB_player_near_lhd)
 };
 
 GRLIB_checkArsenal = {
+	if (GRLIB_filter_arsenal == 4) exitWith { false };
+	if (GRLIB_arsenal_open) exitWith { false };
 	private _near_arsenal = [player, "ARSENAL", GRLIB_ActionDist_5, false] call F_check_near;
 	private _mode1 = (GRLIB_enable_arsenal == 1 && (_near_arsenal || GRLIB_player_near_base));
 	private _mode2 = (GRLIB_enable_arsenal == 2 && GRLIB_player_near_base);
 	(GRLIB_player_is_menuok && (_mode1 || _mode2) && LRX_arsenal_init_done)
 };
 
+GRLIB_checkArsenalPerso = {
+	(GRLIB_filter_arsenal == 4 && typeOf cursorObject == Arsenal_typename && cursorObject distance2D player <= GRLIB_ActionDist_5)
+};
+
 GRLIB_checkGarage = {
-	(GRLIB_player_is_menuok && !(surfaceIsWater getPos player) &&GRLIB_player_fobdistance > 15 && GRLIB_player_fobdistance < GRLIB_fob_range && !GRLIB_player_near_outpost && GRLIB_player_score >= GRLIB_perm_inf)
+	(GRLIB_garage_size > 0 && GRLIB_player_is_menuok && !(surfaceIsWater getPos player) &&GRLIB_player_fobdistance > 15 && GRLIB_player_fobdistance < GRLIB_fob_range && !GRLIB_player_near_outpost && GRLIB_player_score >= GRLIB_perm_inf)
 };
 
 GRLIB_checkBuild = {

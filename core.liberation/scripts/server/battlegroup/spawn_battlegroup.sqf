@@ -1,8 +1,8 @@
 if ( GRLIB_endgame == 1 || GRLIB_global_stop == 1 ) exitWith {};
 params ["_liberated_sector"];
+waitUntil {sleep 0.5; !GRLIB_GC_Running };
 diag_log format ["Spawn BattlegGroup at %1", time];
 
-private _bg_groups = [];
 private _spawn_marker = "";
 private _objective_pos = [];
 
@@ -48,7 +48,6 @@ if (_spawn_marker != "") then {
 		};
 
 		[_nextgrp, _objective_pos] spawn battlegroup_ai;
-		_bg_groups pushback _nextgrp;
 		sleep 10;
 	};
 
@@ -59,7 +58,6 @@ if (_spawn_marker != "") then {
 		_squad = [] call F_getAdaptiveSquadComp;
 		_nextgrp = [_spawn_marker, "csat", _squad] call F_spawnRegularSquad;
 		[_nextgrp, _objective_pos] spawn battlegroup_ai;
-		_bg_groups pushback _nextgrp;
 		_target_size = _target_size + 1;
 		sleep 10;
 	};
@@ -77,16 +75,7 @@ if (_spawn_marker != "") then {
 
 	combat_readiness = combat_readiness - (_target_size * 1.75);
 	if ( combat_readiness < 0 ) then { combat_readiness = 0 };
-
-	{
-		if ( local _x ) then {
-			_headless_client = [] call F_lessLoadedHC;
-			if ( !isNull _headless_client ) then {
-				_x setGroupOwner ( owner _headless_client );
-			};
-		};
-		sleep 3;
-	} foreach _bg_groups;
+	publicVariable "combat_readiness";
 
 	stats_hostile_battlegroups = stats_hostile_battlegroups + 1;
 	diag_log format ["Spawn BattlegGroup (%1) objective %2 at %3", _target_size, _objective_pos, time];

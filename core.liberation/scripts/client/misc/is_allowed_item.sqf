@@ -1,7 +1,6 @@
 params ["_item"];
 if (isNil "_item") exitWith { false };
 if (_item == "") exitWith { true };
-if ([_item, GRLIB_TFR_radios] call F_startsWithMultiple) exitWith { true };
 
 private _ret = true; 
 if (GRLIB_blacklisted_from_arsenal find _item >= 0) then {
@@ -11,7 +10,7 @@ if (GRLIB_blacklisted_from_arsenal find _item >= 0) then {
 };
 
 if (_ret && LRX_arsenal_init_done) then {
-	if (GRLIB_filter_arsenal in [2, 4]) then {
+	if (GRLIB_filter_arsenal == 2) then {
 		if !(_item in GRLIB_whitelisted_from_arsenal) then { _ret = false };
 	};
 

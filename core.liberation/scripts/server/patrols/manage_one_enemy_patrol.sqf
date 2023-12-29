@@ -8,11 +8,11 @@ private [
 	"_opfor_grp",
 	"_opfor_veh",
 	"_unit_ttl",
-	"_current_pos"
+	"_unit_pos"
 ];
 
 while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
-	//sleep (300 + floor(random 300));
+	sleep (300 + floor(random 300));
 	while { opforcap > GRLIB_patrol_cap || (diag_fps < 35.0) || combat_readiness < _readiness } do {
 		sleep 60;
 	};
@@ -20,7 +20,7 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 	_opfor_veh = objNull;
 	_usable_sectors = [];
 	{
-		if ( (count ([getmarkerpos _x, GRLIB_spawn_max] call F_getNearbyPlayers) > 0) && (count ([getmarkerpos _x, GRLIB_sector_size] call F_getNearbyPlayers) == 0) ) then {			
+		if ( (count ([markerPos  _x, GRLIB_spawn_max] call F_getNearbyPlayers) > 0) && (count ([markerPos  _x, GRLIB_sector_size] call F_getNearbyPlayers) == 0) ) then {			
 			_usable_sectors pushback _x;
 		};
 	} foreach (sectors_bigtown + sectors_capture + sectors_factory - active_sectors);
@@ -54,30 +54,32 @@ while { GRLIB_endgame == 0 && GRLIB_global_stop == 0 } do {
 		[_opfor_grp, _sector_pos] spawn add_civ_waypoints;
 
 		if (local _opfor_grp) then {
-			_headless_client = [] call F_lessLoadedHC;
-			if (!isNull _headless_client) then {
-				_opfor_grp setGroupOwner ( owner _headless_client );
+			private _hc = [] call F_lessLoadedHC;
+			if (!isNull _hc) then {
+				_opfor_grp setGroupOwner (owner _hc);
 			};
 		};
 
 		// Wait
 		_unit_ttl = round (time + 1800);
+		_unit_pos = getPosATL (leader _opfor_grp);
+
 		waitUntil {
+			if (alive (leader _opfor_grp)) then { _unit_pos = getPosATL (leader _opfor_grp) };
 			sleep 60;
-			_current_pos = getPosATL (leader _opfor_grp);
 			(
 				GRLIB_global_stop == 1 ||
 				(diag_fps < 25) ||
 				({alive _x} count (units _opfor_grp) == 0) ||
 				//(round (speed (leader _opfor_grp)) == 0) ||
-				([getPos (leader _opfor_grp), GRLIB_spawn_max, GRLIB_side_friendly] call F_getUnitsCount == 0) ||
+				([(leader _opfor_grp), GRLIB_spawn_max, GRLIB_side_friendly] call F_getUnitsCount == 0) ||
 				(time > _unit_ttl)
 			)
 		};
 
 		// Cleanup
-		waitUntil { sleep 30; (GRLIB_global_stop == 1 || [_current_pos, GRLIB_sector_size, GRLIB_side_friendly] call F_getUnitsCount == 0) };
-		if (!isNull _opfor_veh) then { [_opfor_veh] spawn clean_vehicle };
+		waitUntil { sleep 30; (GRLIB_global_stop == 1 || [_unit_pos, GRLIB_sector_size, GRLIB_side_friendly] call F_getUnitsCount == 0) };
+		[_opfor_veh] call clean_vehicle;
 		{ deleteVehicle _x } forEach (units _opfor_grp);
 		deleteGroup _opfor_grp;
 	};

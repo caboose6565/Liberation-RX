@@ -2,7 +2,7 @@ params ["_unit", ["_side", west]];
 
 if (isNull _unit) exitWith {};
 if (_unit getVariable ["GRLIB_mission_AI", false]) exitWith {};
-if (_unit getVariable ["GRLIB_is_prisonner", false]) exitWith {};
+if (_unit getVariable ["GRLIB_is_prisoner", false]) exitWith {};
 
 sleep 3;
 if (!alive _unit) exitWith {};
@@ -11,8 +11,9 @@ private _cloth = getText(configfile >> "CfgVehicles" >> selectRandom civilians >
 private _targets = [];
 private _target = objNull;
 
-_grp = createGroup [GRLIB_side_civilian, true];
+private _grp = createGroup [GRLIB_side_civilian, true];
 [_unit] joinSilent _grp;
+[_grp] call F_deleteWaypoints;
 _unit setVariable ["GRLIB_is_kamikaze", true, true];
 
 // Init bomber
@@ -26,18 +27,25 @@ removeGoggles _unit;
 _unit forceAddUniform _cloth;
 _unit setHitPointDamage ["hitLegs", 0];
 {_unit disableAI _x} count ["TARGET","AUTOTARGET","AUTOCOMBAT","SUPPRESSION"];
+if !(_unit getVariable ["GRLIB_in_building", false]) then {
+	[_unit] call F_fixPosUnit;
+};
 _unit setUnitPos "UP";
-_unit setSpeedMode "FULL";
-_unit allowFleeing 0;
+_unit switchMove "";
 sleep 1;
+
+_grp setCombatMode "BLUE";
+_grp setBehaviour "SAFE";
 
 private ["_expl1","_expl2","_expl3"];
 while {alive _unit} do {
-	_targets = [getpos _unit , 100] call F_getNearbyPlayers;
+	_targets = [getpos _unit , 150] call F_getNearbyPlayers;
 	if (count _targets > 0) then {
+		if (count waypoints _grp > 0) then { [_grp] call F_deleteWaypoints };
 		_target = _targets select 0;
 		_unit doMove (getPos _target);
-		if (round (speed vehicle _unit) == 0) then { 
+		_unit setSpeedMode "FULL";
+		if ((speed vehicle _unit) == 0) then { 
 			_unit switchMove "AmovPercMwlkSrasWrflDf";
 			_unit playMoveNow "AmovPercMwlkSrasWrflDf";
 		};
@@ -57,14 +65,20 @@ while {alive _unit} do {
 			playSound3D [getMissionPath "res\shout.ogg", _unit, false, getPosASL _unit, 5, 1, 500];
 			sleep 0.5;
 			if (alive _unit) then {
-				{ _x setDamage 1 } forEach [_expl1,_expl2,_expl3];
-				"R_PG32V_F" createVehicle (getPosATL _unit);
-				{ deleteVehicle _x } forEach [_expl1,_expl2,_expl3];
+				{ 
+					_x setDamage 1;
+					"R_PG32V_F" createVehicle (getPos _unit);
+					deleteVehicle _x;
+				} forEach [_expl1,_expl2,_expl3];
 				deleteVehicle _unit;
 			};
 		};
+		sleep 2;
 	} else {
-		doStop _unit;
+		if (count waypoints _grp == 0) then {
+			_unit setSpeedMode "NORMAL";
+			[_grp, getPos _unit, 100] call BIS_fnc_taskPatrol;
+		};
 	};
 	sleep 2;
 };

@@ -37,10 +37,7 @@ private ["_vehicle", "_spawnpos", "_startpos", "_radius", "_max_try"];
     _vehicle lockCargo true;
     _vehicle setVariable ["GRLIB_vehicle_owner", "server", true];
     _vehicle setVariable ["R3F_LOG_disabled", true, true];
-    clearWeaponCargoGlobal _vehicle;
-    clearMagazineCargoGlobal _vehicle;
-    clearItemCargoGlobal _vehicle;
-    clearBackpackCargoGlobal _vehicle;
+    [_vehicle] call F_clearCargo;
   } else {
     diag_log format ["--- LRX Error: No place to build %1 at sector %2", repair_offroad, _x];
   };
@@ -83,7 +80,7 @@ GRLIB_SHOP_Group = createGroup [GRLIB_side_civilian, true];
     if (_str find "house_big_02" > 0) then { _deskDir = (180 + _deskDir); _offset = [-0.7, -2, 0.25]};
 
     _deskPos = (getposASL _shop) vectorAdd ([_offset, -_deskDir] call BIS_fnc_rotateVector2D);
-    _desk = "Land_CashDesk_F" createVehicle zeropos;
+    _desk = createVehicle ["Land_CashDesk_F", ([] call F_getFreePos), [], 0, "NONE"];
     _desk allowDamage false;
     _desk setDir _deskDir;
     _desk setPosASL _deskPos;

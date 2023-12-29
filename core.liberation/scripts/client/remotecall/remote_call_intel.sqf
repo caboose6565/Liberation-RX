@@ -11,9 +11,8 @@ if ( _notiftype == 1 ) then {
 };
 
 if ( _notiftype == 2 ) then {
-	waitUntil {!isNil "secondary_objective_position_marker" };
-	waitUntil {count secondary_objective_position_marker > 0 };
-	waitUntil {secondary_objective_position_marker distance2D zeropos > 100 };
+	waitUntil { !isNil "secondary_objective_position_marker" };
+	waitUntil { secondary_objective_position_marker distance2D zeropos > 100 };
 	["lib_intel_fob", [markertext ([1000, secondary_objective_position_marker] call F_getNearestSector)]] call BIS_fnc_showNotification;
 	_secondary_marker = createMarkerLocal ["secondarymarker", secondary_objective_position_marker];
 	_secondary_marker setMarkerColorLocal GRLIB_color_enemy_bright;
@@ -30,7 +29,7 @@ if ( _notiftype == 3 ) then {
 	[ "lib_secondary_fob_destroyed" ] call BIS_fnc_showNotification;
 	deleteMarkerLocal "secondarymarker";
 	deleteMarkerLocal "secondarymarkerzone";
-	secondary_objective_position_marker = [];
+	secondary_objective_position_marker = zeropos;
 };
 
 if ( _notiftype == 4 ) then {
@@ -67,5 +66,5 @@ if (_notiftype == 7 || _notiftype == 8) then {
 	};
 	deleteMarkerLocal "secondarymarker";
 	deleteMarkerLocal "secondarymarkerzone";
-	secondary_objective_position_marker = [];
+	secondary_objective_position_marker = zeropos;
 };

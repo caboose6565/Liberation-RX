@@ -57,6 +57,7 @@ GRLIB_param_wipe_savegame_1 = ["WipeSave1",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_savegame_2 = ["WipeSave2",0] call bis_fnc_getParamValue;
 GRLIB_param_wipe_params = ["WipeSave3",0] call bis_fnc_getParamValue;
 GRLIB_force_load = ["ForceLoading",0] call bis_fnc_getParamValue;
+GRLIB_log_settings = ["LogSettings",0] call bis_fnc_getParamValue;
 
 private _lrx_getParamValue = {
 	params ["_param", "_def"];
@@ -82,6 +83,25 @@ if (isServer) then {
 		profileNamespace setVariable [GRLIB_params_save_key, GRLIB_LRX_params];
 	};
 	publicVariable "GRLIB_LRX_params";
+	if (GRLIB_log_settings > 0) then {
+		diag_log "--- LRX Mission Settings: ";
+		{
+			_name = _x select 0;
+			_data = [_name] call lrx_getParamData;
+			_value_text = "Error!";
+			if (count _data > 0) then {
+				_name = _data select 0;
+				_values_raw = _data select 2;
+				if (isNil "_values_raw") then { _values_raw = [] };
+				if (count (_values_raw) > 0) then {
+					_value_text = (_data select 1) select (_values_raw find (_x select 1));
+				} else {
+					_value_text = (_data select 1) select (_x select 1);
+				};
+			};
+			diag_log format ["   %1: %2", _name, _value_text ];
+		} foreach GRLIB_LRX_params;		
+	};
 } else {
 	waitUntil { sleep 1; !isNil "GRLIB_LRX_params" };
 };
@@ -122,6 +142,7 @@ GRLIB_mod_preset_east = ["ModPresetEast", 0] call _lrx_getParamValue;
 GRLIB_enable_arsenal = ["EnableArsenal",1] call _lrx_getParamValue;
 GRLIB_filter_arsenal = ["FilterArsenal",1] call _lrx_getParamValue;
 GRLIB_forced_loadout = ["ForcedLoadout",1] call _lrx_getParamValue;
+GRLIB_free_loadout = ["FreeLoadout",0] call _lrx_getParamValue;
 GRLIB_opfor_english = ["EnglishOpfor", 0] call _lrx_getParamValue;
 GRLIB_difficulty_modifier = ["Difficulty",1] call _lrx_getParamValue;
 GRLIB_csat_aggressivity = ["Aggressivity",1] call _lrx_getParamValue;
@@ -135,8 +156,9 @@ GRLIB_fatigue = ["Fatigue",0] call _lrx_getParamValue;
 GRLIB_revive = ["Revive",3] call _lrx_getParamValue;
 GRLIB_tk_mode = ["TK_mode",1] call _lrx_getParamValue;
 GRLIB_tk_count = ["TK_count",4] call _lrx_getParamValue;
+GRLIB_garage_size = ["MaxGarageSize",5] call _lrx_getParamValue;
 GRLIB_squad_size = ["SquadSize",2] call _lrx_getParamValue;
-GRLIB_max_squad_size = ["MaxSquadSize",7] call _lrx_getParamValue;
+GRLIB_max_squad_size = ["MaxSquadSize",6] call _lrx_getParamValue;
 GRLIB_max_spawn_point = ["MaxSpawnPoint",3] call _lrx_getParamValue;
 GRLIB_allow_redeploy = ["Redeploy",1] call _lrx_getParamValue;
 GRLIB_permissions_param = ["Permissions",1] call _lrx_getParamValue;
@@ -151,16 +173,20 @@ GRLIB_admin_menu = ["AdminMenu",1] call _lrx_getParamValue;
 GRLIB_cleanup_vehicles = ["CleanupVehicles",1800] call _lrx_getParamValue;
 GRLIB_autosave_timer = ["AutoSave",1800] call _lrx_getParamValue;
 GRLIB_param_wipe_keepscore = ["KeepScore",0] call _lrx_getParamValue;
+GRLIB_respawn_timer = ["Respawn",20] call _lrx_getParamValue;
 GRLIB_respawn_cooldown = ["RespawnCD",0] call _lrx_getParamValue;
 GRLIB_kick_idle = ["KickIdle",0] call _lrx_getParamValue;
 GRLIB_server_persistent = ["Persistent",0] call _lrx_getParamValue;
+GRLIB_air_support = ["AirSupport",1] call _lrx_getParamValue;
+GRLIB_despawn_tickets = ["SectorDespawn",72] call _lrx_getParamValue;
 
 // Hardcoded
 GRLIB_endgame = 0;
 GRLIB_global_stop = 0;
-GRLIB_min_score_player = 20;	// Minimal player score to be saved
-GRLIB_blufor_cap = GRLIB_blufor_cap * GRLIB_unitcap;
-GRLIB_sector_cap = GRLIB_sector_cap * GRLIB_unitcap;
+GRLIB_min_score_player = 20;				// Minimal player score to be saved
+GRLIB_opfor_cap = 180 * GRLIB_unitcap;		// Maximal number of enemies units
+GRLIB_blufor_cap = 50;						// Maximal number of friendly units
+GRLIB_max_active_sectors = 3;				// Maximal active sectors at the same time
 GRLIB_battlegroup_cap = GRLIB_battlegroup_cap * (sqrt GRLIB_unitcap) * (sqrt GRLIB_csat_aggressivity);
 GRLIB_patrol_cap = GRLIB_patrol_cap * GRLIB_unitcap;
 GRLIB_battlegroup_size = GRLIB_battlegroup_size * GRLIB_unitcap;
@@ -245,10 +271,12 @@ switch (GRLIB_huron_type) do {
 };
 
 // Overide Naval FOB
+FOB_carrier = "Land_Destroyer_01_base_F";
+FOB_carrier_center = "Land_Destroyer_01_hull_04_F";
 switch (GRLIB_naval_type) do {
-	case 0: {FOB_carrier = "Land_Destroyer_01_base_F"; FOB_carrier_center = "Land_Destroyer_01_hull_04_F" };
-	case 1: {FOB_carrier = "Land_Carrier_01_base_F"; FOB_carrier_center = "Land_Carrier_01_island_02_F" };
-	case 2: {FOB_carrier = ""; FOB_carrier_center = "" };
+//	case 1: {FOB_carrier = "Land_Destroyer_01_base_F"; FOB_carrier_center = "Land_Destroyer_01_hull_04_F" };
+	case 2: {FOB_carrier = "Land_Carrier_01_base_F"; FOB_carrier_center = "Land_Carrier_01_island_02_F" };
+	case 3: {FOB_carrier = "abcdef"; FOB_carrier_center = "abcdef" };
 };
 
 if ( GRLIB_ACE_enabled ) then { GRLIB_fancy_info = 0 };		// Disable Fancy if ACE present
@@ -268,8 +296,9 @@ if ( GRLIB_civ_penalties == 1 ) then { GRLIB_civ_penalties = true } else { GRLIB
 if ( GRLIB_blufor_defenders == 1 ) then { GRLIB_blufor_defenders = true } else { GRLIB_blufor_defenders = false };
 if ( GRLIB_opfor_english == 1 ) then { GRLIB_opfor_english = true } else { GRLIB_opfor_english = false };
 if ( GRLIB_disable_death_chat == 1 ) then { GRLIB_disable_death_chat = true } else { GRLIB_disable_death_chat = false };
-if ( GRLIB_respawn_cooldown == 1 ) then { GRLIB_respawn_cooldown = true } else { GRLIB_respawn_cooldown = false };
 if ( GRLIB_server_persistent == 1 ) then { GRLIB_server_persistent = true } else { GRLIB_server_persistent = false };
+if ( GRLIB_air_support == 1 ) then { GRLIB_air_support = true } else { GRLIB_air_support = false };
+if ( GRLIB_free_loadout == 1 ) then { GRLIB_free_loadout = true } else { GRLIB_free_loadout = false };
 
 // Overide sector radius
 if (GRLIB_sector_radius != 0) then { GRLIB_sector_size = GRLIB_sector_radius };

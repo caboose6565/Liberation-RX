@@ -62,7 +62,7 @@ if (_enable_objectives) then {
 {
     _x setDamage 0;
     _x setVariable ["R3F_LOG_disabled", true, true];
-    if (typeOf _x isKindof "AllVehicles" || _x in _base_objectives) then {
+    if (_x isKindof "AllVehicles" || _x in _base_objectives) then {
         _x allowDamage true;
         _x addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
         [_x, "lock", "server"] call F_vehicleLock;  
@@ -102,7 +102,7 @@ if (_enable_defenders) then {
         _unit setpos _nextpos;
         [_unit] spawn building_defence_ai;
         [_unit] spawn reammo_ai;
-        sleep 0.1;
+        sleep 0.3;
     } foreach _idxselected;
 
     private _sentry = ceil ((5 + (floor (random 4))) * (sqrt (GRLIB_unitcap)) );

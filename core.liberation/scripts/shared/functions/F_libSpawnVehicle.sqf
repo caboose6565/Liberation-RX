@@ -69,6 +69,8 @@ if ( _classname isKindOf "Air" ) then {
 
 if ( isNull _vehicle ) exitWith { diag_log format ["--- LRX Error: Cannot build vehicle (%1) at position %2", _classname, _sectorpos]; objNull };
 
+[_vehicle] call F_fixModVehicle;
+
 if ( _vehicle isKindOf "Air" ) then {
 	if (GRLIB_SOG_enabled) then { _airveh_alt = 50 };
 	_vehicle engineOn true;
@@ -81,7 +83,7 @@ if ( _random_rotate ) then {
 };
 
 if ( _vehicle isKindOf "LandVehicle" ) then {
-	sleep 1;
+	[_vehicle] call F_fixPosUnit;
 	if ((vectorUp _vehicle) select 2 < 0.70 || (getPosATL _vehicle) select 2 < 0) then {
 		_vehicle setpos [(getPosATL _vehicle) select 0, (getPosATL _vehicle) select 1, 0.5];
 		_vehicle setVectorUp surfaceNormal position _vehicle;
@@ -99,31 +101,21 @@ if ( _side != GRLIB_side_civilian ) then {
 			[_vehicle] call F_forceOpforCrew;
 		};
 		_vehicle addEventHandler ["HandleDamage", { _this call damage_manager_enemy }];
+
+		// LRX textures
+		if (count opfor_texture_overide > 0) then {
+			_texture_name = selectRandom opfor_texture_overide;
+			[_vehicle, _texture_name] spawn RPT_fnc_TextureVehicle;
+		};
+
+		// A3 textures
+		if ( _classname in ["I_E_Truck_02_MRL_F"] ) then {
+			[_vehicle, ["Opfor",1], true ] spawn BIS_fnc_initVehicle;
+		};
 	};
 		
 	_vehcrew = crew _vehicle;
 	{ _x allowDamage false } forEach _vehcrew;
-
-	// A3 textures
-	if ( _classname in ["I_E_Truck_02_MRL_F"] ) then {
-		[_vehicle, ["Opfor",1], true ] call BIS_fnc_initVehicle;
-	};
-
-	// CUP remove tank panel
-	if (GRLIB_CUPV_enabled) then {
-		[_vehicle, false, ["hide_front_ti_panels",1,"hide_cip_panel_rear",1,"hide_cip_panel_bustle",1]] call BIS_fnc_initVehicle;
-	};
-
-	// RHS remove tank panel
-	if (GRLIB_RHS_enabled) then {
-		[_vehicle, false, ["IFF_Panels_Hide",1,"Miles_Hide",1]] call BIS_fnc_initVehicle;
-	};
-
-	// LRX textures
-	if (count opfor_texture_overide > 0) then {
-		_texture_name = selectRandom opfor_texture_overide;
-		[_vehicle, _texture_name] call RPT_fnc_TextureVehicle;
-	};
 
 	[_vehicle, _vehcrew] spawn {
 		params ["_veh", "_crew"];
@@ -138,10 +130,7 @@ _vehicle addMPEventHandler ['MPKilled', {_this spawn kill_manager}];
 _vehicle allowCrewInImmobile [true, false];
 _vehicle setUnloadInCombat [true, false];
 
-clearWeaponCargoGlobal _vehicle;
-clearMagazineCargoGlobal _vehicle;
-clearItemCargoGlobal _vehicle;
-clearBackpackCargoGlobal _vehicle;
+[_vehicle] spawn F_clearCargo;
 
 if ( _side == GRLIB_side_civilian ) then { _vehicle allowDamage true };
 

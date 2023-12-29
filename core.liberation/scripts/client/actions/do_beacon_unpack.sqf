@@ -1,4 +1,4 @@
-if (([getPlayerUID player] call F_getMobileRespawnsPlayer) select 1) exitWith {};
+if (([PAR_Grp_ID] call F_getMobileRespawnsPlayer) select 1) exitWith {};
 
 private _tent_cost = support_vehicles select {(_x select 0) == mobile_respawn} select 0 select 1;
 
@@ -21,6 +21,6 @@ if ( _tent_cost > (infantry_cap - resources_infantry)) then {
 	if (build_confirmed == 3) then {
 		player addBackpack mobile_respawn_bag;
 		(backpackContainer player) setVariable ["GRLIB_mobile_respawn_bag", true, true];
-		(backpackContainer player) setMaxLoad 0;
+		[(backpackContainer player), 0] remoteExec ["setMaxLoad", 2];
 	};
 };

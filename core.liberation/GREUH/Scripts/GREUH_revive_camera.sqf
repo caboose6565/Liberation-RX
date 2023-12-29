@@ -1,12 +1,9 @@
-waitUntil {sleep 1; GRLIB_player_spawned};
-revive_ui = compileFinal preprocessFileLineNumbers "GREUH\scripts\GREUH_revive_ui.sqf";
 count_death = 1;
 private ["_pos", "_destpos", "_cam", "_noesckey"];
 
 while { true } do {
-	waitUntil {sleep 0.5; (player getVariable ["GREUH_isUnconscious", 0]) == 1};
+	waitUntil {sleep 0.5; (GRLIB_player_spawned && (player getVariable ["PAR_isUnconscious", false])) };
 	closeDialog 0;
-	waitUntil {!dialog};
 
 	_pos = positionCameraToWorld [0,0,-0.2];
 	_destpos = [getpos player select 0, getpos player select 1, (getpos player select 2) + 150];
@@ -43,10 +40,10 @@ while { true } do {
 	closeDialog 0;
 	waitUntil {!dialog};
 
-	[] spawn revive_ui;
-	waitUntil {sleep 0.5; (player getVariable ["PAR_isUnconscious", 1]) == 0 || !alive player };
+	[] execVM "GREUH\scripts\GREUH_revive_ui.sqf";
+	waitUntil { sleep 0.5; (!(player getVariable ["PAR_isUnconscious", true]) || !alive player) };
+	player setVariable ["PAR_isUnconscious", false, true];
 	closeDialog 5566;
-	player setVariable ["GREUH_isUnconscious", 0];
 
 	"colorCorrections" ppEffectEnable FALSE;
 	"filmGrain" ppEffectEnable FALSE;

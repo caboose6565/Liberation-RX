@@ -2,7 +2,7 @@ params ["_playerId"];
 if (GRLIB_allow_redeploy == 0) exitWith {[[], true]};
 private _max_respawn_reached = false;
 
-private _respawn_trucks_unsorted = [entities [[Respawn_truck_typename, huron_typename], [], false, true], {
+private _respawn_trucks_unsorted = [entities [respawn_vehicles, [], false, true], {
 	_x getVariable ["GRLIB_vehicle_owner", ""] == _playerId &&
 	!(_x getVariable ['R3F_LOG_disabled', false]) &&
 	alive _x && !([_x, "LHD", GRLIB_fob_range] call F_check_near) &&
@@ -21,7 +21,7 @@ if (!isNil "GRLIB_mobile_respawn") then {
 };
 
 private _player_respawn_unsorted = _respawn_trucks_unsorted + _respawn_tent_unsorted;
-if (count _player_respawn_unsorted > GRLIB_max_spawn_point && getPlayerUID player == _playerId) then {
+if (count _player_respawn_unsorted > GRLIB_max_spawn_point && PAR_Grp_ID == _playerId) then {
 	hintSilent localize "STR_TOO_MANY_SPAWN";
 	_player_respawn_unsorted = _player_respawn_unsorted select [0, GRLIB_max_spawn_point];
 	_max_respawn_reached = true;

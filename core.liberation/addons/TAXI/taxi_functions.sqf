@@ -27,19 +27,17 @@ taxi_land = {
 };
 
 taxi_dest = {
-	params ["_vehicle", "_air_grp", "_dest", "_msg"];
+	params ["_vehicle", "_dest", "_msg"];
 	_vehicle setFuel 1;
 	_vehicle engineOn true;
 
 	(driver _vehicle) doMove _dest;
 
-	hintSilent format [localize _msg, round (_vehicle distance2D _dest)];
-	sleep 20;
-	if (GRLIB_RHS_enabled) then { sleep 40 };
 	private _landing_range = 150;
 	private _stop = time + (5 * 60); // wait 5min max
 	private _alt_old = 999;
 
+	waitUntil { sleep 1; speed _vehicle > 5 };
 	waitUntil {
 		sleep 1;
 		if (!isNil "GRLIB_taxi_helipad") then {
@@ -49,7 +47,9 @@ taxi_dest = {
 			};
 		};
 
-		hintSilent format [localize _msg, round (_vehicle distance2D _dest)];
+		if (count _msg > 0) then {
+			hintSilent format [localize _msg, round (_vehicle distance2D _dest)];
+		};
 
 		_alt = (getPosATL _vehicle) select 2;
 		_speed = round (abs speed vehicle _vehicle);
@@ -75,7 +75,8 @@ taxi_cargo = {
 };
 
 taxi_outboard = {
-	params ["_vehicle", "_cargo"];
+	params ["_vehicle"];
+	private _cargo = [_vehicle] call taxi_cargo;
 	_vehicle setVehicleLock "UNLOCKED";
 	_vehicle lockCargo false;
 	waitUntil {
@@ -87,10 +88,10 @@ taxi_outboard = {
 				moveOut _x;
 				sleep 0.3;
 			};
-		} forEach (_cargo);
+		} forEach _cargo;
 		sleep 1;
 		(_bailout);
 	};
 	_vehicle setVehicleLock "LOCKED";
-	_vehicle lockCargo true;		
+	_vehicle lockCargo true;
 };
