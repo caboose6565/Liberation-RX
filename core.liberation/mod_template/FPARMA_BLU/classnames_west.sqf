@@ -50,9 +50,9 @@ units_loadout_overide = [
 light_vehicles = [
 	["UK3CB_C_MMT",1,5,1,0],
 	["UK3CB_C_Ikarus",10,500,10,0],
-	["Land_Wrench_F",5,100,10,GRLIB_perm_log],
-	["Land_Ammobox_rounds_F",5,250,10,GRLIB_perm_log],
-	["Land_CanisterFuel_F",5,100,20,GRLIB_perm_log],
+	["FP_GOR_B_Truck_03_repair_F",5,100,10,GRLIB_perm_log],
+	["FP_GOR_B_Truck_03_ammo_F",5,250,10,GRLIB_perm_log],
+	["FP_GOR_B_Truck_03_fuel_F",5,100,20,GRLIB_perm_log],
 	["B_T_Truck_01_mover_F",5,500,50,GRLIB_perm_tank],
 	["B_Quadbike_01_F",1,5,1,0],
 	["B_Boat_Transport_01_F",1,25,1,GRLIB_perm_inf],
