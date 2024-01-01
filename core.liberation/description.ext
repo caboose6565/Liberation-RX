@@ -79,15 +79,15 @@ class CfgDebriefing {
 
 class Extended_InitPost_EventHandlers 
 {
-	class Land_Wrench_F
+	class FP_GOR_B_Truck_03_repair_F
 		{
         init = "_this call gor_fnc_applyCustomVic";
     };
-	class Land_Ammobox_rounds_F
+	class FP_GOR_B_Truck_03_ammo_F
 		{
         init = "_this call gor_fnc_applyCustomVic";
     };
-	class Land_CanisterFuel_F
+	class FP_GOR_B_Truck_03_fuel_F
 		{
         init = "_this call gor_fnc_applyCustomVic";
     };
