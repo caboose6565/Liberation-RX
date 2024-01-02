@@ -1,4 +1,4 @@
-diag_log "--- Liberation RX: FPARMA Edition by pSiKO/caboose ---";
+diag_log "--- Liberation RX: FPARMA Edition by pSiKO/Taylor ---";
 [] call compileFinal preprocessFileLineNUmbers "build_info.sqf";
 diag_log "--- Init start ---";
 if (!isNil "startup") then { deleteVehicle startup }; // remove logic sound

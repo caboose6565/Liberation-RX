@@ -39,6 +39,7 @@ class CfgFunctions {
         {
             file = "functions";
 			class applyCustomVic {};
+			class applyUGV {};
         };
     	};
 };
